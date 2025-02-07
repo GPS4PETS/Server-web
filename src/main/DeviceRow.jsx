@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
   },
   avataricon: {
     width: '25px',
-    height: '25px',
+    height: '18px',
   },
   batteryText: {
     fontSize: '0.75rem',
