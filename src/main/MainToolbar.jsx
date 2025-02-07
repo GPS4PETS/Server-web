@@ -66,6 +66,7 @@ const MainToolbar = ({
       <OutlinedInput
         ref={inputRef}
         placeholder={t('sharedSearchDevices')}
+        id={t('sharedSearchDevices')}
         value={keyword}
         onChange={(e) => setKeyword(e.target.value)}
         onFocus={() => setDevicesAnchorEl(toolbarRef.current)}

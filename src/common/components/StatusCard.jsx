@@ -647,6 +647,7 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
                             )}
                           </IconButton>
                           {formatPercentage(position.attributes.batteryLevel)}
+                          {position.attributes.charge ? ' '.concat(t('positionCharge')) : ''}
                         </>
                       )}
                     />
