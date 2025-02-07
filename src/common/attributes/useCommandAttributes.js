@@ -8,7 +8,28 @@ export default (t) => useMemo(() => ({
       type: 'string',
     },
   ],
+  setApn: [
+    {
+      key: 'data',
+      name: t('commandData'),
+      type: 'string',
+    },
+  ],
+  positionPeriodicOrig: [
+    {
+      key: 'frequency',
+      name: t('commandFrequency'),
+      type: 'number',
+    },
+  ],
   positionPeriodic: [
+    {
+      key: 'frequency',
+      name: t('commandFrequency'),
+      type: 'number',
+    },
+  ],
+  positionPeriodicStatic: [
     {
       key: 'frequency',
       name: t('commandFrequency'),
@@ -207,6 +228,62 @@ export default (t) => useMemo(() => ({
     {
       key: 'data',
       name: t('commandData'),
+      type: 'string',
+    },
+  ],
+  lightDuration: [
+    {
+      key: 'duration',
+      name: t('commandLightDuration'),
+      type: 'number',
+    },
+  ],
+  buzzerDuration: [
+    {
+      key: 'duration',
+      name: t('commandBuzzerDuration'),
+      type: 'number',
+    },
+  ],
+  statusLed: [
+    {
+      key: 'enable',
+      name: t('commandEnable'),
+      type: 'boolean',
+    },
+  ],
+  static: [
+    {
+      key: 'frequency',
+      name: t('commandFrequency'),
+      type: 'number',
+    },
+  ],
+  heartbeat: [
+    {
+      key: 'frequency',
+      name: t('commandFrequency'),
+      type: 'number',
+    },
+  ],
+  tkWorkMode: [
+    {
+      key: 'tkWorkMode',
+      name: t('commandTkWorkModeDesc'),
+      type: 'number',
+    },
+  ],
+  transparent: [
+    {
+      key: 'data',
+      name: t('commandSmsTransparent'),
+      type: 'string',
+    },
+  ],
+  transparentSer: [
+    {
+      key: 'data',
+      name: t('commandSerTransparent'),
       type: 'string',
     },
   ],

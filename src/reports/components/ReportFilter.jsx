@@ -9,7 +9,7 @@ import useReportStyles from '../common/useReportStyles';
 import { devicesActions, reportsActions } from '../../store';
 import SplitButton from '../../common/components/SplitButton';
 import SelectField from '../../common/components/SelectField';
-import { useRestriction } from '../../common/util/permissions';
+import { useAdministrator } from '../../common/util/permissions';
 
 const ReportFilter = ({
   children, handleSubmit, handleSchedule, showOnly, ignoreDevice, multiDevice, includeGroups, loading,
@@ -18,7 +18,7 @@ const ReportFilter = ({
   const dispatch = useDispatch();
   const t = useTranslation();
 
-  const readonly = useRestriction('readonly');
+  const admin = useAdministrator();
 
   const devices = useSelector((state) => state.devices.items);
   const groups = useSelector((state) => state.groups.items);
@@ -176,7 +176,7 @@ const ReportFilter = ({
           </div>
         </>
       )}
-      {children}
+      {admin ? children : ''}
       <div className={classes.filterItem}>
         {showOnly ? (
           <Button
@@ -197,7 +197,7 @@ const ReportFilter = ({
             onClick={handleClick}
             selected={button}
             setSelected={(value) => setButton(value)}
-            options={readonly ? {
+            options={!admin ? {
               json: t('reportShow'),
               export: t('reportExport'),
               mail: t('reportEmail'),

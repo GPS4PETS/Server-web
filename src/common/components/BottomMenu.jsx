@@ -5,15 +5,15 @@ import {
   Paper, BottomNavigation, BottomNavigationAction, Menu, MenuItem, Typography, Badge,
 } from '@mui/material';
 
-import DescriptionIcon from '@mui/icons-material/Description';
-import SettingsIcon from '@mui/icons-material/Settings';
+import DescriptionIcon from '@mui/icons-material/QueryStats';
+import SettingsIcon from '@mui/icons-material/Build';
 import MapIcon from '@mui/icons-material/Map';
 import PersonIcon from '@mui/icons-material/Person';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 
 import { sessionActions } from '../../store';
 import { useTranslation } from './LocalizationProvider';
-import { useRestriction } from '../util/permissions';
+import { useAdministrator, useRestriction } from '../util/permissions';
 import { nativePostMessage } from './NativeInterface';
 
 const BottomMenu = () => {
@@ -23,6 +23,7 @@ const BottomMenu = () => {
   const t = useTranslation();
 
   const readonly = useRestriction('readonly');
+  const admin = useAdministrator();
   const disableReports = useRestriction('disableReports');
   const user = useSelector((state) => state.session.user);
   const socket = useSelector((state) => state.session.socket);
@@ -82,7 +83,11 @@ const BottomMenu = () => {
         navigate('/');
         break;
       case 'reports':
-        navigate('/reports/combined');
+        if (admin) {
+          navigate('/reports/combined');
+        } else {
+          navigate('/reports/trip');
+        }
         break;
       case 'settings':
         navigate('/settings/preferences');

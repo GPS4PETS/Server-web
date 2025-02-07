@@ -11,16 +11,17 @@ import BatteryCharging60Icon from '@mui/icons-material/BatteryCharging60';
 import Battery20Icon from '@mui/icons-material/Battery20';
 import BatteryCharging20Icon from '@mui/icons-material/BatteryCharging20';
 import ErrorIcon from '@mui/icons-material/Error';
+import LiveModeIcon from '@mui/icons-material/Streetview';
+import LightIcon from '@mui/icons-material/Flare';
+import BuzzerIcon from '@mui/icons-material/VolumeUp';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { devicesActions } from '../store';
 import {
-  formatAlarm, formatBoolean, formatPercentage, formatStatus, getStatusColor,
+  formatAlarm, formatPercentage, formatStatus, getStatusColor,
 } from '../common/util/formatter';
 import { useTranslation } from '../common/components/LocalizationProvider';
-import { mapIconKey, mapIcons } from '../map/core/preloadImages';
 import { useAdministrator } from '../common/util/permissions';
-import EngineIcon from '../resources/images/data/engine.svg?react';
 import { useAttributePreference } from '../common/util/preferences';
 
 dayjs.extend(relativeTime);
@@ -30,6 +31,10 @@ const useStyles = makeStyles((theme) => ({
     width: '25px',
     height: '25px',
     filter: 'brightness(0) invert(1)',
+  },
+  avataricon: {
+    width: '25px',
+    height: '25px',
   },
   batteryText: {
     fontSize: '0.75rem',
@@ -48,6 +53,12 @@ const useStyles = makeStyles((theme) => ({
   neutral: {
     color: theme.palette.neutral.main,
   },
+  light: {
+    color: '#FFFF0080',
+  },
+  sound: {
+    color: '#0000FF80',
+  },
 }));
 
 const DeviceRow = ({ data, index, style }) => {
@@ -63,6 +74,8 @@ const DeviceRow = ({ data, index, style }) => {
   const devicePrimary = useAttributePreference('devicePrimary', 'name');
   const deviceSecondary = useAttributePreference('deviceSecondary', '');
 
+  const deviceImage = item?.attributes?.deviceImage;
+
   const secondaryText = () => {
     let status;
     if (item.status === 'online' || !item.lastUpdate) {
@@ -70,10 +83,13 @@ const DeviceRow = ({ data, index, style }) => {
     } else {
       status = dayjs(item.lastUpdate).fromNow();
     }
+
     return (
       <>
         {deviceSecondary && item[deviceSecondary] && `${item[deviceSecondary]} • `}
-        <span className={classes[getStatusColor(item.status)]}>{status}</span>
+        <span className={classes[getStatusColor(item.status)]}>
+          {status}
+        </span>
       </>
     );
   };
@@ -85,11 +101,19 @@ const DeviceRow = ({ data, index, style }) => {
         onClick={() => dispatch(devicesActions.selectId(item.id))}
         disabled={!admin && item.disabled}
       >
-        <ListItemAvatar>
-          <Avatar>
-            <img className={classes.icon} src={mapIcons[mapIconKey(item.category)]} alt="" />
-          </Avatar>
-        </ListItemAvatar>
+        {deviceImage ? (
+          <ListItemAvatar>
+            <Avatar>
+              <img className={classes.avataricon} src={`/api/media/${item.uniqueId}/${deviceImage}`} alt="" />
+            </Avatar>
+          </ListItemAvatar>
+        ) : (
+          <ListItemAvatar>
+            <Avatar>
+              <img className={classes.avataricon} src="/device.png" alt="" />
+            </Avatar>
+          </ListItemAvatar>
+        )}
         <ListItemText
           primary={item[devicePrimary]}
           primaryTypographyProps={{ noWrap: true }}
@@ -98,21 +122,31 @@ const DeviceRow = ({ data, index, style }) => {
         />
         {position && (
           <>
+            {item.liveModetime.indexOf('2000-01') === -1 && (
+              <Tooltip title={t('liveModeActivate')}>
+                <IconButton size="small">
+                  <LiveModeIcon fontSize="small" className={classes.success} />
+                </IconButton>
+              </Tooltip>
+            )}
+            {(position.attributes.hasOwnProperty('lightswitch') && position.attributes.lightswitch === 1) && (
+              <Tooltip title={t('lightActivate')}>
+                <IconButton size="small">
+                  <LightIcon fontSize="small" className={classes.light} />
+                </IconButton>
+              </Tooltip>
+            )}
+            {(position.attributes.hasOwnProperty('soundswitch') && position.attributes.soundswitch === 1) && (
+              <Tooltip title={t('buzzerActivate')}>
+                <IconButton size="small">
+                  <BuzzerIcon fontSize="small" className={classes.sound} />
+                </IconButton>
+              </Tooltip>
+            )}
             {position.attributes.hasOwnProperty('alarm') && (
               <Tooltip title={`${t('eventAlarm')}: ${formatAlarm(position.attributes.alarm, t)}`}>
                 <IconButton size="small">
                   <ErrorIcon fontSize="small" className={classes.error} />
-                </IconButton>
-              </Tooltip>
-            )}
-            {position.attributes.hasOwnProperty('ignition') && (
-              <Tooltip title={`${t('positionIgnition')}: ${formatBoolean(position.attributes.ignition, t)}`}>
-                <IconButton size="small">
-                  {position.attributes.ignition ? (
-                    <EngineIcon width={20} height={20} className={classes.success} />
-                  ) : (
-                    <EngineIcon width={20} height={20} className={classes.neutral} />
-                  )}
                 </IconButton>
               </Tooltip>
             )}

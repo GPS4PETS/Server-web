@@ -10,7 +10,7 @@ import ViewListIcon from '@mui/icons-material/ViewList';
 import AddIcon from '@mui/icons-material/Add';
 import TuneIcon from '@mui/icons-material/Tune';
 import { useTranslation } from '../common/components/LocalizationProvider';
-import { useDeviceReadonly } from '../common/util/permissions';
+import { useAdministrator, useDeviceReadonly } from '../common/util/permissions';
 import DeviceRow from './DeviceRow';
 
 const useStyles = makeStyles((theme) => ({
@@ -45,6 +45,7 @@ const MainToolbar = ({
   const navigate = useNavigate();
   const t = useTranslation();
 
+  const admin = useAdministrator();
   const deviceReadonly = useDeviceReadonly();
 
   const groups = useSelector((state) => state.groups.items);
@@ -134,19 +135,21 @@ const MainToolbar = ({
               <MenuItem value="unknown">{`${t('deviceStatusUnknown')} (${deviceStatusCount('unknown')})`}</MenuItem>
             </Select>
           </FormControl>
-          <FormControl>
-            <InputLabel>{t('settingsGroups')}</InputLabel>
-            <Select
-              label={t('settingsGroups')}
-              value={filter.groups}
-              onChange={(e) => setFilter({ ...filter, groups: e.target.value })}
-              multiple
-            >
-              {Object.values(groups).sort((a, b) => a.name.localeCompare(b.name)).map((group) => (
-                <MenuItem key={group.id} value={group.id}>{group.name}</MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+          {admin && (
+            <FormControl>
+              <InputLabel>{t('settingsGroups')}</InputLabel>
+              <Select
+                label={t('settingsGroups')}
+                value={filter.groups}
+                onChange={(e) => setFilter({ ...filter, groups: e.target.value })}
+                multiple
+              >
+                {Object.values(groups).sort((a, b) => a.name.localeCompare(b.name)).map((group) => (
+                  <MenuItem key={group.id} value={group.id}>{group.name}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          )}
           <FormControl>
             <InputLabel>{t('sharedSortBy')}</InputLabel>
             <Select
@@ -160,19 +163,23 @@ const MainToolbar = ({
               <MenuItem value="lastUpdate">{t('deviceLastUpdate')}</MenuItem>
             </Select>
           </FormControl>
-          <FormGroup>
-            <FormControlLabel
-              control={<Checkbox checked={filterMap} onChange={(e) => setFilterMap(e.target.checked)} />}
-              label={t('sharedFilterMap')}
-            />
-          </FormGroup>
+          {admin && (
+            <FormGroup>
+              <FormControlLabel
+                control={<Checkbox checked={filterMap} onChange={(e) => setFilterMap(e.target.checked)} />}
+                label={t('sharedFilterMap')}
+              />
+            </FormGroup>
+          )}
         </div>
       </Popover>
+      {admin && (
       <IconButton edge="end" onClick={() => navigate('/settings/device')} disabled={deviceReadonly}>
-        <Tooltip open={!deviceReadonly && Object.keys(devices).length === 0} title={t('deviceRegisterFirst')} arrow>
+        <Tooltip open={admin && Object.keys(devices).length === 0} title={t('deviceRegisterFirst')} arrow>
           <AddIcon />
         </Tooltip>
       </IconButton>
+      )}
     </Toolbar>
   );
 };

@@ -26,4 +26,20 @@ export default (t) => useMemo(() => ({
     name: t('attributeForwardUrl'),
     type: 'string',
   },
+  deviceOnline: {
+    name: t('deviceStatus'),
+    type: 'string',
+  },
+  liveModeTime: {
+    name: t('attributeLiveModeTime'),
+    type: 'string',
+  },
+  lightTime: {
+    name: t('attributeLightTime'),
+    type: 'string',
+  },
+  soundTime: {
+    name: t('attributeSoundTime'),
+    type: 'string',
+  },
 }), [t]);

@@ -1,0 +1,2 @@
+rm -rf /opt/traccar/web/*
+cp -r build/* /opt/traccar/web/

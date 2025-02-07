@@ -29,12 +29,8 @@ import MapScale from '../map/MapScale';
 
 const columnsArray = [
   ['startTime', 'reportStartTime'],
-  ['startOdometer', 'positionOdometer'],
-  ['address', 'positionAddress'],
   ['endTime', 'reportEndTime'],
   ['duration', 'reportDuration'],
-  ['engineHours', 'reportEngineHours'],
-  ['spentFuel', 'reportSpentFuel'],
 ];
 const columnsMap = new Map(columnsArray);
 
@@ -46,7 +42,7 @@ const StopReportPage = () => {
   const distanceUnit = useAttributePreference('distanceUnit');
   const volumeUnit = useAttributePreference('volumeUnit');
 
-  const [columns, setColumns] = usePersistedState('stopColumns', ['startTime', 'endTime', 'startOdometer', 'address']);
+  const [columns, setColumns] = usePersistedState('stopColumns', ['startTime', 'endTime', 'duration']);
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
