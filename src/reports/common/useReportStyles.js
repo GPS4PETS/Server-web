@@ -50,7 +50,8 @@ export default makeStyles((theme) => ({
     overflow: 'hidden',
   },
   header2: {
-    paddingLeft: '20px',
-    fontSize: '+2',
+    padding: '10px',
+    fontSize: '1.1em',
+    backgroundColor: '#EEEEEE10',
   },
 }));

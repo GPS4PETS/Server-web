@@ -223,6 +223,13 @@ const ActivityReportPage = () => {
   return (
     <PageLayout menu={<ReportsMenu />} breadcrumbs={['reportTitle', 'reportActivity']}>
       <div className={classes.container}>
+        <div className={classes.containerFilter}>
+          <div className={classes.header}>
+            <ReportFilter handleSubmit={handleSubmit} handleSchedule={handleSchedule} loading={activityLoading}>
+              <ColumnSelect columns={columns} setColumns={setColumns} columnsArray={columnsArray} />
+            </ReportFilter>
+          </div>
+        </div>
         {!sleepSelectedItem && !activitySelectedItem && selectedDevice != null && (
           <div className={classes.containerMap}>
             <MapView>
@@ -274,14 +281,10 @@ const ActivityReportPage = () => {
             <MapScale />
           </div>
         )}
-        <div className={classes.containerFilter}>
-          <div className={classes.header}>
-            <ReportFilter handleSubmit={handleSubmit} handleSchedule={handleSchedule} loading={activityLoading}>
-              <ColumnSelect columns={columns} setColumns={setColumns} columnsArray={columnsArray} />
-            </ReportFilter>
-          </div>
-        </div>
         <div className={classes.containerMain}>
+          <div className={classes.header}>
+            &nbsp;
+          </div>
           <div className={classes.header2}>
             {t('reportActivityTime')}
           </div>
