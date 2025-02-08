@@ -46,4 +46,8 @@ export default makeStyles((theme) => ({
     flexGrow: 1,
     overflow: 'hidden',
   },
+  header2: {
+    paddingLeft: '20px',
+    fontSize: '+1',
+  },
 }));

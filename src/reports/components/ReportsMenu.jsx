@@ -49,19 +49,25 @@ const ReportsMenu = () => {
         </>
         )}
         <MenuItem
-          title={t('reportTrips')}
-          link="/reports/trip"
-          icon={<PlayCircleFilledIcon />}
-          selected={location.pathname === '/reports/trip'}
-        />
-        <MenuItem
-          title={t('reportStops')}
-          link="/reports/stop"
-          icon={<PauseCircleFilledIcon />}
-          selected={location.pathname === '/reports/stop'}
+          title={t('reportActivity')}
+          link="/reports/activity"
+          icon={<TimelineIcon />}
+          selected={location.pathname === '/reports/activity'}
         />
         {admin && (
         <>
+          <MenuItem
+            title={t('reportTrips')}
+            link="/reports/trip"
+            icon={<PlayCircleFilledIcon />}
+            selected={location.pathname === '/reports/trip'}
+          />
+          <MenuItem
+            title={t('reportStops')}
+            link="/reports/stop"
+            icon={<PauseCircleFilledIcon />}
+            selected={location.pathname === '/reports/stop'}
+          />
           <MenuItem
             title={t('reportSummary')}
             link="/reports/summary"
