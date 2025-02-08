@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import {
   IconButton,
   Table, TableBody, TableCell, TableHead, TableRow,
@@ -27,6 +28,7 @@ import MapGeofence from '../map/MapGeofence';
 import scheduleReport from './common/scheduleReport';
 import MapScale from '../map/MapScale';
 import MapRoutePath from '../map/MapRoutePath';
+import MapRouteCoordinates from '../map/MapRouteCoordinates';
 import MapMarkers from '../map/MapMarkers';
 
 const columnsArray = [
@@ -111,9 +113,37 @@ const ActivityReportPage = () => {
     }
   }, [activitySelectedItem]);
 
+  const [selectedDevice, setSelectedDevice] = useState(null);
+
+  const devices = useSelector((state) => state.devices.items);
+  const [mapItems, setMapItems] = useState([]);
+  const mapItemsCoordinates = useMemo(() => mapItems.flatMap((mapItem) => mapItem.route), [mapItems]);
+
+  const createMapMarkers = () => mapItems.flatMap((mapItem) => mapItem.events
+    .map((event) => mapItem.positions.find((p) => event.positionId === p.id))
+    .filter((position) => position != null)
+    .map((position) => ({
+      latitude: position.latitude,
+      longitude: position.longitude,
+    })));
+
   const handleSubmit = useCatch(async ({ deviceId, from, to }) => {
-    setSleepLoading(true);
     setActivityLoading(true);
+    setSleepLoading(true);
+
+    const mapQuery = new URLSearchParams({ from, to });
+    mapQuery.append('deviceId', deviceId);
+    try {
+      const mapResponse = await fetch(`/api/reports/combined?${mapQuery.toString()}`);
+      if (mapResponse.ok) {
+        setMapItems(await mapResponse.json());
+      } else {
+        throw Error(await mapResponse.text());
+      }
+    } finally {
+      setSelectedDevice(deviceId);
+    }
+
     const activityQuery = new URLSearchParams({ deviceId, from, to });
     try {
       const activityResponse = await fetch(`/api/reports/trips?${activityQuery.toString()}`, {
@@ -127,6 +157,7 @@ const ActivityReportPage = () => {
     } finally {
       setActivityLoading(false);
     }
+
     const sleepQuery = new URLSearchParams({ deviceId, from, to });
     try {
       const sleepResponse = await fetch(`/api/reports/stops?${sleepQuery.toString()}`, {
@@ -192,6 +223,24 @@ const ActivityReportPage = () => {
   return (
     <PageLayout menu={<ReportsMenu />} breadcrumbs={['reportTitle', 'reportActivity']}>
       <div className={classes.container}>
+        {!sleepSelectedItem && !activitySelectedItem && selectedDevice != null && (
+          <div className={classes.containerMap}>
+            <MapView>
+              <MapGeofence />
+              {mapItems.map((item) => (
+                <MapRouteCoordinates
+                  key={item.deviceId}
+                  name={devices[item.deviceId].name}
+                  coordinates={item.route}
+                  deviceId={item.deviceId}
+                />
+              ))}
+              <MapMarkers markers={createMapMarkers()} />
+            </MapView>
+            <MapScale />
+            <MapCamera coordinates={mapItemsCoordinates} />
+          </div>
+        )}
         {sleepSelectedItem && (
           <div className={classes.containerMap}>
             <MapView>
@@ -225,12 +274,14 @@ const ActivityReportPage = () => {
             <MapScale />
           </div>
         )}
-        <div className={classes.containerMain}>
+        <div className={classes.containerFilter}>
           <div className={classes.header}>
             <ReportFilter handleSubmit={handleSubmit} handleSchedule={handleSchedule} loading={activityLoading}>
               <ColumnSelect columns={columns} setColumns={setColumns} columnsArray={columnsArray} />
             </ReportFilter>
           </div>
+        </div>
+        <div className={classes.containerMain}>
           <div className={classes.header2}>
             {t('reportActivityTime')}
           </div>

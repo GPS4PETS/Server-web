@@ -10,6 +10,9 @@ export default makeStyles((theme) => ({
     flexBasis: '40%',
     flexShrink: 0,
   },
+  containerFilter: {
+    flexShrink: 0,
+  },
   containerMain: {
     overflow: 'auto',
   },

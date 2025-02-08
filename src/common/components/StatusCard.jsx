@@ -334,7 +334,7 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
           fcmdres = await fcmd.text();
         } else {
           fcmdres = 'failure';
-          setFetchdev(fcmdres);
+          setFetchcmd(fcmdres);
           throw Error('Can not get Device Commands');
         }
         setFetchcmd(fcmdres);
@@ -354,7 +354,7 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
           fposres = await fpos.text();
         } else {
           fposres = 'failure';
-          setFetchdev(fposres);
+          setFetchpos(fposres);
           throw Error('Can not get Device Position');
         }
         setFetchpos(fposres);
