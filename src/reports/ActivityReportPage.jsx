@@ -33,19 +33,17 @@ const columnsArray = [
   ['startTime', 'reportStartTime'],
   ['endTime', 'reportEndTime'],
   ['distance', 'sharedDistance'],
-  ['averageSpeed', 'reportAverageSpeed'],
   ['duration', 'reportDuration'],
-  ['maxSpeed', 'reportMaximumSpeed'],
 ];
-/* const columnsMap = new Map(columnsArray); */
+const columnsMap = new Map(columnsArray);
 
 const activityColumnsArray = [
   ['startTime', 'reportStartTime'],
   ['endTime', 'reportEndTime'],
-  ['distance', 'sharedDistance'],
   ['averageSpeed', 'reportAverageSpeed'],
-  ['duration', 'reportDuration'],
   ['maxSpeed', 'reportMaximumSpeed'],
+  ['distance', 'sharedDistance'],
+  ['duration', 'reportDuration'],
 ];
 const activityColumnsMap = new Map(activityColumnsArray);
 
@@ -62,17 +60,16 @@ const ActivityReportPage = () => {
   const t = useTranslation();
 
   const distanceUnit = useAttributePreference('distanceUnit');
-  const speedUnit = useAttributePreference('speedUnit')
+  const speedUnit = useAttributePreference('speedUnit');
   const volumeUnit = useAttributePreference('volumeUnit');
 
-  const [columns, setColumns] = usePersistedState('tripColumns', ['startTime', 'endTime', 'distance', 'averageSpeed', 'duration']);
+  const [columns, setColumns] = usePersistedState('tripColumns', ['startTime', 'endTime', 'distance', 'duration']);
 
-  const [activityColumns, setActivityColumns] = usePersistedState('tripColumns', ['startTime', 'endTime', 'distance', 'averageSpeed', 'duration']);
+  const [activityColumns, setActivityColumns] = usePersistedState('tripColumns', ['startTime', 'endTime', 'distance', 'duration']);
   const [activityItems, setActivityItems] = useState([]);
   const [activityLoading, setActivityLoading] = useState(false);
   const [activitySelectedItem, setActivitySelectedItem] = useState(null);
   const [route, setRoute] = useState(null);
-
 
   const [sleepColumns, setSleepColumns] = usePersistedState('stopColumns', ['startTime', 'endTime', 'duration']);
   const [sleepItems, setSleepItems] = useState([]);
@@ -259,7 +256,7 @@ const ActivityReportPage = () => {
             <TableHead>
               <TableRow>
                 <TableCell className={classes.columnAction} />
-                {activityColumns.map((key) => (<TableCell key={key}>{t(activityColumnsMap.get(key))}</TableCell>))}
+                {activityColumns.map((activityKey) => (<TableCell key={activityKey}>{t(activityColumnsMap.get(activityKey))}</TableCell>))}
               </TableRow>
             </TableHead>
             <TableBody>
@@ -295,7 +292,7 @@ const ActivityReportPage = () => {
             <TableHead>
               <TableRow>
                 <TableCell className={classes.columnAction} />
-                {sleepColumns.map((key) => (<TableCell key={key}>{t(SleepColumnsMap.get(key))}</TableCell>))}
+                {sleepColumns.map((sleepKey) => (<TableCell key={sleepKey}>{t(SleepColumnsMap.get(sleepKey))}</TableCell>))}
               </TableRow>
             </TableHead>
             <TableBody>

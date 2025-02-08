@@ -86,7 +86,7 @@ const BottomMenu = () => {
         if (admin) {
           navigate('/reports/combined');
         } else {
-          navigate('/reports/trip');
+          navigate('/reports/activity');
         }
         break;
       case 'settings':

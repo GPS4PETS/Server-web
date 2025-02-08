@@ -30,10 +30,10 @@ import MapScale from '../map/MapScale';
 const columnsArray = [
   ['startTime', 'reportStartTime'],
   ['endTime', 'reportEndTime'],
-  ['distance', 'sharedDistance'],
   ['averageSpeed', 'reportAverageSpeed'],
-  ['duration', 'reportDuration'],
   ['maxSpeed', 'reportMaximumSpeed'],
+  ['distance', 'sharedDistance'],
+  ['duration', 'reportDuration'],
 ];
 const columnsMap = new Map(columnsArray);
 
@@ -46,7 +46,7 @@ const TripReportPage = () => {
   const speedUnit = useAttributePreference('speedUnit');
   const volumeUnit = useAttributePreference('volumeUnit');
 
-  const [columns, setColumns] = usePersistedState('tripColumns', ['startTime', 'endTime', 'distance', 'averageSpeed', 'duration']);
+  const [columns, setColumns] = usePersistedState('tripColumns', ['startTime', 'endTime', 'averageSpeed', 'maxSpeed', 'distance', 'duration']);
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
