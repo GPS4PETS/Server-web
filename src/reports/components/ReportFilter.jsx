@@ -178,7 +178,7 @@ const ReportFilter = ({
       )}
       {admin ? children : ''}
       <div className={classes.filterItem}>
-        {showOnly ? (
+        {showOnly || !admin ? (
           <Button
             fullWidth
             variant="outlined"

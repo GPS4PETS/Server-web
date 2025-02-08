@@ -48,6 +48,6 @@ export default makeStyles((theme) => ({
   },
   header2: {
     paddingLeft: '20px',
-    fontSize: '+1',
+    fontSize: '+2',
   },
 }));

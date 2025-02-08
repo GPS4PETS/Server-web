@@ -35,7 +35,7 @@ const columnsArray = [
   ['distance', 'sharedDistance'],
   ['duration', 'reportDuration'],
 ];
-const columnsMap = new Map(columnsArray);
+/* const columnsMap = new Map(columnsArray); */
 
 const activityColumnsArray = [
   ['startTime', 'reportStartTime'],
@@ -65,13 +65,13 @@ const ActivityReportPage = () => {
 
   const [columns, setColumns] = usePersistedState('tripColumns', ['startTime', 'endTime', 'distance', 'duration']);
 
-  const [activityColumns, setActivityColumns] = usePersistedState('tripColumns', ['startTime', 'endTime', 'distance', 'duration']);
+  const [activityColumns] = usePersistedState('tripColumns', ['startTime', 'endTime', 'distance', 'duration']);
   const [activityItems, setActivityItems] = useState([]);
   const [activityLoading, setActivityLoading] = useState(false);
   const [activitySelectedItem, setActivitySelectedItem] = useState(null);
   const [route, setRoute] = useState(null);
 
-  const [sleepColumns, setSleepColumns] = usePersistedState('stopColumns', ['startTime', 'endTime', 'duration']);
+  const [sleepColumns] = usePersistedState('stopColumns', ['startTime', 'endTime', 'duration']);
   const [sleepItems, setSleepItems] = useState([]);
   const [sleepLoading, setSleepLoading] = useState(false);
   const [sleepSelectedItem, setSleepSelectedItem] = useState(null);
@@ -111,52 +111,34 @@ const ActivityReportPage = () => {
     }
   }, [activitySelectedItem]);
 
-  const handleSubmit = useCatch(async ({ deviceId, from, to, type }) => {
-    let query = new URLSearchParams({ deviceId, from, to });
-    if (type === 'export') {
-      window.location.assign(`/api/reports/stops/xlsx?${query.toString()}`);
-    } else if (type === 'mail') {
-      const response = await fetch(`/api/reports/stops/mail?${query.toString()}`);
-      if (!response.ok) {
-        throw Error(await response.text());
+  const handleSubmit = useCatch(async ({ deviceId, from, to }) => {
+    setSleepLoading(true);
+    setActivityLoading(true);
+    const activityQuery = new URLSearchParams({ deviceId, from, to });
+    try {
+      const activityResponse = await fetch(`/api/reports/trips?${activityQuery.toString()}`, {
+        headers: { Accept: 'application/json' },
+      });
+      if (activityResponse.ok) {
+        setActivityItems(await activityResponse.json());
+      } else {
+        throw Error(await activityResponse.text());
       }
-    } else {
-      setSleepLoading(true);
-      try {
-        const response = await fetch(`/api/reports/stops?${query.toString()}`, {
-          headers: { Accept: 'application/json' },
-        });
-        if (response.ok) {
-          setSleepItems(await response.json());
-        } else {
-          throw Error(await response.text());
-        }
-      } finally {
-        setSleepLoading(false);
-      }
+    } finally {
+      setActivityLoading(false);
     }
-    query = new URLSearchParams({ deviceId, from, to });
-    if (type === 'export') {
-      window.location.assign(`/api/reports/trips/xlsx?${query.toString()}`);
-    } else if (type === 'mail') {
-      const response = await fetch(`/api/reports/trips/mail?${query.toString()}`);
-      if (!response.ok) {
-        throw Error(await response.text());
+    const sleepQuery = new URLSearchParams({ deviceId, from, to });
+    try {
+      const sleepResponse = await fetch(`/api/reports/stops?${sleepQuery.toString()}`, {
+        headers: { Accept: 'application/json' },
+      });
+      if (sleepResponse.ok) {
+        setSleepItems(await sleepResponse.json());
+      } else {
+        throw Error(await sleepResponse.text());
       }
-    } else {
-      setActivityLoading(true);
-      try {
-        const response = await fetch(`/api/reports/trips?${query.toString()}`, {
-          headers: { Accept: 'application/json' },
-        });
-        if (response.ok) {
-          setActivityItems(await response.json());
-        } else {
-          throw Error(await response.text());
-        }
-      } finally {
-        setActivityLoading(false);
-      }
+    } finally {
+      setSleepLoading(false);
     }
   });
 
