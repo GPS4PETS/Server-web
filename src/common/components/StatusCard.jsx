@@ -114,6 +114,7 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: '2px',
     paddingBottom: '2px',
     paddingLeft: '10px',
+    width: '50%',
   },
   actions: {
     justifyContent: 'space-between',
