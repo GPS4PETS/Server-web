@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import dayjs from 'dayjs';
+import { createTheme, useTheme } from '@mui/material/styles';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Link as RouterLink } from 'react-router-dom';
 import Draggable from 'react-draggable';
@@ -54,6 +55,18 @@ import {
 } from '../util/formatter';
 
 const useStyles = makeStyles((theme) => ({
+  components: {
+    MuiIconButton: {
+      styleOverrides: {
+        root: ({
+          p: 0,
+        }),
+        disabled: ({
+          p: 0,
+        }),
+      },
+    },
+  },
   card: {
     pointerEvents: 'auto',
     width: theme.dimensions.popupMaxWidth,
@@ -173,6 +186,7 @@ const StatusRow = ({ name, content }) => {
 
 const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPadding = 0 }) => {
   const classes = useStyles({ desktopPadding });
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const t = useTranslation();
@@ -631,19 +645,19 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
                       name={t('positionBatteryLevel')}
                       content={(
                         <>
-                          <IconButton size="small" disabled>
+                          <IconButton size="small" title={t('positionBatteryLevel')} disabled style={{ padding: 0, margin: 0 }}>
                             {(position.attributes.batteryLevel > 70 && (
                               position.attributes.charge
-                                ? (<BatteryChargingFullIcon fontSize="small" className={classes.success} />)
-                                : (<BatteryFullIcon fontSize="small" className={classes.success} />)
+                                ? (<BatteryChargingFullIcon fontSize="small" classes={{ root: classes.success, disabled: classes.success }} />)
+                                : (<BatteryFullIcon fontSize="small" classes={{ root: classes.success, disabled: classes.success }} />)
                             )) || (position.attributes.batteryLevel > 30 && (
                               position.attributes.charge
-                                ? (<BatteryCharging60Icon fontSize="small" className={classes.warning} />)
-                                : (<Battery60Icon fontSize="small" className={classes.warning} />)
+                                ? (<BatteryCharging60Icon fontSize="small" classes={{ root: classes.warning, disabled: classes.warning }} />)
+                                : (<Battery60Icon fontSize="small" classes={{ root: classes.warning, disabled: classes.warning }} />)
                             )) || (
                               position.attributes.charge
-                                ? (<BatteryCharging20Icon fontSize="small" className={classes.error} />)
-                                : (<Battery20Icon fontSize="small" className={classes.error} />)
+                                ? (<BatteryCharging20Icon fontSize="small" classes={{ root: classes.error, disabled: classes.error }} />)
+                                : (<Battery20Icon fontSize="small" classes={{ root: classes.error, disabled: classes.error }} />)
                             )}
                           </IconButton>
                           {formatPercentage(position.attributes.batteryLevel)}

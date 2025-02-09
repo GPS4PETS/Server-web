@@ -34,6 +34,7 @@ import MapMarkers from '../map/MapMarkers';
 const columnsArray = [
   ['startTime', 'reportStartTime'],
   ['endTime', 'reportEndTime'],
+  ['steps', 'positionSteps'],
   ['distance', 'sharedDistance'],
   ['duration', 'reportDuration'],
 ];
@@ -44,6 +45,7 @@ const activityColumnsArray = [
   ['endTime', 'reportEndTime'],
   ['averageSpeed', 'reportAverageSpeed'],
   ['maxSpeed', 'reportMaximumSpeed'],
+  ['steps', 'positionSteps'],
   ['distance', 'sharedDistance'],
   ['duration', 'reportDuration'],
 ];
@@ -65,17 +67,17 @@ const ActivityReportPage = () => {
   const speedUnit = useAttributePreference('speedUnit');
   const volumeUnit = useAttributePreference('volumeUnit');
 
-  const [columns, setColumns] = usePersistedState('tripColumns', ['startTime', 'endTime', 'distance', 'duration']);
+  const [columns, setColumns] = usePersistedState('tripColumns', ['startTime', 'endTime', 'steps', 'distance', 'duration']);
 
-  const [activityColumns] = usePersistedState('tripColumns', ['startTime', 'endTime', 'distance', 'duration']);
+  const [activityColumns] = usePersistedState('tripColumns', ['startTime', 'endTime', 'steps', 'distance', 'duration']);
   const [activityTime, setActivityTime] = useState(null);
-  const [sleepTime, setSleepTime] = useState(null);
   const [activityItems, setActivityItems] = useState([]);
   const [activityLoading, setActivityLoading] = useState(false);
   const [activitySelectedItem, setActivitySelectedItem] = useState(null);
   const [route, setRoute] = useState(null);
 
   const [sleepColumns] = usePersistedState('stopColumns', ['startTime', 'endTime', 'duration']);
+  const [sleepTime, setSleepTime] = useState(null);
   const [sleepItems, setSleepItems] = useState([]);
   const [sleepLoading, setSleepLoading] = useState(false);
   const [sleepSelectedItem, setSleepSelectedItem] = useState(null);
