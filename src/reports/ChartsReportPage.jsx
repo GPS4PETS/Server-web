@@ -33,7 +33,7 @@ const ChartsReportPage = () => {
   const [items, setItems] = useState([]);
   const [types, setTypes] = useState(['steps']);
   const [type, setType] = useState('steps');
-  const [timeType, setTimeType] = useState('fixTime');
+  const [timeType] = useState('fixTime');
 
   const values = items.map((it) => it[type]);
   const minValue = Math.min(...values);
@@ -55,7 +55,7 @@ const ChartsReportPage = () => {
         formatted.fixTime = dayjs(position.fixTime).valueOf();
         Object.keys(data).filter((key) => !['id', 'deviceId'].includes(key)).forEach((key) => {
           const value = data[key];
-          if (typeof value === 'number' && (key === 'speed' || key === 'steps' || key === 'altitude' || key === 'totalDistance' || key === 'batteryLevel')) {
+          if (typeof value === 'number' && (key === 'speed' || key === 'altitude' || key === 'steps' || key === 'course' || key === 'batteryLevel' || key === 'totalDistance')) {
             keySet.add(key);
             const definition = positionAttributes[key] || {};
             switch (definition.dataType) {
@@ -94,7 +94,7 @@ const ChartsReportPage = () => {
 
   return (
     <PageLayout menu={<ReportsMenu />} breadcrumbs={['reportTitle', 'reportChart']}>
-      <ReportFilter handleSubmit={handleSubmit}>
+      <ReportFilter handleSubmit={handleSubmit} showOnly>
         <div className={classes.filterItem}>
           <FormControl fullWidth>
             <InputLabel>{t('reportChartType')}</InputLabel>
@@ -107,21 +107,6 @@ const ChartsReportPage = () => {
               {types.map((key) => (
                 <MenuItem key={key} value={key}>{positionAttributes[key]?.name || key}</MenuItem>
               ))}
-            </Select>
-          </FormControl>
-        </div>
-        <div className={classes.filterItem}>
-          <FormControl fullWidth>
-            <InputLabel>{t('reportTimeType')}</InputLabel>
-            <Select
-              label={t('reportTimeType')}
-              value={timeType}
-              onChange={(e) => setTimeType(e.target.value)}
-              disabled={!items.length}
-            >
-              <MenuItem value="fixTime">{t('positionFixTime')}</MenuItem>
-              <MenuItem value="deviceTime">{t('positionDeviceTime')}</MenuItem>
-              <MenuItem value="serverTime">{t('positionServerTime')}</MenuItem>
             </Select>
           </FormControl>
         </div>

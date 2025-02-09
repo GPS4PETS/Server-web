@@ -183,7 +183,7 @@ const ReportFilter = ({
           </div>
         </>
       )}
-      {admin ? children : ''}
+      {admin ? children : children}
       <div className={classes.filterItem}>
         {showOnly || !admin ? (
           <Button
