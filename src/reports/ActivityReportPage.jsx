@@ -68,6 +68,8 @@ const ActivityReportPage = () => {
   const [columns, setColumns] = usePersistedState('tripColumns', ['startTime', 'endTime', 'distance', 'duration']);
 
   const [activityColumns] = usePersistedState('tripColumns', ['startTime', 'endTime', 'distance', 'duration']);
+  const [activityTime, setActivityTime] = useState(null);
+  const [sleepTime, setSleepTime] = useState(null);
   const [activityItems, setActivityItems] = useState([]);
   const [activityLoading, setActivityLoading] = useState(false);
   const [activitySelectedItem, setActivitySelectedItem] = useState(null);
@@ -130,6 +132,8 @@ const ActivityReportPage = () => {
   const handleSubmit = useCatch(async ({ deviceId, from, to }) => {
     setActivityLoading(true);
     setSleepLoading(true);
+    setActivityTime(null);
+    setSleepTime(null);
 
     const mapQuery = new URLSearchParams({ from, to });
     mapQuery.append('deviceId', deviceId);
@@ -145,30 +149,40 @@ const ActivityReportPage = () => {
     }
 
     const activityQuery = new URLSearchParams({ deviceId, from, to });
+    let activityJson;
     try {
       const activityResponse = await fetch(`/api/reports/trips?${activityQuery.toString()}`, {
         headers: { Accept: 'application/json' },
       });
       if (activityResponse.ok) {
-        setActivityItems(await activityResponse.json());
+        activityJson = await activityResponse.json();
+        setActivityItems(activityJson);
       } else {
         throw Error(await activityResponse.text());
       }
     } finally {
+      let activityDuration = 0;
+      activityJson.forEach((e) => activityDuration += e.duration);
+      setActivityTime(formatNumericHours(activityDuration, t));
       setActivityLoading(false);
     }
 
     const sleepQuery = new URLSearchParams({ deviceId, from, to });
+    let sleepJson;
     try {
       const sleepResponse = await fetch(`/api/reports/stops?${sleepQuery.toString()}`, {
         headers: { Accept: 'application/json' },
       });
       if (sleepResponse.ok) {
-        setSleepItems(await sleepResponse.json());
+        sleepJson = await sleepResponse.json();
+        setSleepItems(sleepJson);
       } else {
         throw Error(await sleepResponse.text());
       }
     } finally {
+      let sleepDuration = 0;
+      sleepJson.forEach((e) => sleepDuration += e.duration);
+      setSleepTime(formatNumericHours(sleepDuration, t));
       setSleepLoading(false);
     }
   });
@@ -287,6 +301,10 @@ const ActivityReportPage = () => {
           </div>
           <div className={classes.header2}>
             {t('reportActivityTime')}
+            &nbsp;
+            {activityTime !== null && (
+              `${activityTime}`
+            )}
           </div>
           <Table>
             <TableHead>
@@ -323,6 +341,10 @@ const ActivityReportPage = () => {
           </div>
           <div className={classes.header2}>
             {t('reportSleepTime')}
+            &nbsp;
+            {sleepTime !== null && (
+              `${sleepTime}`
+            )}
           </div>
           <Table>
             <TableHead>

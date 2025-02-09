@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, setState } from 'react';
 import {
   FormControl, InputLabel, Select, MenuItem, Button, TextField, Typography,
 } from '@mui/material';
@@ -90,6 +90,12 @@ const ReportFilter = ({
     }
   };
 
+  /*
+  if (deviceId == null) {
+    setState(deviceId, devices.id);
+  }
+  */
+
   return (
     <div className={classes.filter}>
       {!ignoreDevice && (
@@ -100,6 +106,7 @@ const ReportFilter = ({
             value={multiDevice ? deviceIds : deviceId}
             onChange={(e) => dispatch(multiDevice ? devicesActions.selectIds(e.target.value) : devicesActions.selectId(e.target.value))}
             multiple={multiDevice}
+            defaultValue={`${Object.values(devices)[1]}`}
             fullWidth
           />
         </div>
