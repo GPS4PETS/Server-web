@@ -23,6 +23,7 @@ import StopReportPage from './reports/StopReportPage';
 import ActivityReportPage from './reports/ActivityReportPage';
 import SummaryReportPage from './reports/SummaryReportPage';
 import ChartReportPage from './reports/ChartReportPage';
+import ChartsReportPage from './reports/ChartsReportPage';
 import DriversPage from './settings/DriversPage';
 import DriverPage from './settings/DriverPage';
 import CalendarsPage from './settings/CalendarsPage';
@@ -166,6 +167,7 @@ const Navigation = () => {
           <Route path="chart" element={<ChartReportPage />} />
           <Route path="event" element={<EventReportPage />} />
           <Route path="activity" element={<ActivityReportPage />} />
+          <Route path="charts" element={<ChartsReportPage />} />
           <Route path="route" element={<RouteReportPage />} />
           <Route path="stop" element={<StopReportPage />} />
           <Route path="summary" element={<SummaryReportPage />} />

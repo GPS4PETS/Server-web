@@ -51,8 +51,14 @@ const ReportsMenu = () => {
         <MenuItem
           title={t('reportActivity')}
           link="/reports/activity"
-          icon={<TimelineIcon />}
+          icon={<FormatListBulletedIcon />}
           selected={location.pathname === '/reports/activity'}
+        />
+        <MenuItem
+          title={t('reportChart')}
+          link="/reports/charts"
+          icon={<TrendingUpIcon />}
+          selected={location.pathname === '/reports/charts'}
         />
         {admin && (
         <>

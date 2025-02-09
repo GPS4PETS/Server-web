@@ -1,0 +1,179 @@
+import dayjs from 'dayjs';
+import React, { useState } from 'react';
+import {
+  FormControl, InputLabel, Select, MenuItem, useTheme,
+} from '@mui/material';
+import {
+  Brush, CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis,
+} from 'recharts';
+import ReportFilter from './components/ReportFilter';
+import { formatTime } from '../common/util/formatter';
+import { useTranslation } from '../common/components/LocalizationProvider';
+import PageLayout from '../common/components/PageLayout';
+import ReportsMenu from './components/ReportsMenu';
+import usePositionAttributes from '../common/attributes/usePositionAttributes';
+import { useCatch } from '../reactHelper';
+import { useAttributePreference } from '../common/util/preferences';
+import {
+  altitudeFromMeters, distanceFromMeters, speedFromKnots,
+} from '../common/util/converter';
+import useReportStyles from './common/useReportStyles';
+
+const ChartsReportPage = () => {
+  const classes = useReportStyles();
+  const theme = useTheme();
+  const t = useTranslation();
+
+  const positionAttributes = usePositionAttributes(t);
+
+  const distanceUnit = useAttributePreference('distanceUnit');
+  const altitudeUnit = useAttributePreference('altitudeUnit');
+  const speedUnit = useAttributePreference('speedUnit');
+
+  const [items, setItems] = useState([]);
+  const [types, setTypes] = useState(['steps']);
+  const [type, setType] = useState('steps');
+  const [timeType, setTimeType] = useState('fixTime');
+
+  const values = items.map((it) => it[type]);
+  const minValue = Math.min(...values);
+  const maxValue = Math.max(...values);
+  const valueRange = maxValue - minValue;
+
+  const handleSubmit = useCatch(async ({ deviceId, from, to }) => {
+    const query = new URLSearchParams({ deviceId, from, to });
+    const response = await fetch(`/api/reports/route?${query.toString()}`, {
+      headers: { Accept: 'application/json' },
+    });
+    if (response.ok) {
+      const positions = await response.json();
+      const keySet = new Set();
+      const keyList = [];
+      const formattedPositions = positions.map((position) => {
+        const data = { ...position, ...position.attributes };
+        const formatted = {};
+        formatted.fixTime = dayjs(position.fixTime).valueOf();
+        Object.keys(data).filter((key) => !['id', 'deviceId'].includes(key)).forEach((key) => {
+          const value = data[key];
+          if (typeof value === 'number' && (key === 'speed' || key === 'steps' || key === 'altitude' || key === 'totalDistance' || key === 'batteryLevel')) {
+            keySet.add(key);
+            const definition = positionAttributes[key] || {};
+            switch (definition.dataType) {
+              case 'speed':
+                formatted[key] = speedFromKnots(value, speedUnit).toFixed(2);
+                break;
+              case 'altitude':
+                formatted[key] = altitudeFromMeters(value, altitudeUnit).toFixed(2);
+                break;
+              case 'distance':
+                formatted[key] = distanceFromMeters(value, distanceUnit).toFixed(2);
+                break;
+              case 'hours':
+                formatted[key] = (value / 1000).toFixed(2);
+                break;
+              default:
+                formatted[key] = value;
+                break;
+            }
+          }
+        });
+        return formatted;
+      });
+      Object.keys(positionAttributes).forEach((key) => {
+        if (keySet.has(key)) {
+          keyList.push(key);
+          keySet.delete(key);
+        }
+      });
+      setTypes([...keyList, ...keySet]);
+      setItems(formattedPositions);
+    } else {
+      throw Error(await response.text());
+    }
+  });
+
+  return (
+    <PageLayout menu={<ReportsMenu />} breadcrumbs={['reportTitle', 'reportChart']}>
+      <ReportFilter handleSubmit={handleSubmit}>
+        <div className={classes.filterItem}>
+          <FormControl fullWidth>
+            <InputLabel>{t('reportChartType')}</InputLabel>
+            <Select
+              label={t('reportChartType')}
+              value={type}
+              onChange={(e) => setType(e.target.value)}
+              disabled={!items.length}
+            >
+              {types.map((key) => (
+                <MenuItem key={key} value={key}>{positionAttributes[key]?.name || key}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </div>
+        <div className={classes.filterItem}>
+          <FormControl fullWidth>
+            <InputLabel>{t('reportTimeType')}</InputLabel>
+            <Select
+              label={t('reportTimeType')}
+              value={timeType}
+              onChange={(e) => setTimeType(e.target.value)}
+              disabled={!items.length}
+            >
+              <MenuItem value="fixTime">{t('positionFixTime')}</MenuItem>
+              <MenuItem value="deviceTime">{t('positionDeviceTime')}</MenuItem>
+              <MenuItem value="serverTime">{t('positionServerTime')}</MenuItem>
+            </Select>
+          </FormControl>
+        </div>
+      </ReportFilter>
+      {items.length > 0 && (
+        <div className={classes.chart}>
+          <ResponsiveContainer>
+            <LineChart
+              data={items}
+              margin={{
+                top: 10, right: 40, left: 0, bottom: 10,
+              }}
+            >
+              <XAxis
+                stroke={theme.palette.text.primary}
+                dataKey={timeType}
+                type="number"
+                tickFormatter={(value) => formatTime(value, 'time')}
+                domain={['dataMin', 'dataMax']}
+                scale="time"
+              />
+              <YAxis
+                stroke={theme.palette.text.primary}
+                type="number"
+                tickFormatter={(value) => value.toFixed(2)}
+                domain={[minValue - valueRange / 5, maxValue + valueRange / 5]}
+              />
+              <CartesianGrid stroke={theme.palette.divider} strokeDasharray="3 3" />
+              <Tooltip
+                contentStyle={{ backgroundColor: theme.palette.background.default, color: theme.palette.text.primary }}
+                formatter={(value, key) => [value, positionAttributes[key]?.name || key]}
+                labelFormatter={(value) => formatTime(value, 'seconds')}
+              />
+              <Brush
+                dataKey={timeType}
+                height={30}
+                stroke={theme.palette.primary.main}
+                tickFormatter={() => ''}
+              />
+              <Line
+                type="monotone"
+                dataKey={type}
+                stroke={theme.palette.primary.main}
+                dot={false}
+                activeDot={{ r: 6 }}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+      )}
+    </PageLayout>
+  );
+};
+
+export default ChartsReportPage;

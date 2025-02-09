@@ -17,6 +17,11 @@ export default (t) => useMemo(() => ({
     dataType: 'speed',
     property: true,
   },
+  steps: {
+    name: t('positionSteps'),
+    type: 'number',
+    property: true,
+  },
   course: {
     name: t('positionCourse'),
     type: 'number',
