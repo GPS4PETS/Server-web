@@ -137,6 +137,7 @@ const ActivityReportPage = () => {
     setSleepLoading(true);
     setActivityTime(null);
     setSleepTime(null);
+    setActivitySteps(null);
 
     const mapQuery = new URLSearchParams({ from, to });
     mapQuery.append('deviceId', deviceId);
