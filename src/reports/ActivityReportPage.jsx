@@ -309,7 +309,7 @@ const ActivityReportPage = () => {
             {t('reportActivityTime')}
             &nbsp;
             {activityTime !== null && (
-              ` ${activityTime} `
+              `   ${activityTime}  `
             )}
             &nbsp;
             {activitySteps !== null && (
@@ -338,7 +338,7 @@ const ActivityReportPage = () => {
                     )}
                   </TableCell>
                   {activityColumns.map((activityKey) => (
-                    <TableCell key={activityKey}>
+                    <TableCell key={activityKey} style={{ width: '20%' }}>
                       {formatValue(activityItem, activityKey)}
                     </TableCell>
                   ))}
@@ -377,11 +377,15 @@ const ActivityReportPage = () => {
                       </IconButton>
                     )}
                   </TableCell>
-                  {sleepColumns.map((sleepKey) => (
-                    <TableCell key={sleepKey}>
-                      {formatValue(sleepItem, sleepKey)}
-                    </TableCell>
-                  ))}
+                  <TableCell key="startTime" style={{ width: '20%' }}>
+                    {formatValue(sleepItem, 'startTime')}
+                  </TableCell>
+                  <TableCell key="endTime" style={{ width: '60%' }}>
+                    {formatValue(sleepItem, 'endTime')}
+                  </TableCell>
+                  <TableCell key="duration" style={{ width: '20%' }}>
+                    {formatValue(sleepItem, 'duration')}
+                  </TableCell>
                 </TableRow>
               )) : (<TableShimmer columns={sleepColumns.length + 1} startAction />)}
             </TableBody>
