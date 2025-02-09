@@ -8,7 +8,6 @@ export default makeStyles((theme) => ({
   },
   containerMap: {
     flexBasis: '40%',
-    flexShrink: 0,
   },
   containerFilter: {
     flexShrink: 0,
