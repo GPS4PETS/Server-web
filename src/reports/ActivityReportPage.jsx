@@ -15,7 +15,6 @@ import { useAttributePreference } from '../common/util/preferences';
 import { useTranslation } from '../common/components/LocalizationProvider';
 import PageLayout from '../common/components/PageLayout';
 import ReportsMenu from './components/ReportsMenu';
-import ColumnSelect from './components/ColumnSelect';
 import usePersistedState from '../common/util/usePersistedState';
 import { useCatch, useEffectAsync } from '../reactHelper';
 import useReportStyles from './common/useReportStyles';
@@ -30,15 +29,6 @@ import MapScale from '../map/MapScale';
 import MapRoutePath from '../map/MapRoutePath';
 import MapRouteCoordinates from '../map/MapRouteCoordinates';
 import MapMarkers from '../map/MapMarkers';
-
-const columnsArray = [
-  ['startTime', 'reportStartTime'],
-  ['endTime', 'reportEndTime'],
-  ['steps', 'positionSteps'],
-  ['distance', 'sharedDistance'],
-  ['duration', 'reportDuration'],
-];
-/* const columnsMap = new Map(columnsArray); */
 
 const activityColumnsArray = [
   ['startTime', 'reportStartTime'],
@@ -66,8 +56,6 @@ const ActivityReportPage = () => {
   const distanceUnit = useAttributePreference('distanceUnit');
   const speedUnit = useAttributePreference('speedUnit');
   const volumeUnit = useAttributePreference('volumeUnit');
-
-  const [columns, setColumns] = usePersistedState('tripColumns', ['startTime', 'endTime', 'steps', 'distance', 'duration']);
 
   const [activityColumns] = usePersistedState('tripColumns', ['startTime', 'endTime', 'steps', 'distance', 'duration']);
   const [activityTime, setActivityTime] = useState(null);
@@ -247,7 +235,6 @@ const ActivityReportPage = () => {
         <div className={classes.containerFilter}>
           <div className={classes.header}>
             <ReportFilter handleSubmit={handleSubmit} handleSchedule={handleSchedule} loading={activityLoading}>
-              <ColumnSelect columns={columns} setColumns={setColumns} columnsArray={columnsArray} />
             </ReportFilter>
           </div>
         </div>
