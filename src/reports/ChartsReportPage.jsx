@@ -33,7 +33,7 @@ const ChartsReportPage = () => {
   const [items, setItems] = useState([]);
   const [types, setTypes] = useState(['steps']);
   const [type, setType] = useState('steps');
-  const [timeType] = useState('fixTime');
+  const [timeType] = useState('deviceTime');
 
   const values = items.map((it) => it[type]);
   const minValue = Math.min(...values);
@@ -52,7 +52,7 @@ const ChartsReportPage = () => {
       const formattedPositions = positions.map((position) => {
         const data = { ...position, ...position.attributes };
         const formatted = {};
-        formatted.fixTime = dayjs(position.fixTime).valueOf();
+        formatted.deviceTime = dayjs(position.deviceTime).valueOf();
         Object.keys(data).filter((key) => !['id', 'deviceId'].includes(key)).forEach((key) => {
           const value = data[key];
           if (typeof value === 'number' && (key === 'speed' || key === 'altitude' || key === 'steps' || key === 'course' || key === 'batteryLevel' || key === 'totalDistance')) {
