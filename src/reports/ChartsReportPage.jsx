@@ -117,7 +117,7 @@ const ChartsReportPage = () => {
             <LineChart
               data={items}
               margin={{
-                top: 10, right: 40, left: 0, bottom: 10,
+                top: 10, right: 40, left: 10, bottom: 10,
               }}
             >
               <XAxis
