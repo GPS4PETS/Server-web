@@ -78,7 +78,7 @@ const ActivityReportPage = () => {
   const [sleepLoading, setSleepLoading] = useState(false);
   const [sleepSelectedItem, setSleepSelectedItem] = useState(null);
 
-  const createMarkers = () => ([
+  const createActivityMarkers = () => ([
     {
       latitude: activitySelectedItem.startLat,
       longitude: activitySelectedItem.startLon,
@@ -273,7 +273,7 @@ const ActivityReportPage = () => {
               {route && (
                 <>
                   <MapRoutePath positions={route} />
-                  <MapMarkers markers={createMarkers()} />
+                  <MapMarkers markers={createActivityMarkers()} />
                   <MapCamera positions={route} />
                 </>
               )}
