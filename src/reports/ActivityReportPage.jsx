@@ -71,6 +71,7 @@ const ActivityReportPage = () => {
 
   const [activityColumns] = usePersistedState('tripColumns', ['startTime', 'endTime', 'steps', 'distance', 'duration']);
   const [activityTime, setActivityTime] = useState(null);
+  const [activitySteps, setActivitySteps] = useState(null);
   const [activityItems, setActivityItems] = useState([]);
   const [activityLoading, setActivityLoading] = useState(false);
   const [activitySelectedItem, setActivitySelectedItem] = useState(null);
@@ -164,8 +165,11 @@ const ActivityReportPage = () => {
       }
     } finally {
       let activityDuration = 0;
+      let activitySteps = 0;
       activityJson.forEach((e) => activityDuration += e.duration);
+      activityJson.forEach((e) => activitySteps += e.steps);
       setActivityTime(formatNumericHours(activityDuration, t));
+      setActivitySteps(activitySteps);
       setActivityLoading(false);
     }
 
@@ -305,7 +309,11 @@ const ActivityReportPage = () => {
             {t('reportActivityTime')}
             &nbsp;
             {activityTime !== null && (
-              `${activityTime}`
+              ` ${activityTime} `
+            )}
+            &nbsp;
+            {activitySteps !== null && (
+              ` ${activitySteps} ${t('positionSteps')}`
             )}
           </div>
           <Table>
