@@ -1,8 +1,12 @@
-import React, { useMemo, useState } from 'react';
+/* eslint-disable react/no-array-index-key */
+import React, { useMemo, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import {
-  IconButton,
+  PieChart, Pie, Tooltip, Cell, ResponsiveContainer,
+} from 'recharts';
+import {
+  IconButton, useTheme,
   Table, TableBody, TableCell, TableHead, TableRow,
 } from '@mui/material';
 import GpsFixedIcon from '@mui/icons-material/GpsFixed';
@@ -51,6 +55,7 @@ const SleepColumnsMap = new Map(SleepColumnsArray);
 const ActivityReportPage = () => {
   const navigate = useNavigate();
   const classes = useReportStyles();
+  const theme = useTheme();
   const t = useTranslation();
 
   const distanceUnit = useAttributePreference('distanceUnit');
@@ -157,7 +162,7 @@ const ActivityReportPage = () => {
       let activitySteps = 0;
       activityJson.forEach((e) => activityDuration += e.duration);
       activityJson.forEach((e) => activitySteps += e.steps);
-      setActivityTime(formatNumericHours(activityDuration, t));
+      setActivityTime(activityDuration);
       setActivitySteps(activitySteps);
       setActivityLoading(false);
     }
@@ -177,7 +182,7 @@ const ActivityReportPage = () => {
     } finally {
       let sleepDuration = 0;
       sleepJson.forEach((e) => sleepDuration += e.duration);
-      setSleepTime(formatNumericHours(sleepDuration, t));
+      setSleepTime(sleepDuration);
       setSleepLoading(false);
     }
   });
@@ -229,6 +234,21 @@ const ActivityReportPage = () => {
     }
   };
 
+  const activityPieData = [
+    { name: t('reportActivityTime'), value: activityTime },
+    { name: t('reportActivityTimeWanted'), value: ((7200000 - (activityTime != null ? activityTime : 0)) < 0) ? 0 : (7200000 - (activityTime != null ? activityTime : 0)) },
+  ];
+
+  const sleepPieData = [
+    { name: t('reportSleepTime'), value: sleepTime },
+    { name: t('reportSleepTimeWanted'), value: ((36000000 - (sleepTime != null ? sleepTime : 0)) < 0) ? 0 : (36000000 - (sleepTime != null ? sleepTime : 0)) },
+  ];
+
+  const activityColors = ['#82ca9d', '#333333'];
+  const sleepColors = ['#8884D8', '#333333'];
+
+  const isMobile = false;
+
   return (
     <PageLayout menu={<ReportsMenu />} breadcrumbs={['reportTitle', 'reportActivity']}>
       <div className={classes.container}>
@@ -238,55 +258,203 @@ const ActivityReportPage = () => {
             </ReportFilter>
           </div>
         </div>
-        {!sleepSelectedItem && !activitySelectedItem && selectedDevice != null && (
-          <div className={classes.containerMap}>
-            <MapView>
-              <MapGeofence />
-              {mapItems.map((item) => (
-                <MapRouteCoordinates
-                  key={item.deviceId}
-                  name={devices[item.deviceId].name}
-                  coordinates={item.route}
-                  deviceId={item.deviceId}
+        {!isMobile && !sleepSelectedItem && !activitySelectedItem && selectedDevice != null && (
+          <div className={classes.containerActivity}>
+            <div className={classes.containerActivityLeft}>
+              <div className={classes.containerActivityLeftHead}>
+                {t('reportActivityTime')}
+              </div>
+              <div className={classes.containerActivityRightHead}>
+                {t('reportSleepTime')}
+              </div>
+              <ResponsiveContainer width="100%" height="90%">
+                <PieChart width={200} height={400}>
+                  <Pie
+                    dataKey="value"
+                    isAnimationActive={false}
+                    data={activityPieData}
+                    cx="25%"
+                    cy="50%"
+                    innerRadius={40}
+                    outerRadius={80}
+                    fill="#82ca9d"
+                    label={(data) => formatNumericHours(data.payload.value, t)}
+                  >
+
+                    {activityPieData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={activityColors[index % activityColors.length]} />
+                    ))}
+                  </Pie>
+                  <Pie
+                    dataKey="value"
+                    data={sleepPieData}
+                    cx="75%"
+                    cy="50%"
+                    innerRadius={40}
+                    outerRadius={80}
+                    fill="#82ca9d"
+                    label={(data) => formatNumericHours(data.payload.value, t)}
+                  >
+                    {sleepPieData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={sleepColors[index % sleepColors.length]} />
+                    ))}
+                  </Pie>
+                  <Tooltip
+                    contentStyle={{ backgroundColor: '#07246e80', color: theme.palette.text.primary }}
+                    formatter={(value, key) => [formatNumericHours(value, t), key || key]}
+                    labelFormatter={(value) => formatNumericHours(value, t)}
+                  />
+                  <Tooltip />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+            <div className={classes.containerActivityRight}>
+              <MapView>
+                <MapGeofence />
+                {mapItems.map((item) => (
+                  <MapRouteCoordinates
+                    key={item.deviceId}
+                    name={devices[item.deviceId].name}
+                    coordinates={item.route}
+                    deviceId={item.deviceId}
+                  />
+                ))}
+                <MapMarkers markers={createMapMarkers()} />
+              </MapView>
+              <MapScale />
+              <MapCamera coordinates={mapItemsCoordinates} />
+            </div>
+          </div>
+        )}
+        {!isMobile && sleepSelectedItem && (
+          <div className={classes.containerActivity}>
+            <div className={classes.containerActivityLeft}>
+              <div className={classes.containerActivityLeftHead}>
+                {t('reportActivityTime')}
+              </div>
+              <div className={classes.containerActivityRightHead}>
+                {t('reportSleepTime')}
+              </div>
+              <ResponsiveContainer width="100%" height="90%">
+                <PieChart width={200} height={400}>
+                  <Pie
+                    dataKey="value"
+                    isAnimationActive={false}
+                    data={activityPieData}
+                    cx="25%"
+                    cy="50%"
+                    innerRadius={40}
+                    outerRadius={80}
+                    fill="#8884d8"
+                    label={(data) => formatNumericHours(data.payload.value, t)}
+                  >
+                    {activityPieData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={activityColors[index % activityColors.length]} />
+                    ))}
+                  </Pie>
+                  <Pie
+                    dataKey="value"
+                    data={sleepPieData}
+                    cx="75%"
+                    cy="50%"
+                    innerRadius={40}
+                    outerRadius={80}
+                    fill="#82ca9d"
+                    label={(data) => formatNumericHours(data.payload.value, t)}
+                  >
+                    {sleepPieData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={sleepColors[index % sleepColors.length]} />
+                    ))}
+                  </Pie>
+                  <Tooltip
+                    contentStyle={{ backgroundColor: '#07246e80', color: theme.palette.text.primary }}
+                    formatter={(value, key) => [formatNumericHours(value, t), key || key]}
+                    labelFormatter={(value) => formatNumericHours(value, t)}
+                  />
+                  <Tooltip />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+            <div className={classes.containerActivityRight}>
+              <MapView>
+                <MapGeofence />
+                <MapPositions
+                  positions={[{
+                    deviceId: sleepSelectedItem.deviceId,
+                    fixTime: sleepSelectedItem.startTime,
+                    latitude: sleepSelectedItem.latitude,
+                    longitude: sleepSelectedItem.longitude,
+                  }]}
+                  titleField="fixTime"
                 />
-              ))}
-              <MapMarkers markers={createMapMarkers()} />
-            </MapView>
-            <MapScale />
-            <MapCamera coordinates={mapItemsCoordinates} />
+              </MapView>
+              <MapScale />
+              <MapCamera latitude={sleepSelectedItem.latitude} longitude={sleepSelectedItem.longitude} />
+            </div>
           </div>
         )}
-        {sleepSelectedItem && (
-          <div className={classes.containerMap}>
-            <MapView>
-              <MapGeofence />
-              <MapPositions
-                positions={[{
-                  deviceId: sleepSelectedItem.deviceId,
-                  fixTime: sleepSelectedItem.startTime,
-                  latitude: sleepSelectedItem.latitude,
-                  longitude: sleepSelectedItem.longitude,
-                }]}
-                titleField="fixTime"
-              />
-            </MapView>
-            <MapScale />
-            <MapCamera latitude={sleepSelectedItem.latitude} longitude={sleepSelectedItem.longitude} />
-          </div>
-        )}
-        {activitySelectedItem && (
-          <div className={classes.containerMap}>
-            <MapView>
-              <MapGeofence />
-              {route && (
-                <>
-                  <MapRoutePath positions={route} />
-                  <MapMarkers markers={createActivityMarkers()} />
-                  <MapCamera positions={route} />
-                </>
-              )}
-            </MapView>
-            <MapScale />
+        {!isMobile && activitySelectedItem && (
+          <div className={classes.containerActivity}>
+            <div className={classes.containerActivityLeft}>
+              <div className={classes.containerActivityLeftHead}>
+                {t('reportActivityTime')}
+              </div>
+              <div className={classes.containerActivityRightHead}>
+                {t('reportSleepTime')}
+              </div>
+              <ResponsiveContainer width="100%" height="90%">
+                <PieChart width={200} height={400}>
+                  <Pie
+                    dataKey="value"
+                    isAnimationActive={false}
+                    data={activityPieData}
+                    cx="25%"
+                    cy="50%"
+                    innerRadius={40}
+                    outerRadius={80}
+                    fill="#8884d8"
+                    label={(data) => formatNumericHours(data.payload.value, t)}
+                  >
+                    {activityPieData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={activityColors[index % activityColors.length]} />
+                    ))}
+                  </Pie>
+                  <Pie
+                    dataKey="value"
+                    data={sleepPieData}
+                    cx="75%"
+                    cy="50%"
+                    innerRadius={40}
+                    outerRadius={80}
+                    fill="#82ca9d"
+                    label={(data) => formatNumericHours(data.payload.value, t)}
+                  >
+                    {sleepPieData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={sleepColors[index % sleepColors.length]} />
+                    ))}
+                  </Pie>
+                  <Tooltip
+                    contentStyle={{ backgroundColor: '#07246e80', color: '#eeeeee00' }}
+                    formatter={(value, key) => [formatNumericHours(value, t), key || key]}
+                    labelFormatter={(value) => formatNumericHours(value, t)}
+                  />
+                  <Tooltip />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+            <div className={classes.containerActivityRight}>
+              <MapView>
+                <MapGeofence />
+                {route && (
+                  <>
+                    <MapRoutePath positions={route} />
+                    <MapMarkers markers={createActivityMarkers()} />
+                    <MapCamera positions={route} />
+                  </>
+                )}
+              </MapView>
+              <MapScale />
+            </div>
           </div>
         )}
         <div className={classes.containerMain}>
@@ -297,7 +465,7 @@ const ActivityReportPage = () => {
             {t('reportActivityTime')}
             &nbsp;
             {activityTime !== null && (
-              `   ${activityTime}  `
+              `   ${formatNumericHours(activityTime, t)}  `
             )}
             &nbsp;
             {activitySteps !== null && (
@@ -341,7 +509,7 @@ const ActivityReportPage = () => {
             {t('reportSleepTime')}
             &nbsp;
             {sleepTime !== null && (
-              `${sleepTime}`
+              `${formatNumericHours(sleepTime, t)}`
             )}
           </div>
           <Table>

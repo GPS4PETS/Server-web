@@ -141,7 +141,7 @@ const ChartsReportPage = () => {
                 tickFormatter={(value) => formatTime(value, 'time')}
                 /* domain={['dataMin', 'dataMax']} */
                 domain={[startTime, endTime]}
-                /* scale="linear" */
+                scale="time"
                 interval="equidistantPreserveStart"
               />
               <YAxis
@@ -154,7 +154,7 @@ const ChartsReportPage = () => {
               />
               <CartesianGrid stroke={theme.palette.divider} strokeDasharray="3 3" />
               <Tooltip
-                contentStyle={{ backgroundColor: theme.palette.background.default, color: theme.palette.text.primary }}
+                contentStyle={{ backgroundColor: '#07246e80', color: theme.palette.text.primary }}
                 formatter={(value, key) => [value, positionAttributes[key]?.name || key]}
                 labelFormatter={(value) => formatTime(value, 'seconds')}
               />

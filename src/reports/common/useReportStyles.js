@@ -9,6 +9,34 @@ export default makeStyles((theme) => ({
   containerMap: {
     flexBasis: '40%',
   },
+  containerActivity: {
+    flexBasis: '40%',
+    width: '100%',
+  },
+  containerActivityLeft: {
+    flexBasis: '40%',
+    width: '50%',
+    height: '100%',
+    float: 'left',
+  },
+  containerActivityRight: {
+    flexBasis: '40%',
+    width: '50%',
+    height: '100%',
+    float: 'right',
+  },
+  containerActivityLeftHead: {
+    width: '50%',
+    float: 'left',
+    textAlign: 'center',
+    fontSize: '1.1em',
+  },
+  containerActivityRightHead: {
+    width: '50%',
+    float: 'right',
+    textAlign: 'center',
+    fontSize: '1.1em',
+  },
   containerFilter: {
     flexShrink: 0,
   },
