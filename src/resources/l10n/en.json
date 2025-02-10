@@ -304,6 +304,7 @@
     "positionIgnition": "Ignition",
     "positionFlags": "Flags",
     "positionCharge": "Charge",
+    "positionNetwork": "Cellular Network",
     "positionIp": "IP",
     "positionArchive": "Archive",
     "positionVin": "VIN",

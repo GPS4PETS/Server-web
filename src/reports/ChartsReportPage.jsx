@@ -4,7 +4,7 @@ import {
   FormControl, InputLabel, Select, MenuItem, useTheme,
 } from '@mui/material';
 import {
-  Brush, CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis,
+  Brush, CartesianGrid, Line, AreaChart, Area, ResponsiveContainer, Tooltip, XAxis, YAxis,
 } from 'recharts';
 import ReportFilter from './components/ReportFilter';
 import { formatTime } from '../common/util/formatter';
@@ -18,11 +18,14 @@ import {
   altitudeFromMeters, distanceFromMeters, speedFromKnots,
 } from '../common/util/converter';
 import useReportStyles from './common/useReportStyles';
+import { useAdministrator } from '../common/util/permissions';
 
 const ChartsReportPage = () => {
   const classes = useReportStyles();
   const theme = useTheme();
   const t = useTranslation();
+
+  const admin = useAdministrator();
 
   const positionAttributes = usePositionAttributes(t);
 
@@ -30,25 +33,30 @@ const ChartsReportPage = () => {
   const altitudeUnit = useAttributePreference('altitudeUnit');
   const speedUnit = useAttributePreference('speedUnit');
 
-  const [items, setItems] = useState([]);
-  const [types, setTypes] = useState(['steps']);
-  const [type, setType] = useState('steps');
+  const [routeItems, setRouteItems] = useState([]);
+  const [routeTypes, setRouteTypes] = useState(['steps']);
+  const [routeType, setRouteType] = useState('steps');
   const [timeType] = useState('deviceTime');
 
-  const values = items.map((it) => it[type]);
+  const values = routeItems.map((it) => it[routeType]);
   const minValue = Math.min(...values);
   const maxValue = Math.max(...values);
   const valueRange = maxValue - minValue;
 
+  let startTime;
+  let endTime;
+
   const handleSubmit = useCatch(async ({ deviceId, from, to }) => {
-    const query = new URLSearchParams({ deviceId, from, to });
-    const response = await fetch(`/api/reports/route?${query.toString()}`, {
+    startTime = from;
+    endTime = to;
+    const routeQuery = new URLSearchParams({ deviceId, from, to });
+    const routeResponse = await fetch(`/api/reports/route?${routeQuery.toString()}`, {
       headers: { Accept: 'application/json' },
     });
-    if (response.ok) {
-      const positions = await response.json();
-      const keySet = new Set();
-      const keyList = [];
+    if (routeResponse.ok) {
+      const positions = await routeResponse.json();
+      const routeKeySet = new Set();
+      const routeKeyList = [];
       const formattedPositions = positions.map((position) => {
         const data = { ...position, ...position.attributes };
         const formatted = {};
@@ -56,7 +64,7 @@ const ChartsReportPage = () => {
         Object.keys(data).filter((key) => !['id', 'deviceId'].includes(key)).forEach((key) => {
           const value = data[key];
           if (typeof value === 'number' && (key === 'speed' || key === 'altitude' || key === 'steps' || key === 'course' || key === 'batteryLevel' || key === 'totalDistance')) {
-            keySet.add(key);
+            routeKeySet.add(key);
             const definition = positionAttributes[key] || {};
             switch (definition.dataType) {
               case 'speed':
@@ -79,16 +87,16 @@ const ChartsReportPage = () => {
         });
         return formatted;
       });
-      Object.keys(positionAttributes).forEach((key) => {
-        if (keySet.has(key)) {
-          keyList.push(key);
-          keySet.delete(key);
+      Object.keys(positionAttributes).forEach((routeKey) => {
+        if (routeKeySet.has(routeKey)) {
+          routeKeyList.push(routeKey);
+          routeKeySet.delete(routeKey);
         }
       });
-      setTypes([...keyList, ...keySet]);
-      setItems(formattedPositions);
+      setRouteTypes([...routeKeyList, ...routeKeySet]);
+      setRouteItems(formattedPositions);
     } else {
-      throw Error(await response.text());
+      throw Error(await routeResponse.text());
     }
   });
 
@@ -100,39 +108,49 @@ const ChartsReportPage = () => {
             <InputLabel>{t('reportChartType')}</InputLabel>
             <Select
               label={t('reportChartType')}
-              value={type}
-              onChange={(e) => setType(e.target.value)}
-              disabled={!items.length}
+              value={routeType}
+              onChange={(e) => setRouteType(e.target.value)}
+              disabled={!routeItems.length}
             >
-              {types.map((key) => (
+              {routeTypes.map((key) => (
                 <MenuItem key={key} value={key}>{positionAttributes[key]?.name || key}</MenuItem>
               ))}
             </Select>
           </FormControl>
         </div>
       </ReportFilter>
-      {items.length > 0 && (
+      {routeItems.length > 0 && (
         <div className={classes.chart}>
           <ResponsiveContainer>
-            <LineChart
-              data={items}
+            <AreaChart
+              data={routeItems}
               margin={{
                 top: 10, right: 40, left: 10, bottom: 10,
               }}
             >
+              <defs>
+                <linearGradient id="colorGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#07246e" stopOpacity={0.9} />
+                  <stop offset="95%" stopColor="#07246e" stopOpacity={0.1} />
+                </linearGradient>
+              </defs>
               <XAxis
                 stroke={theme.palette.text.primary}
                 dataKey={timeType}
                 type="number"
                 tickFormatter={(value) => formatTime(value, 'time')}
-                domain={['dataMin', 'dataMax']}
-                scale="time"
+                /* domain={['dataMin', 'dataMax']} */
+                domain={[startTime, endTime]}
+                /* scale="linear" */
+                interval="equidistantPreserveStart"
               />
               <YAxis
                 stroke={theme.palette.text.primary}
                 type="number"
-                tickFormatter={(value) => value.toFixed(2)}
-                domain={[minValue - valueRange / 5, maxValue + valueRange / 5]}
+                tickFormatter={(value) => value.toFixed(0)}
+                domain={[(minValue - valueRange / 5) < 0 ? 0 : (minValue - valueRange / 5), maxValue + valueRange / 5]}
+                interval="equidistantPreserveStart"
+                scale="linear"
               />
               <CartesianGrid stroke={theme.palette.divider} strokeDasharray="3 3" />
               <Tooltip
@@ -140,20 +158,23 @@ const ChartsReportPage = () => {
                 formatter={(value, key) => [value, positionAttributes[key]?.name || key]}
                 labelFormatter={(value) => formatTime(value, 'seconds')}
               />
+              {admin && (
               <Brush
                 dataKey={timeType}
                 height={30}
                 stroke={theme.palette.primary.main}
                 tickFormatter={() => ''}
               />
+              )}
               <Line
                 type="monotone"
-                dataKey={type}
+                dataKey={routeType}
                 stroke={theme.palette.primary.main}
                 dot={false}
                 activeDot={{ r: 6 }}
               />
-            </LineChart>
+              <Area type="monotone" dataKey={routeType} stroke={theme.palette.primary.main} fillOpacity={1} fill="url(#colorGrad)" />
+            </AreaChart>
           </ResponsiveContainer>
         </div>
       )}
