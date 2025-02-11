@@ -1,5 +1,6 @@
 /* eslint-disable react/no-array-index-key */
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useMemo, useState } from 'react';
+import { isMobile } from 'react-device-detect';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import {
@@ -246,8 +247,6 @@ const ActivityReportPage = () => {
 
   const activityColors = ['#82ca9d', '#333333'];
   const sleepColors = ['#8884D8', '#333333'];
-
-  const isMobile = false;
 
   return (
     <PageLayout menu={<ReportsMenu />} breadcrumbs={['reportTitle', 'reportActivity']}>

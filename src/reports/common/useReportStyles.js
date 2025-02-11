@@ -12,6 +12,7 @@ export default makeStyles((theme) => ({
   containerActivity: {
     flexBasis: '40%',
     width: '100%',
+    flexShrink: 0,
   },
   containerActivityLeft: {
     flexBasis: '40%',
@@ -34,6 +35,12 @@ export default makeStyles((theme) => ({
   containerActivityRightHead: {
     width: '50%',
     float: 'right',
+    textAlign: 'center',
+    fontSize: '1.1em',
+  },
+  containerActivityHead: {
+    width: '33%',
+    float: 'left',
     textAlign: 'center',
     fontSize: '1.1em',
   },
