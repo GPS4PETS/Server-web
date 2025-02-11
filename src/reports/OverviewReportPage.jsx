@@ -36,6 +36,10 @@ const OverviewReportPage = () => {
   const [mapItems, setMapItems] = useState([]);
   const mapItemsCoordinates = useMemo(() => mapItems.flatMap((mapItem) => mapItem.route), [mapItems]);
 
+  const [wantedActivityTime, setWantedActivityTime] = useState(7200000);
+  const [wantedSleepTime, setWantedSleepTime] = useState(36000000);
+  const [wantedSteps, setWantedSteps] = useState(10000);
+
   const createMapMarkers = () => mapItems.flatMap((mapItem) => mapItem.events
     .map((event) => mapItem.positions.find((p) => event.positionId === p.id))
     .filter((position) => position != null)
@@ -48,6 +52,50 @@ const OverviewReportPage = () => {
     setActivityTime(null);
     setSleepTime(null);
     setActivitySteps(null);
+
+    let wantedServerJson;
+    try {
+      const activityTimeWantedServerResponse = await fetch('/api/server', {
+        headers: { Accept: 'application/json' },
+      });
+      if (activityTimeWantedServerResponse.ok) {
+        wantedServerJson = await activityTimeWantedServerResponse.json();
+      } else {
+        throw Error(await activityTimeWantedServerResponse.text());
+      }
+    } finally {
+      const activityTimeWantedServer = wantedServerJson.activityTimeWanted * 60 * 1000;
+      setWantedActivityTime(activityTimeWantedServer);
+      const sleepTimeWantedServer = wantedServerJson.sleepTimeWanted * 60 * 1000;
+      setWantedSleepTime(sleepTimeWantedServer);
+      const stepsWantedServer = wantedServerJson.stepsWanted;
+      setWantedSteps(stepsWantedServer);
+    }
+
+    let wantedDeviceJson;
+    try {
+      const activityTimeWantedDeviceResponse = await fetch(`/api/devices/?id=${deviceId}`, {
+        headers: { Accept: 'application/json' },
+      });
+      if (activityTimeWantedDeviceResponse.ok) {
+        wantedDeviceJson = await activityTimeWantedDeviceResponse.json();
+      } else {
+        throw Error(await activityTimeWantedDeviceResponse.text());
+      }
+    } finally {
+      const activityTimeWantedDevice = wantedDeviceJson.activityTimeWanted * 60 * 1000;
+      if (activityTimeWantedDevice > 0) {
+        setWantedActivityTime(activityTimeWantedDevice);
+      }
+      const sleepTimeWantedDevice = wantedDeviceJson.sleepTimeWanted * 60 * 1000;
+      if (sleepTimeWantedDevice > 0) {
+        setWantedSleepTime(sleepTimeWantedDevice);
+      }
+      const stepsWantedDevice = wantedDeviceJson.stepsWanted;
+      if (stepsWantedDevice > 0) {
+        setWantedSteps(stepsWantedDevice);
+      }
+    }
 
     const mapQuery = new URLSearchParams({ from, to });
     mapQuery.append('deviceId', deviceId);
@@ -119,17 +167,17 @@ const OverviewReportPage = () => {
 
   const activityPieData = [
     { name: t('reportActivityTime'), duration: activityTime },
-    { name: t('reportActivityTimeWanted'), duration: ((7200000 - (activityTime != null ? activityTime : 0)) < 0) ? 0 : (7200000 - (activityTime != null ? activityTime : 0)) },
+    { name: t('reportActivityTimeWanted'), duration: ((wantedActivityTime - (activityTime != null ? activityTime : 0)) < 0) ? 0 : (wantedActivityTime - (activityTime != null ? activityTime : 0)) },
   ];
 
   const sleepPieData = [
     { name: t('reportSleepTime'), duration: sleepTime },
-    { name: t('reportSleepTimeWanted'), duration: ((36000000 - (sleepTime != null ? sleepTime : 0)) < 0) ? 0 : (36000000 - (sleepTime != null ? sleepTime : 0)) },
+    { name: t('reportSleepTimeWanted'), duration: ((wantedSleepTime - (sleepTime != null ? sleepTime : 0)) < 0) ? 0 : (wantedSleepTime - (sleepTime != null ? sleepTime : 0)) },
   ];
 
   const stepsPieData = [
     { name: t('positionSteps'), steps: activitySteps },
-    { name: t('reportStepsWanted'), steps: ((10000 - (activitySteps != null ? activitySteps : 0)) < 0) ? 0 : (10000 - (activitySteps != null ? activitySteps : 0)) },
+    { name: t('reportStepsWanted'), steps: ((wantedSteps - (activitySteps != null ? activitySteps : 0)) < 0) ? 0 : (wantedSteps - (activitySteps != null ? activitySteps : 0)) },
   ];
 
   const activityColors = ['#82ca9d', '#333333'];
@@ -157,8 +205,24 @@ const OverviewReportPage = () => {
               <div className={classes.containerActivityHead3}>
                 {t('reportSleepTime')}
               </div>
-              <ResponsiveContainer width="100%" height="90%">
-                <PieChart width={400} height={400} margin={{ top: 30, right: 5, bottom: 20, left: 5 }}>
+              <br />
+              <div className={classes.containerActivityHead3}>
+                {t('reportWanted')}
+                :
+                {formatNumericHours(wantedActivityTime, t)}
+              </div>
+              <div className={classes.containerActivityHead3}>
+                {t('reportWanted')}
+                :
+                {wantedSteps}
+              </div>
+              <div className={classes.containerActivityHead3}>
+                {t('reportWanted')}
+                :
+                {formatNumericHours(wantedSleepTime, t)}
+              </div>
+              <ResponsiveContainer width="100%" height="95%">
+                <PieChart width={400} height={280} margin={{ top: 30, right: 5, bottom: 20, left: 5 }}>
                   <Pie
                     dataKey="duration"
                     isAnimationActive={false}
@@ -169,14 +233,17 @@ const OverviewReportPage = () => {
                     outerRadius={!isMobile ? 80 : 40}
                     fill="#82ca9d"
                     label={(data) => formatNumericHours(data.payload.duration, t)}
+                    startAngle={0}
+                    endAngle={360}
+                    paddingAngle={1}
                   >
-
                     {activityPieData.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={activityColors[index % activityColors.length]} />
                     ))}
                   </Pie>
                   <Pie
                     dataKey="duration"
+                    isAnimationActive={false}
                     data={sleepPieData}
                     cx="75%"
                     cy="25%"
@@ -184,6 +251,9 @@ const OverviewReportPage = () => {
                     outerRadius={!isMobile ? 80 : 40}
                     fill="#82ca9d"
                     label={(data) => formatNumericHours(data.payload.duration, t)}
+                    startAngle={0}
+                    endAngle={360}
+                    paddingAngle={1}
                   >
                     {sleepPieData.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={sleepColors[index % sleepColors.length]} />
@@ -191,13 +261,17 @@ const OverviewReportPage = () => {
                   </Pie>
                   <Pie
                     dataKey="steps"
+                    isAnimationActive={false}
                     data={stepsPieData}
                     cx="50%"
-                    cy="75%"
+                    cy="70%"
                     innerRadius={!isMobile ? 40 : 20}
                     outerRadius={!isMobile ? 80 : 40}
                     fill="#c49102"
                     label={(data) => data.payload.steps}
+                    startAngle={0}
+                    endAngle={360}
+                    paddingAngle={1}
                   >
                     {stepsPieData.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={stepsColors[index % stepsColors.length]} />
@@ -213,7 +287,7 @@ const OverviewReportPage = () => {
                 </PieChart>
               </ResponsiveContainer>
             </div>
-            <div className={classes.containerActivity}>
+            <div className={classes.containerMap}>
               <MapView>
                 <MapGeofence />
                 {mapItems.map((item) => (
