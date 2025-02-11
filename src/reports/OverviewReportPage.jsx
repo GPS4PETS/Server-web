@@ -36,9 +36,9 @@ const OverviewReportPage = () => {
   const [mapItems, setMapItems] = useState([]);
   const mapItemsCoordinates = useMemo(() => mapItems.flatMap((mapItem) => mapItem.route), [mapItems]);
 
-  const [wantedActivityTime, setWantedActivityTime] = useState(7200000);
-  const [wantedSleepTime, setWantedSleepTime] = useState(36000000);
-  const [wantedSteps, setWantedSteps] = useState(10000);
+  const [wantedActivityTime, setWantedActivityTime] = useState(0);
+  const [wantedSleepTime, setWantedSleepTime] = useState(0);
+  const [wantedSteps, setWantedSteps] = useState(0);
 
   const createMapMarkers = () => mapItems.flatMap((mapItem) => mapItem.events
     .map((event) => mapItem.positions.find((p) => event.positionId === p.id))
@@ -64,14 +64,12 @@ const OverviewReportPage = () => {
         throw Error(await WantedServerResponse.text());
       }
     } finally {
-      /*
-      const activityTimeWantedServer = wantedServerJson[1].activityTimeWanted * 60 * 1000;
+      const activityTimeWantedServer = wantedServerJson.activityTimeWanted * 60 * 1000;
       setWantedActivityTime(activityTimeWantedServer);
-      const sleepTimeWantedServer = wantedServerJson[1].sleepTimeWanted * 60 * 1000;
+      const sleepTimeWantedServer = wantedServerJson.sleepTimeWanted * 60 * 1000;
       setWantedSleepTime(sleepTimeWantedServer);
-      const stepsWantedServer = wantedServerJson[1].stepsWanted;
+      const stepsWantedServer = wantedServerJson.stepsWanted;
       setWantedSteps(stepsWantedServer);
-      */
     }
 
     let wantedDeviceJson;
@@ -230,12 +228,12 @@ const OverviewReportPage = () => {
                 {formatNumericHours(wantedSleepTime, t)}
               </div>
               <ResponsiveContainer width="100%" height="95%">
-                <PieChart width={400} height={280} margin={{ top: 30, right: 5, bottom: 20, left: 5 }}>
+                <PieChart width="100%" maxHeight="100%" margin={{ top: 30, right: 5, bottom: 20, left: 5 }}>
                   <Pie
                     dataKey="duration"
                     isAnimationActive={false}
                     data={activityPieData}
-                    cx="25%"
+                    cx={isMobile ? '25%' : '20%'}
                     cy="25%"
                     innerRadius={!isMobile ? 40 : 20}
                     outerRadius={!isMobile ? 80 : 40}
@@ -250,10 +248,28 @@ const OverviewReportPage = () => {
                     ))}
                   </Pie>
                   <Pie
+                    dataKey="steps"
+                    isAnimationActive={false}
+                    data={stepsPieData}
+                    cx="50%"
+                    cy={isMobile ? '70%' : '25%'}
+                    innerRadius={!isMobile ? 40 : 20}
+                    outerRadius={!isMobile ? 80 : 40}
+                    fill="#c49102"
+                    label={(data) => data.payload.steps}
+                    startAngle={0}
+                    endAngle={360}
+                    paddingAngle={1}
+                  >
+                    {stepsPieData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={stepsColors[index % stepsColors.length]} />
+                    ))}
+                  </Pie>
+                  <Pie
                     dataKey="duration"
                     isAnimationActive={false}
                     data={sleepPieData}
-                    cx="75%"
+                    cx={isMobile ? '75%' : '80%'}
                     cy="25%"
                     innerRadius={!isMobile ? 40 : 20}
                     outerRadius={!isMobile ? 80 : 40}
@@ -267,24 +283,6 @@ const OverviewReportPage = () => {
                       <Cell key={`cell-${index}`} fill={sleepColors[index % sleepColors.length]} />
                     ))}
                   </Pie>
-                  <Pie
-                    dataKey="steps"
-                    isAnimationActive={false}
-                    data={stepsPieData}
-                    cx="50%"
-                    cy="70%"
-                    innerRadius={!isMobile ? 40 : 20}
-                    outerRadius={!isMobile ? 80 : 40}
-                    fill="#c49102"
-                    label={(data) => data.payload.steps}
-                    startAngle={0}
-                    endAngle={360}
-                    paddingAngle={1}
-                  >
-                    {stepsPieData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={stepsColors[index % stepsColors.length]} />
-                    ))}
-                  </Pie>
                   { /*
                   <Tooltip
                     contentStyle={{ backgroundColor: '#07246e80', color: theme.palette.text.primary }}
@@ -295,7 +293,7 @@ const OverviewReportPage = () => {
                 </PieChart>
               </ResponsiveContainer>
             </div>
-            <div className={classes.containerMap}>
+            <div className={classes.containerMap2}>
               <MapView>
                 <MapGeofence />
                 {mapItems.map((item) => (
