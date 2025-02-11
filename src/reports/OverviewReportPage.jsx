@@ -130,7 +130,7 @@ const OverviewReportPage = () => {
 
   const stepsPieData = [
     { name: t('positionSteps'), value: activitySteps },
-    { name: t('reportSlStepsWanted'), value: ((15000 - (activitySteps != null ? activitySteps : 0)) < 0) ? 0 : (15000 - (activitySteps != null ? activitySteps : 0)) },
+    { name: t('reportStepsWanted'), value: ((15000 - (activitySteps != null ? activitySteps : 0)) < 0) ? 0 : (15000 - (activitySteps != null ? activitySteps : 0)) },
   ];
 
   const activityColors = ['#82ca9d', '#333333'];
@@ -206,7 +206,7 @@ const OverviewReportPage = () => {
                   <Tooltip
                     contentStyle={{ backgroundColor: '#07246e80', color: theme.palette.text.primary }}
                     formatter={(value, key) => [key === 'steps' ? value : formatNumericHours(value, t), key || key]}
-                    labelFormatter={(value, key) => [key === 'steps' ? value : formatNumericHours(value, t)]}
+                    labelFormatter={(value, key) => [key === 'steps' ? value : formatNumericHours(value, t), key || key]}
                   />
                   <Tooltip />
                 </PieChart>
