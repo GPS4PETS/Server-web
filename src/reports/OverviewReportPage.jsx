@@ -2,10 +2,10 @@
 import React, { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { isMobile } from 'react-device-detect';
 import {
-  PieChart, Pie, Tooltip, Cell, ResponsiveContainer,
+  PieChart, Pie, Cell, ResponsiveContainer,
 } from 'recharts';
-import { useTheme } from '@mui/material';
 import ReportFilter from './components/ReportFilter';
 import { formatNumericHours } from '../common/util/formatter';
 import { useTranslation } from '../common/components/LocalizationProvider';
@@ -24,7 +24,6 @@ import MapMarkers from '../map/MapMarkers';
 const OverviewReportPage = () => {
   const navigate = useNavigate();
   const classes = useReportStyles();
-  const theme = useTheme();
   const t = useTranslation();
 
   const [activityTime, setActivityTime] = useState(null);
@@ -119,23 +118,23 @@ const OverviewReportPage = () => {
   });
 
   const activityPieData = [
-    { name: t('reportActivityTime'), value: activityTime },
-    { name: t('reportActivityTimeWanted'), value: ((7200000 - (activityTime != null ? activityTime : 0)) < 0) ? 0 : (7200000 - (activityTime != null ? activityTime : 0)) },
+    { name: t('reportActivityTime'), duration: activityTime },
+    { name: t('reportActivityTimeWanted'), duration: ((7200000 - (activityTime != null ? activityTime : 0)) < 0) ? 0 : (7200000 - (activityTime != null ? activityTime : 0)) },
   ];
 
   const sleepPieData = [
-    { name: t('reportSleepTime'), value: sleepTime },
-    { name: t('reportSleepTimeWanted'), value: ((36000000 - (sleepTime != null ? sleepTime : 0)) < 0) ? 0 : (36000000 - (sleepTime != null ? sleepTime : 0)) },
+    { name: t('reportSleepTime'), duration: sleepTime },
+    { name: t('reportSleepTimeWanted'), duration: ((36000000 - (sleepTime != null ? sleepTime : 0)) < 0) ? 0 : (36000000 - (sleepTime != null ? sleepTime : 0)) },
   ];
 
   const stepsPieData = [
-    { name: t('positionSteps'), value: activitySteps },
-    { name: t('reportStepsWanted'), value: ((15000 - (activitySteps != null ? activitySteps : 0)) < 0) ? 0 : (15000 - (activitySteps != null ? activitySteps : 0)) },
+    { name: t('positionSteps'), steps: activitySteps },
+    { name: t('reportStepsWanted'), steps: ((10000 - (activitySteps != null ? activitySteps : 0)) < 0) ? 0 : (10000 - (activitySteps != null ? activitySteps : 0)) },
   ];
 
   const activityColors = ['#82ca9d', '#333333'];
   const sleepColors = ['#8884D8', '#333333'];
-  const stepsColors = ['#8884D8', '#333333'];
+  const stepsColors = ['#c49102', '#333333'];
 
   return (
     <PageLayout menu={<ReportsMenu />} breadcrumbs={['reportTitle', 'reportActivity']}>
@@ -149,27 +148,27 @@ const OverviewReportPage = () => {
         {selectedDevice != null && (
           <>
             <div className={classes.containerActivity}>
-              <div className={classes.containerActivityHead}>
+              <div className={classes.containerActivityHead3}>
                 {t('reportActivityTime')}
               </div>
-              <div className={classes.containerActivityHead}>
+              <div className={classes.containerActivityHead3}>
                 {t('positionSteps')}
               </div>
-              <div className={classes.containerActivityHead}>
+              <div className={classes.containerActivityHead3}>
                 {t('reportSleepTime')}
               </div>
               <ResponsiveContainer width="100%" height="90%">
-                <PieChart width={400} height={600}>
+                <PieChart width={400} height={400} margin={{ top: 30, right: 5, bottom: 20, left: 5 }}>
                   <Pie
-                    dataKey="value"
+                    dataKey="duration"
                     isAnimationActive={false}
                     data={activityPieData}
                     cx="25%"
                     cy="25%"
-                    innerRadius={40}
-                    outerRadius={80}
+                    innerRadius={!isMobile ? 40 : 20}
+                    outerRadius={!isMobile ? 80 : 40}
                     fill="#82ca9d"
-                    label={(data) => formatNumericHours(data.payload.value, t)}
+                    label={(data) => formatNumericHours(data.payload.duration, t)}
                   >
 
                     {activityPieData.map((entry, index) => (
@@ -177,38 +176,40 @@ const OverviewReportPage = () => {
                     ))}
                   </Pie>
                   <Pie
-                    dataKey="value"
+                    dataKey="duration"
                     data={sleepPieData}
                     cx="75%"
                     cy="25%"
-                    innerRadius={40}
-                    outerRadius={80}
+                    innerRadius={!isMobile ? 40 : 20}
+                    outerRadius={!isMobile ? 80 : 40}
                     fill="#82ca9d"
-                    label={(data) => formatNumericHours(data.payload.value, t)}
+                    label={(data) => formatNumericHours(data.payload.duration, t)}
                   >
                     {sleepPieData.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={sleepColors[index % sleepColors.length]} />
                     ))}
                   </Pie>
                   <Pie
-                    dataKey="value"
+                    dataKey="steps"
                     data={stepsPieData}
                     cx="50%"
                     cy="75%"
-                    innerRadius={40}
-                    outerRadius={80}
-                    fill="#82ca9d"
+                    innerRadius={!isMobile ? 40 : 20}
+                    outerRadius={!isMobile ? 80 : 40}
+                    fill="#c49102"
+                    label={(data) => data.payload.steps}
                   >
                     {stepsPieData.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={stepsColors[index % stepsColors.length]} />
                     ))}
                   </Pie>
+                  { /*
                   <Tooltip
                     contentStyle={{ backgroundColor: '#07246e80', color: theme.palette.text.primary }}
                     formatter={(value, key) => [key === 'steps' ? value : formatNumericHours(value, t), key || key]}
-                    labelFormatter={(value, key) => [key === 'steps' ? value : formatNumericHours(value, t), key || key]}
+                    labelFormatter={(value, key) => [key === 'steps' ? value : formatNumericHours(value, t)]}
                   />
-                  <Tooltip />
+                  */ }
                 </PieChart>
               </ResponsiveContainer>
             </div>

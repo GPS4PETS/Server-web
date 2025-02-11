@@ -14,31 +14,19 @@ export default makeStyles((theme) => ({
     width: '100%',
     flexShrink: 0,
   },
-  containerActivityLeft: {
+  containerActivity2: {
     flexBasis: '40%',
     width: '50%',
     height: '100%',
     float: 'left',
   },
-  containerActivityRight: {
-    flexBasis: '40%',
-    width: '50%',
-    height: '100%',
-    float: 'right',
-  },
-  containerActivityLeftHead: {
+  containerActivityHead2: {
     width: '50%',
     float: 'left',
     textAlign: 'center',
     fontSize: '1.1em',
   },
-  containerActivityRightHead: {
-    width: '50%',
-    float: 'right',
-    textAlign: 'center',
-    fontSize: '1.1em',
-  },
-  containerActivityHead: {
+  containerActivityHead3: {
     width: '33%',
     float: 'left',
     textAlign: 'center',
