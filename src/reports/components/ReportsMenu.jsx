@@ -49,7 +49,7 @@ const ReportsMenu = () => {
         </>
         )}
         <MenuItem
-          title={t('reportSummary>')}
+          title={t('reportSummary')}
           link="/reports/overview"
           icon={<StarIcon />}
           selected={location.pathname === '/reports/overview'}
