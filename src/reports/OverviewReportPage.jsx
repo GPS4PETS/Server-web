@@ -55,43 +55,51 @@ const OverviewReportPage = () => {
 
     let wantedServerJson;
     try {
-      const activityTimeWantedServerResponse = await fetch('/api/server', {
+      const WantedServerResponse = await fetch('/api/server', {
         headers: { Accept: 'application/json' },
       });
-      if (activityTimeWantedServerResponse.ok) {
-        wantedServerJson = await activityTimeWantedServerResponse.json();
+      if (WantedServerResponse.ok) {
+        wantedServerJson = await WantedServerResponse.json();
       } else {
-        throw Error(await activityTimeWantedServerResponse.text());
+        throw Error(await WantedServerResponse.text());
       }
     } finally {
-      const activityTimeWantedServer = wantedServerJson.activityTimeWanted * 60 * 1000;
+      /*
+      const activityTimeWantedServer = wantedServerJson[1].activityTimeWanted * 60 * 1000;
       setWantedActivityTime(activityTimeWantedServer);
-      const sleepTimeWantedServer = wantedServerJson.sleepTimeWanted * 60 * 1000;
+      const sleepTimeWantedServer = wantedServerJson[1].sleepTimeWanted * 60 * 1000;
       setWantedSleepTime(sleepTimeWantedServer);
-      const stepsWantedServer = wantedServerJson.stepsWanted;
+      const stepsWantedServer = wantedServerJson[1].stepsWanted;
       setWantedSteps(stepsWantedServer);
+      */
     }
 
     let wantedDeviceJson;
     try {
-      const activityTimeWantedDeviceResponse = await fetch(`/api/devices/?id=${deviceId}`, {
+      const WantedDeviceResponse = await fetch(`/api/devices/?id=${deviceId}`, {
         headers: { Accept: 'application/json' },
       });
-      if (activityTimeWantedDeviceResponse.ok) {
-        wantedDeviceJson = await activityTimeWantedDeviceResponse.json();
+      if (WantedDeviceResponse.ok) {
+        wantedDeviceJson = await WantedDeviceResponse.json();
       } else {
-        throw Error(await activityTimeWantedDeviceResponse.text());
+        throw Error(await WantedDeviceResponse.text());
       }
     } finally {
-      const activityTimeWantedDevice = wantedDeviceJson.activityTimeWanted * 60 * 1000;
+      let activityTimeWantedDevice = 0;
+      wantedDeviceJson.forEach((e) => activityTimeWantedDevice += e.activityTimeWanted);
+      activityTimeWantedDevice = activityTimeWantedDevice * 60 * 1000;
       if (activityTimeWantedDevice > 0) {
         setWantedActivityTime(activityTimeWantedDevice);
       }
-      const sleepTimeWantedDevice = wantedDeviceJson.sleepTimeWanted * 60 * 1000;
+      let sleepTimeWantedDevice = 0;
+      wantedDeviceJson.forEach((e) => sleepTimeWantedDevice += e.sleepTimeWanted);
+      sleepTimeWantedDevice = sleepTimeWantedDevice * 60 * 1000;
       if (sleepTimeWantedDevice > 0) {
         setWantedSleepTime(sleepTimeWantedDevice);
       }
-      const stepsWantedDevice = wantedDeviceJson.stepsWanted;
+      let stepsWantedDevice = 0;
+      wantedDeviceJson.forEach((e) => stepsWantedDevice += e.stepsWanted);
+      sleepTimeWantedDevice = sleepTimeWantedDevice * 60 * 1000;
       if (stepsWantedDevice > 0) {
         setWantedSteps(stepsWantedDevice);
       }
