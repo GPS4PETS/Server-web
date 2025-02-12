@@ -90,11 +90,11 @@ const ReportFilter = ({
     }
   };
 
-  /*
   if (deviceId == null) {
-    setState(deviceId, devices.id);
+    const tempid = devices[Object.keys(devices)[0]].id;
+    dispatch(devicesActions.selectId(tempid));
+    handleClick('json');
   }
-  */
 
   return (
     <div className={classes.filter}>
@@ -106,7 +106,6 @@ const ReportFilter = ({
             value={multiDevice ? deviceIds : deviceId}
             onChange={(e) => dispatch(multiDevice ? devicesActions.selectIds(e.target.value) : devicesActions.selectId(e.target.value))}
             multiple={multiDevice}
-            defaultValue={`${Object.values(devices)[1]}`}
             fullWidth
           />
         </div>

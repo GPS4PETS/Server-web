@@ -97,7 +97,6 @@ const OverviewReportPage = () => {
       }
       let stepsWantedDevice = 0;
       wantedDeviceJson.forEach((e) => stepsWantedDevice += e.stepsWanted);
-      sleepTimeWantedDevice = sleepTimeWantedDevice * 60 * 1000;
       if (stepsWantedDevice > 0) {
         setWantedSteps(stepsWantedDevice);
       }
@@ -213,32 +212,37 @@ const OverviewReportPage = () => {
               </div>
               <br />
               <div className={classes.containerActivityHead3}>
+                {formatNumericHours(activityTime, t)}
+                &nbsp; | &nbsp;
                 {t('reportWanted')}
-                :
+                : &nbsp;
                 {formatNumericHours(wantedActivityTime, t)}
               </div>
               <div className={classes.containerActivityHead3}>
+                {activitySteps}
+                &nbsp; | &nbsp;
                 {t('reportWanted')}
-                :
+                : &nbsp;
                 {wantedSteps}
               </div>
               <div className={classes.containerActivityHead3}>
+                {formatNumericHours(sleepTime, t)}
+                &nbsp; | &nbsp;
                 {t('reportWanted')}
-                :
+                : &nbsp;
                 {formatNumericHours(wantedSleepTime, t)}
               </div>
               <ResponsiveContainer width="100%" height="95%">
-                <PieChart width="100%" maxHeight="100%" margin={{ top: 30, right: 5, bottom: 20, left: 5 }}>
+                <PieChart width="100%" maxHeight="100%" margin={{ top: 40, right: 5, bottom: 20, left: 5 }}>
                   <Pie
                     dataKey="duration"
                     isAnimationActive={false}
                     data={activityPieData}
-                    cx={isMobile ? '25%' : '20%'}
+                    cx="20%"
                     cy="25%"
                     innerRadius={!isMobile ? 40 : 20}
                     outerRadius={!isMobile ? 80 : 40}
                     fill="#82ca9d"
-                    label={(data) => formatNumericHours(data.payload.duration, t)}
                     startAngle={0}
                     endAngle={360}
                     paddingAngle={1}
@@ -252,11 +256,10 @@ const OverviewReportPage = () => {
                     isAnimationActive={false}
                     data={stepsPieData}
                     cx="50%"
-                    cy={isMobile ? '70%' : '25%'}
+                    cy="25%"
                     innerRadius={!isMobile ? 40 : 20}
                     outerRadius={!isMobile ? 80 : 40}
                     fill="#c49102"
-                    label={(data) => data.payload.steps}
                     startAngle={0}
                     endAngle={360}
                     paddingAngle={1}
@@ -269,12 +272,11 @@ const OverviewReportPage = () => {
                     dataKey="duration"
                     isAnimationActive={false}
                     data={sleepPieData}
-                    cx={isMobile ? '75%' : '80%'}
+                    cx="80%"
                     cy="25%"
                     innerRadius={!isMobile ? 40 : 20}
                     outerRadius={!isMobile ? 80 : 40}
                     fill="#82ca9d"
-                    label={(data) => formatNumericHours(data.payload.duration, t)}
                     startAngle={0}
                     endAngle={360}
                     paddingAngle={1}
