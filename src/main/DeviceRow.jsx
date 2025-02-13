@@ -90,6 +90,16 @@ const DeviceRow = ({ data, index, style }) => {
         <span className={classes[getStatusColor(item.status)]}>
           {status}
         </span>
+        {position && (
+          <>
+            <br />
+            <span>
+              {t('deviceLastUpdateShort')}
+              : &nbsp;
+              {dayjs(position.serverTime).fromNow()}
+            </span>
+          </>
+        )}
       </>
     );
   };

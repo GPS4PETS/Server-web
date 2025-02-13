@@ -214,6 +214,7 @@
     "deviceContact": "Kontakt",
     "deviceCategory": "Symbol",
     "deviceLastUpdate": "Letzte Aktualisierung",
+    "deviceLastUpdateShort": "Aktualisierung",
     "deviceCommand": "Befehl",
     "deviceFollow": "Folgen",
     "deviceTotalDistance": "Gesamt Strecke",
