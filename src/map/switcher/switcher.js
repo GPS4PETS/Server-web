@@ -86,6 +86,7 @@ export class SwitcherControl {
   onAdd(map) {
     this.map = map;
     this.controlContainer = document.createElement('div');
+    this.controlContainer.style.display = 'none';
     this.controlContainer.classList.add('maplibregl-ctrl');
     this.controlContainer.classList.add('maplibregl-ctrl-group');
     this.mapStyleContainer = document.createElement('div');
