@@ -455,7 +455,7 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
       setLightd(lightdis);
     }
     getLightd();
-  }, [fetchcmd, fetchpos]);
+  }, [fetchcmd, fetchpos, lcounter]);
 
   const [buzzerd, setBuzzerd] = useState(true);
   useEffect(() => {
@@ -468,7 +468,7 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
       setBuzzerd(buzzerdis);
     }
     getBuzzerd();
-  }, [fetchcmd, fetchpos]);
+  }, [fetchcmd, fetchpos, bcounter]);
 
   const [lightdcolor, setLightdcolor] = useState('#FFFFFF80');
   useEffect(() => {
@@ -496,7 +496,7 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
       setLightdcolor(ldcolor);
     }
     getLightdcolor();
-  }, [fetchpos]);
+  }, [fetchpos, lcounter]);
 
   const [buzzerdcolor, setBuzzerdcolor] = useState('#FFFFFF80');
   useEffect(() => {
@@ -524,7 +524,7 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
       setBuzzerdcolor(bdcolor);
     }
     getBuzzerdcolor();
-  }, [fetchpos]);
+  }, [fetchpos, bcounter]);
 
   const livemodehandle = useCatch(async () => {
     // livemode
