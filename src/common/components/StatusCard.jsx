@@ -488,8 +488,10 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
           setLcounter((ltime));
           setLightl(false);
         }
-      } else {
+      } else if (fetchpos.indexOf('"lightswitch":0') > -1) {
         setLcounter(0);
+      } else if (lcounter > 0) {
+        ldcolor = '#FFFF0080';
       }
       setLightdcolor(ldcolor);
     }
@@ -514,8 +516,10 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
           setBcounter((stime));
           setBuzzerl(false);
         }
-      } else {
+      } else if (fetchpos.indexOf('"soundswitch":0') > -1) {
         setBcounter(0);
+      } else if (bcounter > 0) {
+        bdcolor = '#0000FF80';
       }
       setBuzzerdcolor(bdcolor);
     }
@@ -535,7 +539,7 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
   });
   const lighthandle = useCatch(async () => {
     // light
-    // setLcounter(60);
+    setLcounter(60);
     setLightl(true);
     setLightdcolor('#FFFF0080');
     fetch('/api/commands/send', {
@@ -546,7 +550,7 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
   });
   const buzzerhandle = useCatch(async () => {
     // buzzer
-    // setBcounter(60);
+    setBcounter(60);
     setBuzzerl(true);
     setBuzzerdcolor('#0000FF80');
     fetch('/api/commands/send', {
