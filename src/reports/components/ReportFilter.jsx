@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   FormControl, InputLabel, Select, MenuItem, Button, TextField, Typography,
 } from '@mui/material';
@@ -90,11 +90,22 @@ const ReportFilter = ({
     }
   };
 
-  if (deviceId == null) {
-    const tempid = devices[Object.keys(devices)[0]].id;
-    dispatch(devicesActions.selectId(tempid));
-    handleClick('json');
-  }
+  const buttonRef = useRef(null);
+  const buttonsplitRef = useRef(null);
+
+  useEffect(() => {
+    if (deviceId == null || !(deviceId % 1 === 0)) {
+      const tempid = devices[Object.keys(devices)[0]].id;
+      dispatch(devicesActions.selectId(tempid));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (deviceId && (deviceId % 1 === 0)) {
+      buttonRef.current.addEventListener('click', handleClick);
+      buttonRef.current.click();
+    }
+  }, [deviceId]);
 
   return (
     <div className={classes.filter}>
@@ -190,7 +201,9 @@ const ReportFilter = ({
             variant="outlined"
             color="secondary"
             disabled={disabled}
-            onClick={() => handleClick('json')}
+            value={t('reportShow')}
+            ref={buttonRef}
+            onClick={() => handleClick({ json: t('reportShow') })}
           >
             <Typography variant="button" noWrap>{t(loading ? 'sharedLoading' : 'reportShow')}</Typography>
           </Button>
@@ -203,6 +216,7 @@ const ReportFilter = ({
             onClick={handleClick}
             selected={button}
             setSelected={(value) => setButton(value)}
+            ref={buttonsplitRef}
             options={!admin ? {
               json: t('reportShow'),
             } : {
