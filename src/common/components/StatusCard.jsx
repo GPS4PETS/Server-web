@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { isMobile } from 'react-device-detect';
 import dayjs from 'dayjs';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Link as RouterLink } from 'react-router-dom';
@@ -572,7 +573,7 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
             handle={`.${classes.media}, .${classes.header}`}
           >
             <Card elevation={3} className={classes.card}>
-              {deviceImage ? (
+              {!isMobile && deviceImage && (
                 <CardMedia
                   className={classes.media}
                   image={`/api/media/${device.uniqueId}/${deviceImage}`}
@@ -585,33 +586,20 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
                     <CloseIcon fontSize="small" className={classes.mediaButton} />
                   </IconButton>
                 </CardMedia>
-              ) : (
-                <>
-                  <CardMedia
-                    className={classes.media}
-                    image="/device.png"
+              )}
+              {!isMobile && !deviceImage && (
+                <CardMedia
+                  className={classes.media}
+                  image="/device.png"
+                >
+                  <IconButton
+                    size="small"
+                    onClick={onClose}
+                    onTouchStart={onClose}
                   >
-                    <IconButton
-                      size="small"
-                      onClick={onClose}
-                      onTouchStart={onClose}
-                    >
-                      <CloseIcon fontSize="small" className={classes.mediaButton} />
-                    </IconButton>
-                  </CardMedia>
-                  <div className={classes.header}>
-                    <Typography variant="body2" color="textSecondary">
-                      {device.name}
-                    </Typography>
-                    <IconButton
-                      size="small"
-                      onClick={onClose}
-                      onTouchStart={onClose}
-                    >
-                      <CloseIcon fontSize="small" />
-                    </IconButton>
-                  </div>
-                </>
+                    <CloseIcon fontSize="small" className={classes.mediaButton} />
+                  </IconButton>
+                </CardMedia>
               )}
               {!position && (
                 <CardContent className={classes.content}>
