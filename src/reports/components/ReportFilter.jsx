@@ -107,10 +107,15 @@ const ReportFilter = ({
     }
   }, [deviceId]);
 
+  let hide = false;
+  if (Object.values(devices).length === 1) {
+    hide = true;
+  }
+
   return (
     <div className={classes.filter}>
       {!ignoreDevice && (
-        <div className={classes.filterItem}>
+        <div className={classes.filterItem} style={{ display: hide ? 'none' : 'block' }}>
           <SelectField
             label={t(multiDevice ? 'deviceTitle' : 'reportDevice')}
             data={Object.values(devices).sort((a, b) => a.name.localeCompare(b.name))}
