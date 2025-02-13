@@ -34,8 +34,8 @@ const ChartsReportPage = () => {
   const speedUnit = useAttributePreference('speedUnit');
 
   const [routeItems, setRouteItems] = useState([]);
-  const [routeTypes, setRouteTypes] = useState(['steps']);
-  const [routeType, setRouteType] = useState('steps');
+  const [routeTypes, setRouteTypes] = useState(['totalDistance']);
+  const [routeType, setRouteType] = useState('totalDistance');
   const [timeType] = useState('deviceTime');
 
   const values = routeItems.map((it) => it[routeType]);
@@ -99,6 +99,10 @@ const ChartsReportPage = () => {
       throw Error(await routeResponse.text());
     }
   });
+
+  if (routeType == null) {
+    setRouteType('totalDistance');
+  }
 
   return (
     <PageLayout menu={<ReportsMenu />} breadcrumbs={['reportTitle', 'reportChart']}>
