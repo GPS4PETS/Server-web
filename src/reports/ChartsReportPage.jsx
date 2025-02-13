@@ -36,7 +36,7 @@ const ChartsReportPage = () => {
   const [routeItems, setRouteItems] = useState([]);
   const [routeTypes, setRouteTypes] = useState(['totalDistance']);
   const [routeType, setRouteType] = useState('totalDistance');
-  const [timeType] = useState('deviceTime');
+  const [timeType] = useState('serverTime');
 
   const values = routeItems.map((it) => it[routeType]);
   const minValue = Math.min(...values);
@@ -60,7 +60,9 @@ const ChartsReportPage = () => {
       const formattedPositions = positions.map((position) => {
         const data = { ...position, ...position.attributes };
         const formatted = {};
+        formatted.fixTime = dayjs(position.fixTime).valueOf();
         formatted.deviceTime = dayjs(position.deviceTime).valueOf();
+        formatted.serverTime = dayjs(position.serverTime).valueOf();
         Object.keys(data).filter((key) => !['id', 'deviceId'].includes(key)).forEach((key) => {
           const value = data[key];
           if (typeof value === 'number' && (key === 'speed' || key === 'altitude' || key === 'steps' || key === 'course' || key === 'batteryLevel' || key === 'totalDistance')) {
@@ -99,10 +101,6 @@ const ChartsReportPage = () => {
       throw Error(await routeResponse.text());
     }
   });
-
-  if (routeType == null) {
-    setRouteType('totalDistance');
-  }
 
   return (
     <PageLayout menu={<ReportsMenu />} breadcrumbs={['reportTitle', 'reportChart']}>

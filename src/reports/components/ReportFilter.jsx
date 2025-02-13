@@ -29,6 +29,7 @@ const ReportFilter = ({
   const period = useSelector((state) => state.reports.period);
   const from = useSelector((state) => state.reports.from);
   const to = useSelector((state) => state.reports.to);
+  const firstload = useSelector((state) => state.reports.firstload);
   const [button, setButton] = useState('json');
 
   const [description, setDescription] = useState();
@@ -49,8 +50,8 @@ const ReportFilter = ({
       let selectedTo;
       switch (period) {
         case 'today':
-          selectedFrom = dayjs().startOf('day');
-          selectedTo = dayjs().endOf('day');
+          selectedFrom = dayjs().startOf('day').add(1, 'hour');
+          selectedTo = dayjs().endOf('day').add(1, 'hour');
           break;
         case 'yesterday':
           selectedFrom = dayjs().subtract(1, 'day').startOf('day');
@@ -97,11 +98,19 @@ const ReportFilter = ({
     if (deviceId == null || !(deviceId % 1 === 0)) {
       const tempid = devices[Object.keys(devices)[0]].id;
       dispatch(devicesActions.selectId(tempid));
+      dispatch(reportsActions.updatePeriod('today'));
+      dispatch(reportsActions.updateFrom(dayjs().startOf('day')));
+      dispatch(reportsActions.updateTo(dayjs().endOf('day')));
     }
   }, []);
 
+  /* useEffect(() => { */
+  dispatch(reportsActions.setFirstload(true));
+  /* }, [URL]); */
+
   useEffect(() => {
-    if (deviceId && (deviceId % 1 === 0)) {
+    if (deviceId && (deviceId % 1 === 0) && firstload) {
+      dispatch(reportsActions.setFirstload(false));
       buttonRef.current.addEventListener('click', handleClick);
       buttonRef.current.click();
     }
