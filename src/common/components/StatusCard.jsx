@@ -152,6 +152,10 @@ const useStyles = makeStyles((theme) => ({
   neutral: {
     color: theme.palette.neutral.main,
   },
+  center: {
+    textAlign: 'center',
+    fontSize: '1.01em',
+  },
   root: ({ desktopPadding }) => ({
     pointerEvents: 'none',
     position: 'fixed',
@@ -613,6 +617,11 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
                 <CardContent className={classes.content}>
                   <Table size="small" classes={{ root: classes.table }}>
                     <TableBody>
+                      <TableRow>
+                        <TableCell colSpan={2} className={classes.center}>
+                          {device.name}
+                        </TableCell>
+                      </TableRow>
                       <StatusRow
                         key={t('deviceStatus')}
                         name={t('deviceStatus')}
@@ -626,6 +635,11 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
               <CardContent className={classes.content}>
                 <Table size="small" classes={{ root: classes.table }}>
                   <TableBody>
+                    <TableRow>
+                      <TableCell colSpan={2} className={classes.center}>
+                        {device.name}
+                      </TableCell>
+                    </TableRow>
                     {positionItems.split(',').filter((key) => position.hasOwnProperty(key) || position.attributes.hasOwnProperty(key)).map((key) => (
                       <StatusRow
                         key={key}
