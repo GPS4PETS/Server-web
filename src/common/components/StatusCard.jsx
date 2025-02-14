@@ -157,6 +157,19 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'center',
     fontSize: '1.01em',
   },
+  device: {
+    position: 'relative;',
+    left: '50%',
+    transform: 'translateX(-50%)',
+    textAlign: 'center',
+    fontSize: '1.01em',
+    float: 'left',
+  },
+  close: {
+    textAlign: 'right',
+    width: '20px',
+    float: 'right',
+  },
   root: ({ desktopPadding }) => ({
     pointerEvents: 'none',
     position: 'fixed',
@@ -603,13 +616,24 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
               )}
               {!position && (
                 <CardContent className={classes.content}>
+                  <div>
+                    <span className={classes.device}>
+                      {device.name}
+                    </span>
+                    {isMobile && (
+                      <span className={classes.close}>
+                        <IconButton
+                          size="small"
+                          onClick={onClose}
+                          onTouchStart={onClose}
+                        >
+                          <CloseIcon fontSize="small" className={classes.mediaButton} />
+                        </IconButton>
+                      </span>
+                    )}
+                  </div>
                   <Table size="small" classes={{ root: classes.table }}>
                     <TableBody>
-                      <TableRow>
-                        <TableCell colSpan={2} className={classes.center}>
-                          {device.name}
-                        </TableCell>
-                      </TableRow>
                       <StatusRow
                         key={t('deviceStatus')}
                         name={t('deviceStatus')}
@@ -621,13 +645,24 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
               )}
               {position && (
               <CardContent className={classes.content}>
+                <div>
+                  <span className={classes.device}>
+                    {device.name}
+                  </span>
+                  {isMobile && (
+                    <span className={classes.close}>
+                      <IconButton
+                        size="small"
+                        onClick={onClose}
+                        onTouchStart={onClose}
+                      >
+                        <CloseIcon fontSize="small" className={classes.mediaButton} />
+                      </IconButton>
+                    </span>
+                  )}
+                </div>
                 <Table size="small" classes={{ root: classes.table }}>
                   <TableBody>
-                    <TableRow>
-                      <TableCell colSpan={2} className={classes.center}>
-                        {device.name}
-                      </TableCell>
-                    </TableRow>
                     {positionItems.split(',').filter((key) => position.hasOwnProperty(key) || position.attributes.hasOwnProperty(key)).map((key) => (
                       <StatusRow
                         key={key}
