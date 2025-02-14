@@ -91,5 +91,5 @@ export const findFonts = (map) => {
   if (glyphs.startsWith('https://tiles.openfreemap.org')) {
     return ['Noto Sans Regular'];
   }
-  return ['Open Sans Regular', 'Arial Unicode MS Regular'];
+  return ['Open Sans Bold', 'Open Sans Regular', 'Arial Unicode MS Regular'];
 };

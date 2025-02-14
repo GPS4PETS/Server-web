@@ -111,13 +111,13 @@ const MapPositions = ({ positions, onClick, showStatus, selectedPosition, titleF
           'text-field': `{${titleField || 'name'}}`,
           'text-allow-overlap': true,
           'text-anchor': 'bottom',
-          'text-offset': [0, -2 * iconScale],
+          'text-offset': [0, -1.2 * iconScale],
           'text-font': findFonts(map),
-          'text-size': 12,
+          'text-size': 16,
         },
         paint: {
           'text-halo-color': 'white',
-          'text-halo-width': 1,
+          'text-halo-width': 2,
         },
       });
       map.addLayer({
