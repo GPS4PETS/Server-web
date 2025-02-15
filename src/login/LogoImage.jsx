@@ -23,12 +23,13 @@ const LogoImage = ({ color }) => {
 
   const logo = useSelector((state) => state.session.server.attributes?.logo);
   const logoInverted = useSelector((state) => state.session.server.attributes?.logoInverted);
+  const altext = useSelector((state) => state.session.server.attributes?.title);
 
   if (logo) {
     if (expanded && logoInverted) {
-      return <img className={classes.image} src={logoInverted} alt="" />;
+      return <img className={classes.image} src={logoInverted} alt={altext} />;
     }
-    return <img className={classes.image} src={logo} alt="" />;
+    return <img className={classes.image} src={logo} alt={altext} />;
   }
   return <Logo className={classes.image} style={{ color }} />;
 };
