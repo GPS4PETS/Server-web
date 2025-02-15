@@ -91,6 +91,11 @@ const ReportFilter = ({
     }
   };
 
+  let hide = false;
+  if (Object.values(devices).length === 1) {
+    hide = true;
+  }
+
   const buttonRef = useRef(null);
   const buttonsplitRef = useRef(null);
 
@@ -102,24 +107,19 @@ const ReportFilter = ({
       dispatch(reportsActions.updateFrom(dayjs().startOf('day')));
       dispatch(reportsActions.updateTo(dayjs().endOf('day')));
     }
-  }, []);
+  }, [URL]);
 
   useEffect(() => {
     dispatch(reportsActions.setFirstload(true));
   }, [URL]);
 
   useEffect(() => {
-    if (deviceId && buttonRef.current && (deviceId % 1 === 0) && firstload) {
+    if (deviceId && buttonRef.current && (deviceId % 1 === 0) && hide) {
       dispatch(reportsActions.setFirstload(false));
       buttonRef.current.addEventListener('click', handleClick);
       buttonRef.current.click();
     }
-  }, [buttonRef]);
-
-  let hide = false;
-  if (Object.values(devices).length === 1) {
-    hide = true;
-  }
+  }, [buttonRef, deviceId, URL, hide]);
 
   return (
     <div className={classes.filter}>
