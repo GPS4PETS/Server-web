@@ -29,7 +29,7 @@ const ReportFilter = ({
   const period = useSelector((state) => state.reports.period);
   const from = useSelector((state) => state.reports.from);
   const to = useSelector((state) => state.reports.to);
-  const firstload = useSelector((state) => state.reports.firstload);
+  /* const firstload = useSelector((state) => state.reports.firstload); */
   const [button, setButton] = useState('json');
 
   const [description, setDescription] = useState();
@@ -109,13 +109,15 @@ const ReportFilter = ({
     }
   }, [URL]);
 
+  /*
   useEffect(() => {
     dispatch(reportsActions.setFirstload(true));
   }, [URL]);
+  */
 
   useEffect(() => {
     if (deviceId && buttonRef.current && (deviceId % 1 === 0) && hide) {
-      dispatch(reportsActions.setFirstload(false));
+      /* dispatch(reportsActions.setFirstload(false)); */
       buttonRef.current.addEventListener('click', handleClick);
       buttonRef.current.click();
     }
