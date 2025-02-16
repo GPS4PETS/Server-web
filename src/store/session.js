@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { isMobile } from 'react-device-detect';
 
 const { reducer, actions } = createSlice({
   name: 'session',
@@ -10,8 +11,12 @@ const { reducer, actions } = createSlice({
     logs: [],
     positions: {},
     history: {},
+    devicesOpen: !isMobile,
   },
   reducers: {
+    setDevicesOpen(state, action) {
+      state.devicesOpen = action.payload;
+    },
     updateServer(state, action) {
       state.server = action.payload;
     },

@@ -14,7 +14,7 @@ import MapDefaultCamera from '../map/main/MapDefaultCamera';
 import MapLiveRoutes from '../map/main/MapLiveRoutes';
 import MapPositions from '../map/MapPositions';
 import MapOverlay from '../map/overlay/MapOverlay';
-/* import MapGeocoder from '../map/geocoder/MapGeocoder'; */
+import MapGeocoder from '../map/geocoder/MapGeocoder';
 import MapScale from '../map/MapScale';
 import MapNotification from '../map/notification/MapNotification';
 import useFeatures from '../common/util/useFeatures';
@@ -52,7 +52,7 @@ const MainMap = ({ filteredPositions, selectedPosition, onEventsClick }) => {
       </MapView>
       <MapScale />
       <MapCurrentLocation />
-      { /* <MapGeocoder /> */ }
+      <MapGeocoder />
       {!features.disableEvents && (
         <MapNotification enabled={eventsAvailable} onClick={onEventsClick} />
       )}

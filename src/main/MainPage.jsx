@@ -1,6 +1,7 @@
 import React, {
   useState, useCallback, useEffect,
 } from 'react';
+import { isMobile } from 'react-device-detect';
 import { Paper } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { useTheme } from '@mui/material/styles';
@@ -9,7 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import DeviceList from './DeviceList';
 import BottomMenu from '../common/components/BottomMenu';
 import StatusCard from '../common/components/StatusCard';
-import { devicesActions } from '../store';
+import { devicesActions, sessionActions } from '../store';
 import usePersistedState from '../common/util/usePersistedState';
 import EventsDrawer from './EventsDrawer';
 import useFilter from './useFilter';
@@ -86,14 +87,15 @@ const MainPage = () => {
   const [filterSort, setFilterSort] = usePersistedState('filterSort', '');
   const [filterMap, setFilterMap] = usePersistedState('filterMap', false);
 
-  const [devicesOpen, setDevicesOpen] = useState(desktop);
+  /* const [devicesOpen, setDevicesOpen] = useState(desktop); */
+  const devicesOpen = useSelector((state) => state.session.devicesOpen);
   const [eventsOpen, setEventsOpen] = useState(false);
 
   const onEventsClick = useCallback(() => setEventsOpen(true), [setEventsOpen]);
 
   useEffect(() => {
-    if (!desktop && mapOnSelect && selectedDeviceId) {
-      setDevicesOpen(false);
+    if (isMobile && !desktop && mapOnSelect && selectedDeviceId) {
+      dispatch(sessionActions.setDevicesOpen(false));
     }
   }, [desktop, mapOnSelect, selectedDeviceId]);
 
@@ -109,24 +111,24 @@ const MainPage = () => {
         />
       )}
       <div className={classes.sidebar}>
-        <Paper square elevation={3} className={classes.header}>
-          <MainToolbar
-            filteredDevices={filteredDevices}
-            devicesOpen={devicesOpen}
-            setDevicesOpen={setDevicesOpen}
-            keyword={keyword}
-            setKeyword={setKeyword}
-            filter={filter}
-            setFilter={setFilter}
-            filterSort={filterSort}
-            setFilterSort={setFilterSort}
-            filterMap={filterMap}
-            setFilterMap={setFilterMap}
-          />
-        </Paper>
+        {!isMobile && (
+          <Paper square elevation={3} className={classes.header}>
+            <MainToolbar
+              filteredDevices={filteredDevices}
+              keyword={keyword}
+              setKeyword={setKeyword}
+              filter={filter}
+              setFilter={setFilter}
+              filterSort={filterSort}
+              setFilterSort={setFilterSort}
+              filterMap={filterMap}
+              setFilterMap={setFilterMap}
+            />
+          </Paper>
+        )}
         <div className={classes.middle}>
           {!desktop && (
-            <div className={classes.contentMap}>
+            <div className={classes.contentMap} style={devicesOpen ? { visibility: 'hidden' } : {}}>
               <MainMap
                 filteredPositions={filteredPositions}
                 selectedPosition={selectedPosition}

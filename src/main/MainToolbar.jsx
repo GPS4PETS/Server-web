@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import {
   Toolbar, IconButton, OutlinedInput, InputAdornment, Popover, FormControl, InputLabel, Select, MenuItem, FormGroup, FormControlLabel, Checkbox, Badge, ListItemButton, ListItemText, Tooltip,
@@ -9,6 +9,7 @@ import MapIcon from '@mui/icons-material/Map';
 import ViewListIcon from '@mui/icons-material/ViewList';
 import AddIcon from '@mui/icons-material/Add';
 import TuneIcon from '@mui/icons-material/Tune';
+import { sessionActions } from '../store';
 import { useTranslation } from '../common/components/LocalizationProvider';
 import { useAdministrator, useDeviceReadonly } from '../common/util/permissions';
 import DeviceRow from './DeviceRow';
@@ -29,8 +30,6 @@ const useStyles = makeStyles((theme) => ({
 
 const MainToolbar = ({
   filteredDevices,
-  devicesOpen,
-  setDevicesOpen,
   keyword,
   setKeyword,
   filter,
@@ -44,12 +43,14 @@ const MainToolbar = ({
   const theme = useTheme();
   const navigate = useNavigate();
   const t = useTranslation();
+  const dispatch = useDispatch();
 
   const admin = useAdministrator();
   const deviceReadonly = useDeviceReadonly();
 
   const groups = useSelector((state) => state.groups.items);
   const devices = useSelector((state) => state.devices.items);
+  const devicesOpen = useSelector((state) => state.session.devicesOpen);
 
   const toolbarRef = useRef();
   const inputRef = useRef();
@@ -58,9 +59,17 @@ const MainToolbar = ({
 
   const deviceStatusCount = (status) => Object.values(devices).filter((d) => d.status === status).length;
 
+  const handleClick = () => {
+    dispatch(sessionActions.setDevicesOpen(!devicesOpen));
+  };
+
+  const handleListClick = () => {
+    dispatch(sessionActions.setDevicesOpen(true));
+  };
+
   return (
     <Toolbar ref={toolbarRef} className={classes.toolbar}>
-      <IconButton edge="start" onClick={() => setDevicesOpen(!devicesOpen)}>
+      <IconButton edge="start" onClick={handleClick}>
         {devicesOpen ? <MapIcon /> : <ViewListIcon />}
       </IconButton>
       <OutlinedInput
@@ -105,7 +114,7 @@ const MainToolbar = ({
           <DeviceRow key={filteredDevices[index].id} data={filteredDevices} index={index} />
         ))}
         {filteredDevices.length > 3 && (
-          <ListItemButton alignItems="center" onClick={() => setDevicesOpen(true)}>
+          <ListItemButton alignItems="center" onClick={handleListClick}>
             <ListItemText
               primary={t('notificationAlways')}
               style={{ textAlign: 'center' }}

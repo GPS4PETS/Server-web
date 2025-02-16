@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
+import { isMobile } from 'react-device-detect';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
 import {
   Paper, BottomNavigation, BottomNavigationAction, Menu, MenuItem, Typography, Badge,
 } from '@mui/material';
-
 import DescriptionIcon from '@mui/icons-material/QueryStats';
 import SettingsIcon from '@mui/icons-material/Build';
 import MapIcon from '@mui/icons-material/Map';
+import ViewListIcon from '@mui/icons-material/ViewList';
 import PersonIcon from '@mui/icons-material/Person';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 
@@ -27,6 +28,7 @@ const BottomMenu = () => {
   const disableReports = useRestriction('disableReports');
   const user = useSelector((state) => state.session.user);
   const socket = useSelector((state) => state.session.socket);
+  const devicesOpen = useSelector((state) => state.session.devicesOpen);
 
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -98,6 +100,13 @@ const BottomMenu = () => {
       case 'logout':
         handleLogout();
         break;
+      case 'devices':
+        if (location.pathname === '/') {
+          dispatch(sessionActions.setDevicesOpen(!devicesOpen));
+        } else {
+          navigate('/');
+        }
+        break;
       default:
         break;
     }
@@ -106,6 +115,7 @@ const BottomMenu = () => {
   return (
     <Paper square elevation={3}>
       <BottomNavigation value={currentSelection()} onChange={handleSelection} showLabels>
+        {!isMobile && (
         <BottomNavigationAction
           label={t('mapTitle')}
           icon={(
@@ -115,6 +125,18 @@ const BottomMenu = () => {
           )}
           value="map"
         />
+        )}
+        {isMobile && (
+          <BottomNavigationAction
+            label={devicesOpen || location.pathname !== '/' ? t('mapTitle') : t('deviceTitle')}
+            icon={(
+              <Badge color="error" variant="dot" overlap="circular" invisible={socket !== false}>
+                {devicesOpen || location.pathname !== '/' ? <MapIcon /> : <ViewListIcon />}
+              </Badge>
+            )}
+            value="devices"
+          />
+        )}
         {!disableReports && (
           <BottomNavigationAction label={t('reportTitle')} icon={<DescriptionIcon />} value="reports" />
         )}
