@@ -79,6 +79,10 @@ const BottomMenu = () => {
     dispatch(sessionActions.updateUser(null));
   };
 
+  const handleSettings = () => {
+    navigate('/settings/preferences');
+  };
+
   const handleSelection = (event, value) => {
     switch (value) {
       case 'map':
@@ -124,6 +128,9 @@ const BottomMenu = () => {
             </Badge>
           )}
           value="map"
+          sx={{
+            fontSize: '1.4em',
+          }}
         />
         )}
         {isMobile && (
@@ -135,23 +142,58 @@ const BottomMenu = () => {
               </Badge>
             )}
             value="devices"
+            sx={{
+              fontSize: '1.4em',
+            }}
           />
         )}
         {!disableReports && (
-          <BottomNavigationAction label={t('reportTitle')} icon={<DescriptionIcon />} value="reports" />
+          <BottomNavigationAction
+            label={t('reportTitle')}
+            icon={<DescriptionIcon />}
+            value="reports"
+            sx={{
+              fontSize: '1.4em',
+            }}
+          />
         )}
+        { /*
         <BottomNavigationAction label={t('settingsTitle')} icon={<SettingsIcon />} value="settings" />
+        */ }
         {readonly ? (
-          <BottomNavigationAction label={t('loginLogout')} icon={<ExitToAppIcon />} value="logout" />
+          <BottomNavigationAction
+            label={t('loginLogout')}
+            icon={<ExitToAppIcon />}
+            value="logout"
+            sx={{
+              fontSize: '1.4em',
+            }}
+          />
         ) : (
-          <BottomNavigationAction label={t('settingsUser')} icon={<PersonIcon />} value="account" />
+          <BottomNavigationAction
+            label={t('settingsTitle')}
+            icon={<SettingsIcon />}
+            value="account"
+            sx={{
+              fontSize: '1.4em',
+            }}
+          />
         )}
       </BottomNavigation>
       <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={() => setAnchorEl(null)}>
+        <MenuItem onClick={handleSettings}>
+          <SettingsIcon fontSize="small" />
+          &nbsp;
+          <Typography color="textPrimary">{t('settingsTitle')}</Typography>
+        </MenuItem>
         <MenuItem onClick={handleAccount}>
+          <PersonIcon fontSize="small" />
+          &nbsp;
           <Typography color="textPrimary">{t('settingsUser')}</Typography>
         </MenuItem>
         <MenuItem onClick={handleLogout}>
+          <ExitToAppIcon fontSize="small" />
+          &nbsp;
           <Typography color="error">{t('loginLogout')}</Typography>
         </MenuItem>
       </Menu>
