@@ -12,7 +12,7 @@ import ViewListIcon from '@mui/icons-material/ViewList';
 import PersonIcon from '@mui/icons-material/Person';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 
-import { sessionActions } from '../../store';
+import { sessionActions, devicesActions } from '../../store';
 import { useTranslation } from './LocalizationProvider';
 import { useAdministrator, useRestriction } from '../util/permissions';
 import { nativePostMessage } from './NativeInterface';
@@ -80,6 +80,7 @@ const BottomMenu = () => {
   };
 
   const handleSettings = () => {
+    setAnchorEl(null);
     navigate('/settings/preferences');
   };
 
@@ -106,6 +107,9 @@ const BottomMenu = () => {
         break;
       case 'devices':
         if (location.pathname === '/') {
+          if (isMobile) {
+            dispatch(devicesActions.selectId(null));
+          }
           dispatch(sessionActions.setDevicesOpen(!devicesOpen));
         } else {
           navigate('/');

@@ -203,6 +203,10 @@ const StatusRow = ({ name, content }) => {
 };
 
 const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPadding = 0 }) => {
+  if (deviceId === null) {
+    onClose();
+  }
+
   const classes = useStyles({ desktopPadding });
 
   const navigate = useNavigate();
