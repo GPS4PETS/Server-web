@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { isMobile } from 'react-device-detect';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -73,7 +74,7 @@ const DevicesPage = () => {
             {admin && <TableCell>{t('groupParent')}</TableCell> }
             {admin && <TableCell>{t('sharedPhone')}</TableCell>}
             {admin && <TableCell>{t('deviceModel')}</TableCell>}
-            <TableCell>{t('deviceContact')}</TableCell>
+            {!isMobile && <TableCell>{t('deviceContact')}</TableCell>}
             <TableCell>{t('userExpirationTime')}</TableCell>
             {manager && <TableCell>{t('settingsUsers')}</TableCell>}
             <TableCell className={classes.columnAction} />
@@ -87,7 +88,7 @@ const DevicesPage = () => {
               {admin && <TableCell>{item.groupId ? groups[item.groupId]?.name : null}</TableCell>}
               {admin && <TableCell>{item.phone}</TableCell>}
               {admin && <TableCell>{item.model}</TableCell>}
-              <TableCell>{item.contact}</TableCell>
+              {!isMobile && <TableCell>{item.contact}</TableCell>}
               <TableCell>{formatTime(item.expirationTime, 'date')}</TableCell>
               {manager && <TableCell><DeviceUsersValue deviceId={item.id} /></TableCell>}
               <TableCell className={classes.columnAction} padding="none">
