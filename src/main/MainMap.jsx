@@ -1,4 +1,5 @@
 import React, { useCallback } from 'react';
+import { isMobile } from 'react-device-detect';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useDispatch, useSelector } from 'react-redux';
@@ -35,6 +36,24 @@ const MainMap = ({ filteredPositions, selectedPosition, onEventsClick }) => {
 
   return (
     <>
+      {isMobile && (
+      <div style={{
+        position: 'fixed',
+        display: 'block',
+        width: '100px',
+        height: '20px',
+        left: 'calc(50% - 50px)',
+        bottom: '80px',
+        backgroundImage: 'linear-gradient(to top, #000000FF 0%, #00000000 100%)',
+        zIndex: 2,
+        cursor: 'pointer',
+        borderTopLeftRadius: '80px',
+        borderTopRightRadius: '80px',
+      }}
+      >
+        &nbsp;
+      </div>
+      )}
       <MapView>
         <MapOverlay />
         <MapGeofence />

@@ -32,14 +32,20 @@ const BottomMenu = () => {
 
   const [anchorEl, setAnchorEl] = useState(null);
 
+  let reportsSize = 'medium';
+
   const currentSelection = () => {
     if (location.pathname === `/settings/user/${user.id}`) {
+      reportsSize = 'medium';
       return 'account';
     } if (location.pathname.startsWith('/settings')) {
+      reportsSize = 'medium';
       return 'settings';
     } if (location.pathname.startsWith('/reports')) {
+      reportsSize = 'medium';
       return 'reports';
     } if (location.pathname === '/') {
+      reportsSize = (isMobile ? 'large' : 'medium');
       return 'map';
     }
     return null;
@@ -128,13 +134,10 @@ const BottomMenu = () => {
           label={t('mapTitle')}
           icon={(
             <Badge color="error" variant="dot" overlap="circular" invisible={socket !== false}>
-              <MapIcon />
+              <MapIcon fontSize="medium" />
             </Badge>
           )}
           value="map"
-          sx={{
-            fontSize: '1.4em',
-          }}
         />
         )}
         {isMobile && (
@@ -142,45 +145,35 @@ const BottomMenu = () => {
             label={devicesOpen || location.pathname !== '/' ? t('mapTitle') : t('deviceTitle')}
             icon={(
               <Badge color="error" variant="dot" overlap="circular" invisible={socket !== false}>
-                {devicesOpen || location.pathname !== '/' ? <MapIcon /> : <ViewListIcon />}
+                {devicesOpen || location.pathname !== '/' ? <MapIcon fontSize="medium" /> : <ViewListIcon fontSize="medium" />}
               </Badge>
             )}
             value="devices"
-            sx={{
-              fontSize: '1.4em',
-            }}
           />
         )}
         {!disableReports && (
           <BottomNavigationAction
             label={t('reportTitle')}
-            icon={<DescriptionIcon />}
+            icon={(
+              <DescriptionIcon fontSize={reportsSize} />
+            )}
             value="reports"
-            sx={{
-              fontSize: '1.4em',
-            }}
           />
         )}
         {!isMobile && (
-          <BottomNavigationAction label={t('settingsTitle')} icon={<SettingsIcon />} value="settings" />
+          <BottomNavigationAction label={t('settingsTitle')} icon={<SettingsIcon fontSize="medium" />} value="settings" />
         )}
         {readonly ? (
           <BottomNavigationAction
             label={t('loginLogout')}
-            icon={<ExitToAppIcon />}
+            icon={<ExitToAppIcon fontSize="medium" />}
             value="logout"
-            sx={{
-              fontSize: '1.4em',
-            }}
           />
         ) : (
           <BottomNavigationAction
             label={isMobile ? t('settingsTitle') : t('settingsUser')}
-            icon={isMobile ? <SettingsIcon /> : <PersonIcon />}
+            icon={isMobile ? <SettingsIcon fontSize="medium" /> : <PersonIcon fontSize="medium" />}
             value="account"
-            sx={{
-              fontSize: '1.4em',
-            }}
           />
         )}
       </BottomNavigation>
