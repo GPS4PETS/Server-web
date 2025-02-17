@@ -157,9 +157,9 @@ const BottomMenu = () => {
             }}
           />
         )}
-        { /*
-        <BottomNavigationAction label={t('settingsTitle')} icon={<SettingsIcon />} value="settings" />
-        */ }
+        {!isMobile && (
+          <BottomNavigationAction label={t('settingsTitle')} icon={<SettingsIcon />} value="settings" />
+        )}
         {readonly ? (
           <BottomNavigationAction
             label={t('loginLogout')}
@@ -171,8 +171,8 @@ const BottomMenu = () => {
           />
         ) : (
           <BottomNavigationAction
-            label={t('settingsTitle')}
-            icon={<SettingsIcon />}
+            label={isMobile ? t('settingsTitle') : t('settingsUser')}
+            icon={isMobile ? <SettingsIcon /> : <PersonIcon />}
             value="account"
             sx={{
               fontSize: '1.4em',
@@ -181,11 +181,13 @@ const BottomMenu = () => {
         )}
       </BottomNavigation>
       <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={() => setAnchorEl(null)}>
-        <MenuItem onClick={handleSettings}>
-          <SettingsIcon fontSize="small" />
-          &nbsp;
-          <Typography color="textPrimary">{t('settingsTitle')}</Typography>
-        </MenuItem>
+        {isMobile && (
+          <MenuItem onClick={handleSettings}>
+            <SettingsIcon fontSize="small" />
+            &nbsp;
+            <Typography color="textPrimary">{t('settingsTitle')}</Typography>
+          </MenuItem>
+        )}
         <MenuItem onClick={handleAccount}>
           <PersonIcon fontSize="small" />
           &nbsp;
