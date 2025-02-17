@@ -649,7 +649,7 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
               )}
               {position && (
               <CardContent className={classes.content}>
-                <div style={{ borderBottom: 'thin solid grey', height: '1.5em' }}>
+                <div style={{ borderBottom: 'thin solid grey', height: '1.8em' }}>
                   <span className={classes.device}>
                     {device.name}
                   </span>

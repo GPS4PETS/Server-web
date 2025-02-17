@@ -45,6 +45,13 @@ const BottomMenu = () => {
         rtval = 'account';
       }
       return rtval;
+    } if (location.pathname.startsWith('/geofences')) {
+      reportsSize = 'medium';
+      let rtval = 'settings';
+      if (isMobile) {
+        rtval = 'account';
+      }
+      return rtval;
     } if (location.pathname.startsWith('/reports')) {
       reportsSize = 'medium';
       return 'reports';
