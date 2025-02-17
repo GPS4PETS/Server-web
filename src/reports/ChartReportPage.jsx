@@ -148,12 +148,15 @@ const ChartReportPage = () => {
                 tickFormatter={(value) => formatTime(value, 'time')}
                 domain={['dataMin', 'dataMax']}
                 scale="time"
+                interval="equidistantPreserveStart"
               />
               <YAxis
                 stroke={theme.palette.text.primary}
                 type="number"
                 tickFormatter={(value) => value.toFixed(2)}
                 domain={[minValue - valueRange / 5, maxValue + valueRange / 5]}
+                interval="equidistantPreserveStart"
+                scale="linear"
               />
               <CartesianGrid stroke={theme.palette.divider} strokeDasharray="3 3" />
               <Tooltip
