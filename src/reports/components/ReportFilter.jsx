@@ -50,8 +50,8 @@ const ReportFilter = ({
       let selectedTo;
       switch (period) {
         case 'today':
-          selectedFrom = dayjs().startOf('day').add(1, 'hour');
-          selectedTo = dayjs().endOf('day').add(1, 'hour');
+          selectedFrom = dayjs().startOf('day');
+          selectedTo = dayjs().endOf('day');
           break;
         case 'yesterday':
           selectedFrom = dayjs().subtract(1, 'day').startOf('day');
