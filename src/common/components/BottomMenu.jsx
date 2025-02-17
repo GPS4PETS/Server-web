@@ -40,13 +40,24 @@ const BottomMenu = () => {
       return 'account';
     } if (location.pathname.startsWith('/settings')) {
       reportsSize = 'medium';
-      return 'settings';
+      let rtval = 'settings';
+      if (isMobile) {
+        rtval = 'account';
+      }
+      return rtval;
     } if (location.pathname.startsWith('/reports')) {
       reportsSize = 'medium';
       return 'reports';
     } if (location.pathname === '/') {
       reportsSize = (isMobile ? 'large' : 'medium');
-      return 'map';
+      let rtval = 'map';
+      if (isMobile) {
+        rtval = 'devices';
+      }
+      return rtval;
+    }
+    if (anchorEl) {
+      return 'account';
     }
     return null;
   };
