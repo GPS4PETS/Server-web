@@ -37,6 +37,7 @@ const SettingsMenu = () => {
   const classes = useStyles();
   const t = useTranslation();
   const location = useLocation();
+  const navigate = useNavigate();
 
   const readonly = useRestriction('readonly');
   const admin = useAdministrator();
@@ -81,8 +82,6 @@ const SettingsMenu = () => {
     </svg>,
     'device',
   );
-
-  const navigate = useNavigate();
 
   return (
     <>
