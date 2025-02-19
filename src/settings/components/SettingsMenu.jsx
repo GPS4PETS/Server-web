@@ -1,11 +1,8 @@
 import React from 'react';
 import { createSvgIcon } from '@mui/material/utils';
-import { isMobile } from 'react-device-detect';
 import {
-  Divider, List, IconButton,
+  Divider, List,
 } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
-import CloseIcon from '@mui/icons-material/Close';
 import SettingsIcon from '@mui/icons-material/Settings';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import FolderIcon from '@mui/icons-material/Folder';
@@ -17,7 +14,7 @@ import TodayIcon from '@mui/icons-material/Today';
 import PublishIcon from '@mui/icons-material/Publish';
 import HelpIcon from '@mui/icons-material/Help';
 import CampaignIcon from '@mui/icons-material/Campaign';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useTranslation } from '../../common/components/LocalizationProvider';
 import {
@@ -26,18 +23,9 @@ import {
 import useFeatures from '../../common/util/useFeatures';
 import MenuItem from '../../common/components/MenuItem';
 
-const useStyles = makeStyles((theme) => ({
-  mediaButton: {
-    color: theme.palette.primary,
-    mixBlendMode: 'normal',
-  },
-}));
-
 const SettingsMenu = () => {
-  const classes = useStyles();
   const t = useTranslation();
   const location = useLocation();
-  const navigate = useNavigate();
 
   const readonly = useRestriction('readonly');
   const admin = useAdministrator();
@@ -85,17 +73,6 @@ const SettingsMenu = () => {
 
   return (
     <>
-      {isMobile && (
-        <div style={{ width: '100%', textAlign: 'right' }}>
-          <IconButton
-            size="medium"
-            onClick={() => navigate('/')}
-            onTouchStart={() => navigate('/')}
-          >
-            <CloseIcon fontSize="medium" className={classes.mediaButton} />
-          </IconButton>
-        </div>
-      )}
       <List>
         <MenuItem
           title={t('sharedPreferences')}

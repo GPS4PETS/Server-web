@@ -15,6 +15,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import MenuIcon from '@mui/icons-material/Menu';
+import CloseIcon from '@mui/icons-material/Close';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from './LocalizationProvider';
 
@@ -118,6 +119,15 @@ const PageLayout = ({ menu, breadcrumbs, children }) => {
         onClose={() => setOpenDrawer(false)}
         classes={{ paper: classes.mobileDrawer }}
       >
+        <div style={{ width: '100%', textAlign: 'right' }}>
+          <IconButton
+            size="medium"
+            onClick={() => setOpenDrawer(false)}
+            onTouchStart={() => setOpenDrawer(false)}
+          >
+            <CloseIcon fontSize="medium" className={classes.mediaButton} />
+          </IconButton>
+        </div>
         {menu}
       </Drawer>
       <AppBar className={classes.mobileToolbar} position="static" color="inherit">

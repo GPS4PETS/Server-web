@@ -1,9 +1,6 @@
 import React from 'react';
-import { isMobile } from 'react-device-detect';
-import { Divider, List, IconButton } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
+import { Divider, List } from '@mui/material';
 import { createSvgIcon } from '@mui/material/utils';
-import CloseIcon from '@mui/icons-material/Close';
 import StarIcon from '@mui/icons-material/Star';
 import TimelineIcon from '@mui/icons-material/Timeline';
 import PauseCircleFilledIcon from '@mui/icons-material/Pause';
@@ -14,23 +11,14 @@ import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import EventRepeatIcon from '@mui/icons-material/EventRepeat';
 import NotesIcon from '@mui/icons-material/Notes';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { useTranslation } from '../../common/components/LocalizationProvider';
 import { useAdministrator, useRestriction } from '../../common/util/permissions';
 import MenuItem from '../../common/components/MenuItem';
 
-const useStyles = makeStyles((theme) => ({
-  mediaButton: {
-    color: theme.palette.primary,
-    mixBlendMode: 'normal',
-  },
-}));
-
 const ReportsMenu = () => {
-  const classes = useStyles();
   const t = useTranslation();
   const location = useLocation();
-  const navigate = useNavigate();
 
   const admin = useAdministrator();
   const readonly = useRestriction('readonly');
@@ -109,17 +97,6 @@ const ReportsMenu = () => {
 
   return (
     <>
-      {isMobile && (
-        <div style={{ width: '100%', textAlign: 'right' }}>
-          <IconButton
-            size="medium"
-            onClick={() => navigate('/')}
-            onTouchStart={() => navigate('/')}
-          >
-            <CloseIcon fontSize="medium" className={classes.mediaButton} />
-          </IconButton>
-        </div>
-      )}
       <List>
         {admin && (
         <>
