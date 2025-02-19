@@ -153,7 +153,7 @@ const DevicePage = () => {
                   label={t('userExpirationTime')}
                   type="date"
                   value={item.expirationTime ? item.expirationTime.split('T')[0] : '2099-01-01'}
-                  nChange={(e) => {
+                  onChange={(e) => {
                     if (e.target.value) {
                       setItem({ ...item, expirationTime: new Date(e.target.value).toISOString() });
                     }
