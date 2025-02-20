@@ -31,7 +31,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import PendingIcon from '@mui/icons-material/Pending';
 import LightIcon from '@mui/icons-material/LightMode';
 import BuzzerIcon from '@mui/icons-material/NotificationsActive';
-import ShareIcon from '@mui/icons-material/Share';
+import ShareIcon from '@mui/icons-material/ShareLocation';
+import StreetViewIcon from '@mui/icons-material/StreetView';
 
 import BatteryFullIcon from '@mui/icons-material/BatteryFull';
 import BatteryChargingFullIcon from '@mui/icons-material/BatteryChargingFull';
@@ -988,7 +989,7 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
             {t('linkAppleMaps')}
           </MenuItem>
           <MenuItem component="a" target="_blank" href={`https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${position.latitude}%2C${position.longitude}&heading=${position.course}`}>
-            <LiveModeIcon fontSize="small" />
+            <StreetViewIcon fontSize="small" />
             &nbsp;
             {t('linkStreetView')}
           </MenuItem>
