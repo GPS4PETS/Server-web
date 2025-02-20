@@ -32,7 +32,7 @@ import PendingIcon from '@mui/icons-material/Pending';
 import LightIcon from '@mui/icons-material/LightMode';
 import BuzzerIcon from '@mui/icons-material/NotificationsActive';
 import ShareIcon from '@mui/icons-material/ShareLocation';
-import StreetViewIcon from '@mui/icons-material/StreetView';
+import StreetViewIcon from '@mui/icons-material/Streetview';
 
 import BatteryFullIcon from '@mui/icons-material/BatteryFull';
 import BatteryChargingFullIcon from '@mui/icons-material/BatteryChargingFull';
