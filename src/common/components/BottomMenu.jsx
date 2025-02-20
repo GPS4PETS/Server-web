@@ -8,7 +8,6 @@ import {
   Paper, BottomNavigation, BottomNavigationAction, Menu, MenuItem, Typography, Badge,
 } from '@mui/material';
 import DescriptionIcon from '@mui/icons-material/QueryStats';
-import SettingsIcon from '@mui/icons-material/Settings';
 import PersonIcon from '@mui/icons-material/Person';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 
@@ -180,7 +179,7 @@ const BottomMenu = () => {
     'device',
   );
 
-  const SettingsMobileIcon = createSvgIcon(
+  const SettingsIcon = createSvgIcon(
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="24px"
@@ -244,7 +243,7 @@ const BottomMenu = () => {
         ) : (
           <BottomNavigationAction
             label={isMobile ? t('settingsTitle') : t('settingsUser')}
-            icon={isMobile ? <SettingsMobileIcon fontSize="medium" /> : <PersonIcon fontSize="medium" />}
+            icon={isMobile ? <SettingsIcon fontSize="medium" /> : <PersonIcon fontSize="medium" />}
             value="account"
           />
         )}
