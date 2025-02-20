@@ -200,36 +200,36 @@ const OverviewReportPage = () => {
         </div>
         {selectedDevice != null && (
           <>
-            <div className={classes.containerActivity}>
-              <div className={classes.containerActivityHead3}>
+            <div className={isMobile ? classes.containerActivityOverview : classes.containerActivity}>
+              <div className={isMobile ? classes.containerActivity3 : classes.containerActivityHead3}>
                 {t('reportActivityTime')}
               </div>
-              <div className={classes.containerActivityHead3}>
+              <div className={isMobile ? classes.containerActivity3 : classes.containerActivityHead3}>
                 {t('positionSteps')}
               </div>
-              <div className={classes.containerActivityHead3}>
+              <div className={isMobile ? classes.containerActivity3 : classes.containerActivityHead3}>
                 {t('reportSleepTime')}
               </div>
               <br />
-              <div className={classes.containerActivityHead3}>
+              <div className={isMobile ? classes.containerActivity3 : classes.containerActivityHead3}>
                 {formatNumericHours(activityTime, t)}
-                &nbsp; | &nbsp;
+                <br />
                 {t('reportWanted')}
-                : &nbsp;
+                &nbsp;
                 {formatNumericHours(wantedActivityTime, t)}
               </div>
-              <div className={classes.containerActivityHead3}>
+              <div className={isMobile ? classes.containerActivity3 : classes.containerActivityHead3}>
                 {activitySteps}
-                &nbsp; | &nbsp;
+                <br />
                 {t('reportWanted')}
-                : &nbsp;
+                &nbsp;
                 {wantedSteps}
               </div>
-              <div className={classes.containerActivityHead3}>
+              <div className={isMobile ? classes.containerActivity3 : classes.containerActivityHead3}>
                 {formatNumericHours(sleepTime, t)}
-                &nbsp; | &nbsp;
+                <br />
                 {t('reportWanted')}
-                : &nbsp;
+                &nbsp;
                 {formatNumericHours(wantedSleepTime, t)}
               </div>
               <ResponsiveContainer width="100%" height="95%">
@@ -295,7 +295,7 @@ const OverviewReportPage = () => {
                 </PieChart>
               </ResponsiveContainer>
             </div>
-            <div className={classes.containerMap2}>
+            <div className={isMobile ? classes.containerMap2 : classes.containerMap3}>
               <MapView>
                 <MapGeofence />
                 {mapItems.map((item) => (

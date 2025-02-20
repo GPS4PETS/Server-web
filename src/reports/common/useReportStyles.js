@@ -10,12 +10,21 @@ export default makeStyles((theme) => ({
     flexBasis: '40%',
   },
   containerMap2: {
-    flexBasis: '80%',
+    flexBasis: '50%',
+  },
+  containerMap3: {
+    flexBasis: '70%',
   },
   containerActivity: {
     flexBasis: '20%',
     width: '100%',
     height: '30%',
+    flexShrink: 0,
+  },
+  containerActivityOverview: {
+    flexBasis: '40%',
+    width: '100%',
+    height: '40%',
     flexShrink: 0,
   },
   containerActivity2: {
@@ -35,6 +44,11 @@ export default makeStyles((theme) => ({
     float: 'left',
     textAlign: 'center',
     fontSize: '1.1em',
+  },
+  containerActivity3: {
+    width: '33%',
+    float: 'left',
+    textAlign: 'center',
   },
   containerFilter: {
     flexShrink: 0,
