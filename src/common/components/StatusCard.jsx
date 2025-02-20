@@ -29,8 +29,8 @@ import PublishIcon from '@mui/icons-material/Publish';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import PendingIcon from '@mui/icons-material/Pending';
-import LightIcon from '@mui/icons-material/Flare';
-import BuzzerIcon from '@mui/icons-material/VolumeUp';
+import LightIcon from '@mui/icons-material/LightMode';
+import BuzzerIcon from '@mui/icons-material/NotificationsActive';
 import ShareIcon from '@mui/icons-material/Share';
 
 import BatteryFullIcon from '@mui/icons-material/BatteryFull';
