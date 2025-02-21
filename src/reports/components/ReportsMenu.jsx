@@ -11,6 +11,7 @@ import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import EventRepeatIcon from '@mui/icons-material/EventRepeat';
 import NotesIcon from '@mui/icons-material/Notes';
+import StepsIcon from '@mui/icons-material/Pets';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from '../../common/components/LocalizationProvider';
 import { useAdministrator, useRestriction } from '../../common/util/permissions';
@@ -132,6 +133,14 @@ const ReportsMenu = () => {
           icon={<DogWalkIcon />}
           selected={location.pathname === '/reports/activity'}
         />
+        {admin && (
+        <MenuItem
+          title={t('reportSteps')}
+          link="/reports/steps"
+          icon={<StepsIcon />}
+          selected={location.pathname === '/reports/steps'}
+        />
+        )}
         <MenuItem
           title={t('reportChart')}
           link="/reports/charts"

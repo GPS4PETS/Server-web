@@ -24,7 +24,7 @@ import { useCatch } from '../reactHelper';
 import { snackBarDurationLongMs } from '../common/util/duration';
 import useSettingsStyles from './common/useSettingsStyles';
 
-const allowedProperties = ['valid', 'latitude', 'longitude', 'altitude', 'speed', 'course', 'address', 'accuracy'];
+const allowedProperties = ['valid', 'latitude', 'longitude', 'altitude', 'speed', 'course', 'address', 'accuracy', 'result'];
 
 const ComputedAttributePage = () => {
   const classes = useSettingsStyles();

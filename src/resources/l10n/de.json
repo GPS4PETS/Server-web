@@ -613,6 +613,7 @@
     "reportStartOdometer": "Kilometerstand Start",
     "reportEndOdometer": "Kilometerstand Ende",
     "reportTimeType": "Zeit",
+    "reportSteps": "Schritte",
     "statisticsTitle": "Statistiken",
     "statisticsCaptureTime": "Zeitpunkt",
     "statisticsActiveUsers": "Aktive Benutzer",
