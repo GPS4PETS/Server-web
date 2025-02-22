@@ -130,9 +130,11 @@ const BottomMenu = () => {
         break;
       case 'devices':
         if (location.pathname === '/') {
+          /*
           if (isMobile) {
             dispatch(devicesActions.selectId(null));
           }
+          */
           dispatch(sessionActions.setDevicesOpen(!devicesOpen));
         } else {
           navigate('/');

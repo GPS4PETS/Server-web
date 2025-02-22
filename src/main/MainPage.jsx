@@ -59,7 +59,7 @@ const useStyles = makeStyles((theme) => ({
   contentList: {
     pointerEvents: 'auto',
     gridArea: '1 / 1',
-    zIndex: 4,
+    zIndex: 11,
   },
 }));
 
