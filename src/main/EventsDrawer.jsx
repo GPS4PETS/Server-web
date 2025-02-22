@@ -6,6 +6,7 @@ import {
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import DeleteIcon from '@mui/icons-material/Delete';
+import CloseIcon from '@mui/icons-material/Close';
 import { formatNotificationTitle, formatTime } from '../common/util/formatter';
 import { useTranslation } from '../common/components/LocalizationProvider';
 import { eventsActions } from '../store';
@@ -18,8 +19,18 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),
   },
+  footerbar: {
+    width: '100%',
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(2),
+    textAlign: 'center',
+  },
   title: {
     flexGrow: 1,
+  },
+  listclass: {
+    height: '100%',
+    width: theme.dimensions.eventsDrawerWidth,
   },
 }));
 
@@ -45,16 +56,22 @@ const EventsDrawer = ({ open, onClose }) => {
       anchor="right"
       open={open}
       onClose={onClose}
+      PaperProps={{
+        sx: {
+          height: 'calc(100% - 75px)',
+          top: 50,
+        },
+      }}
     >
       <Toolbar className={classes.toolbar} disableGutters>
         <Typography variant="h6" className={classes.title}>
           {t('reportEvents')}
         </Typography>
-        <IconButton size="small" color="inherit" onClick={() => dispatch(eventsActions.deleteAll())}>
-          <DeleteIcon fontSize="small" />
+        <IconButton size="small" color="inherit" onClick={onClose}>
+          <CloseIcon fontSize="small" />
         </IconButton>
       </Toolbar>
-      <List className={classes.drawer} dense>
+      <List className={classes.listclass} dense>
         {events.map((event) => (
           <ListItemButton
             key={event.id}
@@ -71,6 +88,13 @@ const EventsDrawer = ({ open, onClose }) => {
           </ListItemButton>
         ))}
       </List>
+      <Toolbar className={classes.footerbar} disableGutters>
+        <span className={classes.footerbar}>
+          <IconButton size="small" color="inherit" onClick={() => dispatch(eventsActions.deleteAll())}>
+            <DeleteIcon fontSize="small" />
+          </IconButton>
+        </span>
+      </Toolbar>
     </Drawer>
   );
 };

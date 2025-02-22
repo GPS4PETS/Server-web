@@ -31,7 +31,7 @@ const groupBy = ({ data, startDate, endDate, tsKey, groupDurationSec, pushTo }) 
   const offsets = slotsAndOffsets.offset;
 
   data.forEach((element) => {
-    const key = generateKey(groupDurationSec, data[element].attributes[tsKey] - offsets, offsets)[0];
+    const key = generateKey(groupDurationSec, data[element][tsKey] - offsets, offsets)[0];
     if (slots[key] !== undefined) {
       if (pushTo === 'top') {
         slots[key].unshift(data[element]);

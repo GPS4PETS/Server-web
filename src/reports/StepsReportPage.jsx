@@ -1,6 +1,9 @@
-import dayjs from 'dayjs';
 import React, { useState } from 'react';
-import { useTheme } from '@mui/material';
+import dayjs from 'dayjs';
+
+import {
+  FormControl, InputLabel, Select, MenuItem, useTheme,
+} from '@mui/material';
 import {
   Brush, CartesianGrid, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis,
 } from 'recharts';
@@ -34,7 +37,7 @@ const StepsReportPage = () => {
   const speedUnit = useAttributePreference('speedUnit');
 
   const [routeItems, setRouteItems] = useState([]);
-  const [routeType, setRouteType] = useState('steps');
+  const [routeType, setRouteType] = useState('course');
   const [timeType] = useState('serverTime');
 
   const values = routeItems.map((it) => it[routeType]);
@@ -102,13 +105,12 @@ const StepsReportPage = () => {
       throw Error(await routeResponse.text());
     }
 
-    steps = groupBy(routeItems, dayjs(startTime).valueOf(), dayjs(endTime).valueOf(), 'steps', 60 * 15, 'bottom');
+    steps = groupBy(routeItems, dayjs(startTime).unix(), dayjs(endTime).unix(), timeType, 60 * 15, 'bottom');
   });
 
   return (
     <PageLayout menu={<ReportsMenu />} breadcrumbs={['reportTitle', 'reportChart']}>
       <ReportFilter handleSubmit={handleSubmit} showOnly>
-        {/*
         <div className={classes.filterItem}>
           <FormControl fullWidth>
             <InputLabel>{t('reportChartType')}</InputLabel>
@@ -118,13 +120,10 @@ const StepsReportPage = () => {
               onChange={(e) => setRouteType(e.target.value)}
               disabled={!routeItems.length}
             >
-              {routeTypes.map((key) => (
-                <MenuItem key={key} value={key}>{positionAttributes[key]?.name || key}</MenuItem>
-              ))}
+              <MenuItem key={routeType} value={routeType}>{positionAttributes[routeType]?.name || routeType}</MenuItem>
             </Select>
           </FormControl>
         </div>
-        */}
       </ReportFilter>
       {routeItems.length > 0 && (
         <div className={classes.chart}>
