@@ -2,7 +2,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import {
-  Drawer, IconButton, List, ListItemButton, ListItemText, Toolbar, Typography,
+  Drawer, IconButton, Button, List, ListItemButton, ListItemText, Toolbar, Typography,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -24,6 +24,13 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),
     textAlign: 'center',
+  },
+  deletebutton: {
+    width: '100%',
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(2),
+    textAlign: 'center',
+    backgroundColor: theme.palette.error.main,
   },
   title: {
     flexGrow: 1,
@@ -89,11 +96,9 @@ const EventsDrawer = ({ open, onClose }) => {
         ))}
       </List>
       <Toolbar className={classes.footerbar} disableGutters>
-        <span className={classes.footerbar}>
-          <IconButton size="small" color="inherit" onClick={() => dispatch(eventsActions.deleteAll())}>
-            <DeleteIcon fontSize="small" />
-          </IconButton>
-        </span>
+        <Button size="small" color="inherit" onClick={() => dispatch(eventsActions.deleteAll())} className={classes.deletebutton}>
+          <DeleteIcon fontSize="small" />
+        </Button>
       </Toolbar>
     </Drawer>
   );
