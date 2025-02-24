@@ -3,7 +3,7 @@ import { isMobile } from 'react-device-detect';
 import dayjs from 'dayjs';
 import { useTheme } from '@mui/material';
 import {
-  CartesianGrid, ResponsiveContainer, XAxis, Bar, Line, YAxis, ComposedChart,
+  CartesianGrid, ResponsiveContainer, XAxis, Bar, Line, YAxis, ComposedChart, Tooltip,
 } from 'recharts';
 import { formatTime } from '../common/util/formatter';
 import ReportFilter from './components/ReportFilter';
@@ -291,6 +291,11 @@ const StepsReportPage = () => {
                 strokeLinecap="round"
               />
               )}
+              <Tooltip
+                contentStyle={{ backgroundColor: '#07246e80', color: theme.palette.text.primary }}
+                formatter={(value, key) => [value, positionAttributes[key]?.name || key]}
+                labelFormatter={(value) => formatTime(value, 'seconds')}
+              />
               <CartesianGrid stroke={theme.palette.divider} strokeDasharray="3 3" />
             </ComposedChart>
           </ResponsiveContainer>
