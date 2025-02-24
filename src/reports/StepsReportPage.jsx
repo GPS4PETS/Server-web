@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
+import { isMobile } from 'react-device-detect';
 import dayjs from 'dayjs';
 import { useTheme } from '@mui/material';
 import {
-  CartesianGrid, BarChart, ResponsiveContainer, XAxis, YAxis, Bar,
+  CartesianGrid, ResponsiveContainer, XAxis, Bar, Line, YAxis, ComposedChart,
 } from 'recharts';
 import { formatTime } from '../common/util/formatter';
 import ReportFilter from './components/ReportFilter';
@@ -19,6 +20,9 @@ import useReportStyles from './common/useReportStyles';
 
 let startTime;
 let endTime;
+let rangeFormat = 'timeshort';
+let groupInterval = 3600;
+let marginval = 20;
 
 const StepsReportPage = () => {
   const classes = useReportStyles();
@@ -35,6 +39,14 @@ const StepsReportPage = () => {
 
   const [steps, setSteps] = useState([]);
 
+  const [showWanted, setShowWawnted] = useState(false);
+
+  /*
+  const [wantedActivityTime, setWantedActivityTime] = useState(0);
+  const [wantedSleepTime, setWantedSleepTime] = useState(0);
+  */
+  const [wantedSteps, setWantedSteps] = useState(0);
+
   function generateKey(groupBySecondsa, timestampa, offseta) {
     const keyDiff = (timestampa % groupBySecondsa);
     return [(timestampa - keyDiff) + offseta, keyDiff];
@@ -43,7 +55,6 @@ const StepsReportPage = () => {
   function generateSlots(dateStart, dateEnd, groupBya) {
     const startKeyGen = generateKey(groupBya, dateStart, 0);
     const startHeadKey = startKeyGen[0];
-    // const keyStep = startKeyGen[1];
 
     const endKeyGen = generateKey(groupBya, dateEnd, 0);
     const endTailKey = endKeyGen[0];
@@ -54,9 +65,10 @@ const StepsReportPage = () => {
 
     const grida = { ts: 0, steps: 0 };
     while (endKey <= endTailKey) {
-      grida[endKey + shift] = 0;
+      grida[endKey + shift] = { ts: (endKey + shift), steps: 0 };
       endKey += groupBya;
     }
+    grida[endKey + shift] = { ts: (endKey + shift), steps: 0 };
 
     return { grid: grida, offset: shift };
   }
@@ -97,8 +109,77 @@ const StepsReportPage = () => {
   }
 
   const handleSubmit = useCatch(async ({ deviceId, from, to }) => {
+    let wantedServerJson;
+    try {
+      const WantedServerResponse = await fetch('/api/server', {
+        headers: { Accept: 'application/json' },
+      });
+      if (WantedServerResponse.ok) {
+        wantedServerJson = await WantedServerResponse.json();
+      } else {
+        throw Error(await WantedServerResponse.text());
+      }
+    } finally {
+      /*
+      const activityTimeWantedServer = wantedServerJson.activityTimeWanted * 60 * 1000;
+      setWantedActivityTime(activityTimeWantedServer);
+      const sleepTimeWantedServer = wantedServerJson.sleepTimeWanted * 60 * 1000;
+      /setWantedSleepTime(sleepTimeWantedServer);
+      */
+      const stepsWantedServer = wantedServerJson.stepsWanted;
+      setWantedSteps(stepsWantedServer);
+    }
+
+    let wantedDeviceJson;
+    try {
+      const WantedDeviceResponse = await fetch(`/api/devices/?id=${deviceId}`, {
+        headers: { Accept: 'application/json' },
+      });
+      if (WantedDeviceResponse.ok) {
+        wantedDeviceJson = await WantedDeviceResponse.json();
+      } else {
+        throw Error(await WantedDeviceResponse.text());
+      }
+    } finally {
+      /*
+      let activityTimeWantedDevice = 0;
+      wantedDeviceJson.forEach((e) => activityTimeWantedDevice += e.activityTimeWanted);
+      activityTimeWantedDevice = activityTimeWantedDevice * 60 * 1000;
+      if (activityTimeWantedDevice > 0) {
+        setWantedActivityTime(activityTimeWantedDevice);
+      }
+      let sleepTimeWantedDevice = 0;
+      wantedDeviceJson.forEach((e) => sleepTimeWantedDevice += e.sleepTimeWanted);
+      sleepTimeWantedDevice = sleepTimeWantedDevice * 60 * 1000;
+      if (sleepTimeWantedDevice > 0) {
+        setWantedSleepTime(sleepTimeWantedDevice);
+      }
+      */
+      let stepsWantedDevice = 0;
+      wantedDeviceJson.forEach((e) => stepsWantedDevice += e.stepsWanted);
+      if (stepsWantedDevice > 0) {
+        setWantedSteps(stepsWantedDevice);
+      }
+    }
+
     startTime = from;
     endTime = to;
+
+    if ((dayjs(endTime).unix() - dayjs(startTime).unix()) > 86400) {
+      rangeFormat = 'dateshort';
+      groupInterval = 86400;
+      setShowWawnted(true);
+    } else {
+      rangeFormat = 'timeshort';
+      groupInterval = 3600;
+      setShowWawnted(false);
+    }
+
+    if (isMobile) {
+      marginval = 15;
+    } else {
+      marginval = 50;
+    }
 
     const routeQuery = new URLSearchParams({ deviceId, from, to });
     const routeResponse = await fetch(`/api/reports/route?${routeQuery.toString()}`, {
@@ -147,7 +228,19 @@ const StepsReportPage = () => {
           routeKeySet.delete(routeKey);
         }
       });
-      setSteps(groupBy(formattedPositions, dayjs(from).unix(), dayjs(to).unix(), 3600));
+
+      let steptmp = [];
+      steptmp = groupBy(formattedPositions, dayjs(from).unix(), dayjs(to).unix(), groupInterval);
+
+      if ((dayjs(endTime).unix() - dayjs(startTime).unix()) > 86400) {
+        steptmp[0] = { wanted: wantedSteps, ts: steptmp[0].ts, steps: steptmp[0].steps };
+        steptmp[steptmp.length - 1] = { wanted: wantedSteps, ts: steptmp[steptmp.length - 1].ts, steps: steptmp[steptmp.length - 1].steps };
+      } else {
+        steptmp[0] = { wanted: 0, ts: steptmp[0].ts, steps: steptmp[0].steps };
+        steptmp[steptmp.length - 1] = { wanted: wantedSteps, ts: steptmp[steptmp.length - 1].ts, steps: steptmp[steptmp.length - 1].steps };
+      }
+
+      setSteps(steptmp);
       setRouteItems(formattedPositions);
     } else {
       throw Error(await routeResponse.text());
@@ -157,54 +250,49 @@ const StepsReportPage = () => {
   return (
     <PageLayout menu={<ReportsMenu />} breadcrumbs={['reportTitle', 'reportChart']}>
       <ReportFilter handleSubmit={handleSubmit} showOnly>
-        { /*
-        <div className={classes.filterItem}>
-          <FormControl fullWidth>
-            <InputLabel>{t('reportChartType')}</InputLabel>
-            <Select
-              label={t('reportChartType')}
-              value={routeType}
-              onChange={(e) => setRouteType(e.target.value)}
-              disabled={!routeItems.length}
-            >
-              <MenuItem key={routeType} value={routeType}>{positionAttributes[routeType]?.name || routeType}</MenuItem>
-            </Select>
-          </FormControl>
-        </div>
-        */ }
       </ReportFilter>
       {(routeItems.length > 0 || true) && (
         <div className={classes.chart}>
           <ResponsiveContainer>
-            <BarChart
+            <ComposedChart
               data={steps}
               margin={{
                 top: 10, right: 40, left: 10, bottom: 10,
               }}
             >
+              <defs>
+                <linearGradient id="colorGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#07246e" stopOpacity={1} />
+                  <stop offset="95%" stopColor="#07246e" stopOpacity={0.2} />
+                </linearGradient>
+              </defs>
               <XAxis
                 dataKey="ts"
-                domain={[startTime, (endTime + 3600000)]}
-                scale="time"
-                interval="equidistantPreserveStart"
-                tickFormatter={(value) => formatTime(value, 'ts')}
+                domain={[(startTime), (endTime)]}
+                interval="PreserveStartEnd"
+                tickFormatter={(value) => formatTime(value - 3600000, rangeFormat)}
+                scale="number"
+                padding={{ left: marginval, right: marginval }}
               />
               <YAxis />
               <Bar
                 dataKey="steps"
-                fill="#6c90eb"
+                fill="url(#colorGrad)"
                 radius={[10, 10, 0, 0]}
-                label={{
-                  dataKey: 'steps',
-                  position: 'insideBottom',
-                  angle: '270',
-                  offset: '35',
-                  fill: 'black',
-                  fontSize: '+1.5em',
-                }}
               />
+              {showWanted && (
+              <Line
+                connectNulls
+                type="monotone"
+                dataKey="wanted"
+                stroke="#ff7300"
+                dot={false}
+                strokeWidth={4}
+                strokeLinecap="round"
+              />
+              )}
               <CartesianGrid stroke={theme.palette.divider} strokeDasharray="3 3" />
-            </BarChart>
+            </ComposedChart>
           </ResponsiveContainer>
         </div>
       )}

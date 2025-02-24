@@ -40,8 +40,12 @@ export const formatTime = (value, format) => {
     switch (format) {
       case 'date':
         return d.toLocaleDateString(undefined, dateConfig);
+      case 'dateshort':
+        return d.toLocaleDateString(undefined, dateConfig).substring(0, 6);
       case 'time':
         return d.toLocaleTimeString(undefined, secondConfig);
+      case 'timeshort':
+        return d.toLocaleTimeString(undefined, secondConfig).substring(0, 5);
       case 'minutes':
         return d.toLocaleString(undefined, { ...dateConfig, ...minuteConfig });
       default:
