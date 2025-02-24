@@ -1,14 +1,11 @@
 import React, { useState } from 'react';
 import dayjs from 'dayjs';
-
+import { useTheme } from '@mui/material';
 import {
-  FormControl, InputLabel, Select, MenuItem, useTheme,
-} from '@mui/material';
-import {
-  Brush, CartesianGrid, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis,
+  CartesianGrid, BarChart, ResponsiveContainer, XAxis, YAxis, Bar,
 } from 'recharts';
-import ReportFilter from './components/ReportFilter';
 import { formatTime } from '../common/util/formatter';
+import ReportFilter from './components/ReportFilter';
 import { useTranslation } from '../common/components/LocalizationProvider';
 import PageLayout from '../common/components/PageLayout';
 import ReportsMenu from './components/ReportsMenu';
@@ -19,16 +16,14 @@ import {
   altitudeFromMeters, distanceFromMeters, speedFromKnots,
 } from '../common/util/converter';
 import useReportStyles from './common/useReportStyles';
-import { useAdministrator } from '../common/util/permissions';
 
-import groupBy from './components/GroupBy';
+let startTime;
+let endTime;
 
 const StepsReportPage = () => {
   const classes = useReportStyles();
   const theme = useTheme();
   const t = useTranslation();
-
-  const admin = useAdministrator();
 
   const positionAttributes = usePositionAttributes(t);
 
@@ -37,22 +32,74 @@ const StepsReportPage = () => {
   const speedUnit = useAttributePreference('speedUnit');
 
   const [routeItems, setRouteItems] = useState([]);
-  const [routeType, setRouteType] = useState('course');
-  const [timeType] = useState('serverTime');
 
-  const values = routeItems.map((it) => it[routeType]);
-  const minValue = Math.min(...values);
-  const maxValue = Math.max(...values);
-  const valueRange = maxValue - minValue;
+  const [steps, setSteps] = useState([]);
 
-  let startTime;
-  let endTime;
+  function generateKey(groupBySecondsa, timestampa, offseta) {
+    const keyDiff = (timestampa % groupBySecondsa);
+    return [(timestampa - keyDiff) + offseta, keyDiff];
+  }
 
-  let steps;
+  function generateSlots(dateStart, dateEnd, groupBya) {
+    const startKeyGen = generateKey(groupBya, dateStart, 0);
+    const startHeadKey = startKeyGen[0];
+    // const keyStep = startKeyGen[1];
+
+    const endKeyGen = generateKey(groupBya, dateEnd, 0);
+    const endTailKey = endKeyGen[0];
+
+    let endKey = startHeadKey;
+
+    const shift = dateStart - startHeadKey;
+
+    const grida = { ts: 0, steps: 0 };
+    while (endKey <= endTailKey) {
+      grida[endKey + shift] = 0;
+      endKey += groupBya;
+    }
+
+    return { grid: grida, offset: shift };
+  }
+
+  function groupBy(data, startDate, endDate, groupDurationSec) {
+    const slotsAndOffsets = generateSlots(startDate, endDate, groupDurationSec);
+    const slots = slotsAndOffsets.grid;
+    const offsets = slotsAndOffsets.offset;
+    const arr = [];
+
+    let min = 999999;
+    let max = 0;
+    let oldkey = 0;
+    let idx = -1;
+
+    data.forEach((item) => {
+      const key = generateKey(groupDurationSec, (item.serverTime / 1000) - offsets, offsets)[0];
+      if (oldkey === 0) { oldkey = key; }
+      if (slots[key] !== undefined) {
+        if (item.steps > max) {
+          max = item.steps;
+        }
+        if (item.steps < min) {
+          min = item.steps;
+        }
+        if (oldkey !== key) {
+          const val = max - min;
+          slots[key] = { ts: (key * 1000), steps: val };
+          arr[idx += 1] = { ts: (key * 1000), steps: val };
+          min = 9999999;
+          max = 0;
+          oldkey = key;
+        }
+      }
+    });
+
+    return (arr);
+  }
 
   const handleSubmit = useCatch(async ({ deviceId, from, to }) => {
     startTime = from;
     endTime = to;
+
     const routeQuery = new URLSearchParams({ deviceId, from, to });
     const routeResponse = await fetch(`/api/reports/route?${routeQuery.toString()}`, {
       headers: { Accept: 'application/json' },
@@ -93,24 +140,24 @@ const StepsReportPage = () => {
         });
         return formatted;
       });
+      routeKeySet.add('steps');
       Object.keys(positionAttributes).forEach((routeKey) => {
         if (routeKeySet.has(routeKey)) {
           routeKeyList.push(routeKey);
           routeKeySet.delete(routeKey);
         }
       });
-      setRouteType(routeKeySet);
+      setSteps(groupBy(formattedPositions, dayjs(from).unix(), dayjs(to).unix(), 3600));
       setRouteItems(formattedPositions);
     } else {
       throw Error(await routeResponse.text());
     }
-
-    steps = groupBy(routeItems, dayjs(startTime).unix(), dayjs(endTime).unix(), timeType, 60 * 15, 'bottom');
   });
 
   return (
     <PageLayout menu={<ReportsMenu />} breadcrumbs={['reportTitle', 'reportChart']}>
       <ReportFilter handleSubmit={handleSubmit} showOnly>
+        { /*
         <div className={classes.filterItem}>
           <FormControl fullWidth>
             <InputLabel>{t('reportChartType')}</InputLabel>
@@ -124,8 +171,9 @@ const StepsReportPage = () => {
             </Select>
           </FormControl>
         </div>
+        */ }
       </ReportFilter>
-      {routeItems.length > 0 && (
+      {(routeItems.length > 0 || true) && (
         <div className={classes.chart}>
           <ResponsiveContainer>
             <BarChart
@@ -135,38 +183,27 @@ const StepsReportPage = () => {
               }}
             >
               <XAxis
-                stroke={theme.palette.text.primary}
-                dataKey={timeType}
-                type="number"
-                tickFormatter={(value) => formatTime(value, 'time')}
-                domain={[startTime, endTime]}
+                dataKey="ts"
+                domain={[startTime, (endTime + 3600000)]}
                 scale="time"
                 interval="equidistantPreserveStart"
-                aggregationInterval="hour"
+                tickFormatter={(value) => formatTime(value, 'ts')}
               />
-              <YAxis
-                stroke={theme.palette.text.primary}
-                type="number"
-                tickFormatter={(value) => value.toFixed(0)}
-                domain={[(minValue - valueRange / 5) < 0 ? 0 : (minValue - valueRange / 5), maxValue + valueRange / 5]}
-                interval="equidistantPreserveStart"
-                scale="linear"
-                allowDecimals="false"
+              <YAxis />
+              <Bar
+                dataKey="steps"
+                fill="#6c90eb"
+                radius={[10, 10, 0, 0]}
+                label={{
+                  dataKey: 'steps',
+                  position: 'insideBottom',
+                  angle: '270',
+                  offset: '35',
+                  fill: 'black',
+                  fontSize: '+1.5em',
+                }}
               />
               <CartesianGrid stroke={theme.palette.divider} strokeDasharray="3 3" />
-              <Tooltip
-                contentStyle={{ backgroundColor: '#07246e80', color: theme.palette.text.primary }}
-                formatter={(value, key) => [value, positionAttributes[key]?.name || key]}
-                labelFormatter={(value) => formatTime(value, 'seconds')}
-              />
-              {admin && (
-              <Brush
-                dataKey={timeType}
-                height={30}
-                stroke={theme.palette.primary.main}
-                tickFormatter={() => ''}
-              />
-              )}
             </BarChart>
           </ResponsiveContainer>
         </div>

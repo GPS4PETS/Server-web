@@ -141,7 +141,6 @@ const ChartsReportPage = () => {
                 dataKey={timeType}
                 type="number"
                 tickFormatter={(value) => formatTime(value, 'time')}
-                /* domain={['dataMin', 'dataMax']} */
                 domain={[startTime, endTime]}
                 scale="time"
                 interval="equidistantPreserveStart"

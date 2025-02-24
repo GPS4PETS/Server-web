@@ -133,14 +133,12 @@ const ReportsMenu = () => {
           icon={<DogWalkIcon />}
           selected={location.pathname === '/reports/activity'}
         />
-        {admin && (
         <MenuItem
           title={t('reportSteps')}
           link="/reports/steps"
           icon={<StepsIcon />}
           selected={location.pathname === '/reports/steps'}
         />
-        )}
         <MenuItem
           title={t('reportChart')}
           link="/reports/charts"
