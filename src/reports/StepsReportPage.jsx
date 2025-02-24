@@ -248,7 +248,7 @@ const StepsReportPage = () => {
   });
 
   return (
-    <PageLayout menu={<ReportsMenu />} breadcrumbs={['reportTitle', 'reportChart']}>
+    <PageLayout menu={<ReportsMenu />} breadcrumbs={['reportTitle', 'reportSteps']}>
       <ReportFilter handleSubmit={handleSubmit} showOnly>
       </ReportFilter>
       {(routeItems.length > 0 || true) && (

@@ -190,7 +190,7 @@ const OverviewReportPage = () => {
   const stepsColors = ['#c49102', '#333333'];
 
   return (
-    <PageLayout menu={<ReportsMenu />} breadcrumbs={['reportTitle', 'reportActivity']}>
+    <PageLayout menu={<ReportsMenu />} breadcrumbs={['reportTitle', 'reportOverview']}>
       <div className={classes.container}>
         <div className={classes.containerFilter}>
           <div className={classes.header}>
