@@ -3,7 +3,7 @@ import { isMobile } from 'react-device-detect';
 import dayjs from 'dayjs';
 import { useTheme } from '@mui/material';
 import {
-  CartesianGrid, ResponsiveContainer, XAxis, Bar, Line, YAxis, ComposedChart, Tooltip,
+  CartesianGrid, ResponsiveContainer, XAxis, Bar, ReferenceLine, YAxis, ComposedChart, Tooltip, Label,
 } from 'recharts';
 import { formatTime } from '../common/util/formatter';
 import ReportFilter from './components/ReportFilter';
@@ -173,7 +173,7 @@ const StepsReportPage = () => {
       setShowWawnted(true);
     } else {
       rangeFormat = 'timeshort';
-      rangeFormatTt = 'time';
+      rangeFormatTt = 'timeshort';
       groupInterval = 3600;
       setShowWawnted(false);
     }
@@ -288,20 +288,20 @@ const StepsReportPage = () => {
                 minPointSize={5}
               />
               {showWanted && (
-              <Line
-                connectNulls
-                type="monotone"
-                dataKey="wanted"
-                stroke="#ff7300"
-                dot={false}
-                strokeWidth={4}
-                strokeLinecap="round"
-              />
+              <ReferenceLine
+                y={wantedSteps}
+                stroke="#82ca9d"
+              >
+                <Label
+                  value={t('reportWanted')}
+                  position="top"
+                />
+              </ReferenceLine>
               )}
               <Tooltip
                 contentStyle={{ backgroundColor: '#07246e80', color: theme.palette.text.primary }}
                 formatter={(value, key) => [value, positionAttributes[key]?.name || key]}
-                labelFormatter={(value) => formatTime(value - 3600000, rangeFormatTt)}
+                labelFormatter={(value) => (rangeFormatTt === 'timeshort' ? formatTime(value - 3600000, rangeFormatTt).concat('-').concat(formatTime(value, rangeFormatTt)) : formatTime(value - 3600000, rangeFormatTt))}
               />
               <CartesianGrid stroke={theme.palette.divider} strokeDasharray="3 3" />
             </ComposedChart>

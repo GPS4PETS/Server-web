@@ -1,5 +1,6 @@
 /* eslint-disable react/no-array-index-key */
 import React, { useMemo, useState } from 'react';
+import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { isMobile } from 'react-device-detect';
@@ -53,6 +54,8 @@ const OverviewReportPage = () => {
     setSleepTime(null);
     setActivitySteps(null);
 
+    const timediff = Math.round((dayjs(to).unix() - dayjs(from).unix()) / 86400);
+
     let wantedServerJson;
     try {
       const WantedServerResponse = await fetch('/api/server', {
@@ -65,11 +68,11 @@ const OverviewReportPage = () => {
       }
     } finally {
       const activityTimeWantedServer = wantedServerJson.activityTimeWanted * 60 * 1000;
-      setWantedActivityTime(activityTimeWantedServer);
+      setWantedActivityTime(activityTimeWantedServer * timediff);
       const sleepTimeWantedServer = wantedServerJson.sleepTimeWanted * 60 * 1000;
-      setWantedSleepTime(sleepTimeWantedServer);
+      setWantedSleepTime(sleepTimeWantedServer * timediff);
       const stepsWantedServer = wantedServerJson.stepsWanted;
-      setWantedSteps(stepsWantedServer);
+      setWantedSteps(stepsWantedServer * timediff);
     }
 
     let wantedDeviceJson;
@@ -87,18 +90,18 @@ const OverviewReportPage = () => {
       wantedDeviceJson.forEach((e) => activityTimeWantedDevice += e.activityTimeWanted);
       activityTimeWantedDevice = activityTimeWantedDevice * 60 * 1000;
       if (activityTimeWantedDevice > 0) {
-        setWantedActivityTime(activityTimeWantedDevice);
+        setWantedActivityTime(activityTimeWantedDevice * timediff);
       }
       let sleepTimeWantedDevice = 0;
       wantedDeviceJson.forEach((e) => sleepTimeWantedDevice += e.sleepTimeWanted);
       sleepTimeWantedDevice = sleepTimeWantedDevice * 60 * 1000;
       if (sleepTimeWantedDevice > 0) {
-        setWantedSleepTime(sleepTimeWantedDevice);
+        setWantedSleepTime(sleepTimeWantedDevice * timediff);
       }
       let stepsWantedDevice = 0;
       wantedDeviceJson.forEach((e) => stepsWantedDevice += e.stepsWanted);
       if (stepsWantedDevice > 0) {
-        setWantedSteps(stepsWantedDevice);
+        setWantedSteps(stepsWantedDevice * timediff);
       }
     }
 
