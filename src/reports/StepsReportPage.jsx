@@ -21,6 +21,7 @@ import useReportStyles from './common/useReportStyles';
 let startTime;
 let endTime;
 let rangeFormat = 'timeshort';
+let rangeFormatTt = 'timeshort';
 let groupInterval = 3600;
 let marginval = 20;
 
@@ -167,18 +168,20 @@ const StepsReportPage = () => {
 
     if ((dayjs(endTime).unix() - dayjs(startTime).unix()) > 86400) {
       rangeFormat = 'dateshort';
+      rangeFormatTt = 'date';
       groupInterval = 86400;
       setShowWawnted(true);
     } else {
       rangeFormat = 'timeshort';
+      rangeFormatTt = 'time';
       groupInterval = 3600;
       setShowWawnted(false);
     }
 
     if (isMobile) {
-      marginval = 15;
+      marginval = 5;
     } else {
-      marginval = 50;
+      marginval = 10;
     }
 
     const routeQuery = new URLSearchParams({ deviceId, from, to });
@@ -232,12 +235,14 @@ const StepsReportPage = () => {
       let steptmp = [];
       steptmp = groupBy(formattedPositions, dayjs(from).unix(), dayjs(to).unix(), groupInterval);
 
-      if ((dayjs(endTime).unix() - dayjs(startTime).unix()) > 86400) {
-        steptmp[0] = { wanted: wantedSteps, ts: steptmp[0].ts, steps: steptmp[0].steps };
-        steptmp[steptmp.length - 1] = { wanted: wantedSteps, ts: steptmp[steptmp.length - 1].ts, steps: steptmp[steptmp.length - 1].steps };
-      } else {
-        steptmp[0] = { wanted: 0, ts: steptmp[0].ts, steps: steptmp[0].steps };
-        steptmp[steptmp.length - 1] = { wanted: wantedSteps, ts: steptmp[steptmp.length - 1].ts, steps: steptmp[steptmp.length - 1].steps };
+      if (steptmp.length > 0) {
+        if ((dayjs(endTime).unix() - dayjs(startTime).unix()) > 86400) {
+          steptmp[0] = { wanted: wantedSteps, ts: steptmp[0].ts, steps: steptmp[0].steps };
+          steptmp[steptmp.length - 1] = { wanted: wantedSteps, ts: steptmp[steptmp.length - 1].ts, steps: steptmp[steptmp.length - 1].steps };
+        } else {
+          steptmp[0] = { wanted: 0, ts: steptmp[0].ts, steps: steptmp[0].steps };
+          steptmp[steptmp.length - 1] = { wanted: wantedSteps, ts: steptmp[steptmp.length - 1].ts, steps: steptmp[steptmp.length - 1].steps };
+        }
       }
 
       setSteps(steptmp);
@@ -268,11 +273,12 @@ const StepsReportPage = () => {
               </defs>
               <XAxis
                 dataKey="ts"
-                domain={[(startTime), (endTime)]}
+                domain={[(startTime - (groupInterval * 1000)), (endTime + (groupInterval * 1000))]}
                 interval="PreserveStartEnd"
                 tickFormatter={(value) => formatTime(value - 3600000, rangeFormat)}
                 scale="number"
                 padding={{ left: marginval, right: marginval }}
+                allowDataOverflow="true"
               />
               <YAxis />
               <Bar
@@ -294,7 +300,7 @@ const StepsReportPage = () => {
               <Tooltip
                 contentStyle={{ backgroundColor: '#07246e80', color: theme.palette.text.primary }}
                 formatter={(value, key) => [value, positionAttributes[key]?.name || key]}
-                labelFormatter={(value) => formatTime(value, 'seconds')}
+                labelFormatter={(value) => formatTime(value - 3600000, rangeFormatTt)}
               />
               <CartesianGrid stroke={theme.palette.divider} strokeDasharray="3 3" />
             </ComposedChart>
