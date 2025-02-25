@@ -285,6 +285,7 @@ const StepsReportPage = () => {
                 dataKey="steps"
                 fill="url(#colorGrad)"
                 radius={[10, 10, 0, 0]}
+                minPointSize={5}
               />
               {showWanted && (
               <Line
