@@ -430,6 +430,7 @@
     "commandSend": "Send",
     "commandSent": "Command sent",
     "commandQueued": "Command queued",
+    "commandNoQueue": "No queue",
     "commandUnit": "Unit",
     "commandCustom": "Custom command",
     "commandSetApn": "APN",
