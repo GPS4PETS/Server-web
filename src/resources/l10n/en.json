@@ -169,7 +169,7 @@
     "attributeStepsWanted": "Steps Goal",
     "attributeActivityTimeWanted": "Activity Time Goal",
     "attributeSleepTimeWanted": "Sleep Time Goal",
-    "attributeLiveModeTime": "LiveMode activated",
+    "attributeLiveModeTime": "LiveMode activated at",
     "attributeLightTime": "Light activated at",
     "attributeSoundTime": "Sound activated at",
     "errorNotTranslated": "not translated",
