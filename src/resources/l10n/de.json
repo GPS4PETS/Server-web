@@ -437,6 +437,7 @@
     "commandSend": "Senden",
     "commandSent": "Befehl gesendet",
     "commandQueued": "Befehl eingereiht",
+    "commandNoQueue": "Befehl nicht eingereiht",
     "commandUnit": "Einheit",
     "commandCustom": "Benutzerdefinierter Befehl",
     "commandSetApn": "APN",
