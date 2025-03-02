@@ -133,7 +133,7 @@ const useStyles = makeStyles((theme) => ({
     margin: '2px',
   },
   lmbutton: {
-    width: '48%',
+    width: '98%',
     margin: '2px',
   },
   batteryText: {
@@ -899,21 +899,6 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
                       {lmcounter > 0 && (
                         ` (${formatTime(lmcounter)})`
                       )}
-                    </Button>
-                    <Button
-                      type="button"
-                      className={classes.button}
-                      variant="outlined"
-                      startIcon={<ShareIcon />}
-                      onClick={() => navigate(`/settings/device/${deviceId}/share`)}
-                      sx={{
-                        '.MuiButton-startIcon': {
-                          marginLeft: '-10px',
-                          marginRight: '4px',
-                        },
-                      }}
-                    >
-                      {t('deviceShare')}
                     </Button>
                   </center>
                 </div>
