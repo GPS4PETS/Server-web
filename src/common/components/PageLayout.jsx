@@ -18,6 +18,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from './LocalizationProvider';
+import BottomMenu from './BottomMenu';
 
 const useStyles = makeStyles((theme) => ({
   desktopRoot: {
@@ -50,6 +51,31 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     overflowY: 'auto',
+  },
+  sidebar: {
+    pointerEvents: 'none',
+    display: 'flex',
+    flexDirection: 'column',
+    [theme.breakpoints.up('md')]: {
+      position: 'fixed',
+      left: 0,
+      top: 50,
+      height: 'calc(100% - 75px)',
+      width: theme.dimensions.drawerWidthDesktop,
+      margin: '0px',
+      zIndex: 3,
+    },
+    [theme.breakpoints.down('md')]: {
+      height: '100%',
+      width: '100%',
+    },
+  },
+  footer: {
+    width: '100%',
+    pointerEvents: 'auto',
+    zIndex: 5,
+    position: 'absolute',
+    bottom: 0,
   },
 }));
 
@@ -108,6 +134,11 @@ const PageLayout = ({ menu, breadcrumbs, children }) => {
         </Toolbar>
         <Divider />
         {menu}
+        {!miniVariant && (
+          <div className={classes.footer}>
+            <BottomMenu />
+          </div>
+        )}
       </Drawer>
       <div className={classes.content}>{children}</div>
     </div>

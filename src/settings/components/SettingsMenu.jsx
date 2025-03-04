@@ -1,6 +1,4 @@
 import React from 'react';
-import { isMobile } from 'react-device-detect';
-import { makeStyles } from '@mui/styles';
 import { createSvgIcon } from '@mui/material/utils';
 import {
   Divider, List,
@@ -24,38 +22,8 @@ import {
 } from '../../common/util/permissions';
 import useFeatures from '../../common/util/useFeatures';
 import MenuItem from '../../common/components/MenuItem';
-import BottomMenu from '../../common/components/BottomMenu';
-
-const useStyles = makeStyles((theme) => ({
-  sidebar: {
-    pointerEvents: 'none',
-    display: 'flex',
-    flexDirection: 'column',
-    [theme.breakpoints.up('md')]: {
-      position: 'fixed',
-      left: 0,
-      top: 50,
-      height: 'calc(100% - 75px)',
-      width: theme.dimensions.drawerWidthDesktop,
-      margin: '0px',
-      zIndex: 3,
-    },
-    [theme.breakpoints.down('md')]: {
-      height: '100%',
-      width: '100%',
-    },
-  },
-  footer: {
-    width: '100%',
-    pointerEvents: 'auto',
-    zIndex: 5,
-    position: 'absolute',
-    bottom: 0,
-  },
-}));
 
 const SettingsMenu = () => {
-  const classes = useStyles();
   const t = useTranslation();
   const location = useLocation();
 
@@ -233,11 +201,6 @@ const SettingsMenu = () => {
             />
           </List>
         </>
-      )}
-      {!isMobile && (
-        <div className={classes.footer}>
-          <BottomMenu />
-        </div>
       )}
     </>
   );
