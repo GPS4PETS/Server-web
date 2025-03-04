@@ -87,7 +87,9 @@ const DevicePage = () => {
               )}
             </AccordionDetails>
           </Accordion>
-          <Accordion>
+          <Accordion
+            defaultExpanded={!admin}
+          >
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
               <Typography variant="subtitle1">
                 {t('sharedExtra')}
