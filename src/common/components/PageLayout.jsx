@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import {
   AppBar,
   Breadcrumbs,
-  cardClasses,
   Divider,
   Drawer,
   IconButton,
@@ -134,7 +133,7 @@ const PageLayout = ({ menu, breadcrumbs, children }) => {
           </IconButton>
         </Toolbar>
         <Divider />
-        <div style={{height: 'calc(100% - 75px - 50px)', overflow: 'auto'}}>
+        <div style={{ height: 'calc(100% - 75px - 50px)', overflow: 'auto' }}>
           {menu}
         </div>
         {!miniVariant && (
