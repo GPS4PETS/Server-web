@@ -441,6 +441,7 @@
     "commandUnit": "Einheit",
     "commandCustom": "Benutzerdefinierter Befehl",
     "commandSetApn": "APN",
+    "commandCornerRadius": "Kurven Radius",
     "commandDeviceIdentification": "Gerätekennung",
     "commandPositionSingle": "Einzelne Meldung",
     "commandPositionPeriodicOrig": "Regelmäßige Meldungen Orig",

@@ -441,6 +441,7 @@
     "commandUnit": "Unit",
     "commandCustom": "Custom command",
     "commandSetApn": "APN",
+    "commandCornerRadius": "Corner Radius",
     "commandDeviceIdentification": "Device Identification",
     "commandPositionSingle": "Single Reporting",
     "commandPositionPeriodicOrig": "Periodic Reporting Orig",
