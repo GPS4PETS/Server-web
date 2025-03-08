@@ -38,7 +38,6 @@ const useStyles = makeStyles((theme) => ({
     zIndex: 3,
     left: 0,
     top: '50px',
-    margin: theme.spacing(1.5),
     width: theme.dimensions.drawerWidthDesktop,
     [theme.breakpoints.down('md')]: {
       width: '100%',
@@ -67,12 +66,6 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     padding: theme.spacing(2),
-    [theme.breakpoints.down('md')]: {
-      margin: theme.spacing(1),
-    },
-    [theme.breakpoints.up('md')]: {
-      marginTop: theme.spacing(1),
-    },
   },
 }));
 
