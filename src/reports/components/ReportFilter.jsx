@@ -12,7 +12,7 @@ import SelectField from '../../common/components/SelectField';
 import { useAdministrator } from '../../common/util/permissions';
 
 const ReportFilter = ({
-  children, handleSubmit, handleSchedule, showOnly, ignoreDevice, multiDevice, includeGroups, loading,
+  children, handleSubmit, handleSchedule, showOnly, ignoreDevice, multiDevice, includeGroups, loading, noauto,
 }) => {
   const classes = useReportStyles();
   const dispatch = useDispatch();
@@ -116,7 +116,7 @@ const ReportFilter = ({
   */
 
   useEffect(() => {
-    if (deviceId && buttonRef.current && (deviceId % 1 === 0) && hide) {
+    if (deviceId && buttonRef.current && (deviceId % 1 === 0) && hide && !noauto) {
       /* dispatch(reportsActions.setFirstload(false)); */
       buttonRef.current.addEventListener('click', handleClick);
       buttonRef.current.click();
