@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import {
-  Typography, Container, Paper, AppBar, Toolbar, IconButton, Table, TableHead, TableRow, TableCell, TableBody,
+  Typography, Container, Paper, AppBar, Toolbar, IconButton, Table, TableHead, TableRow, TableCell, TableBody, Link,
 } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -79,6 +79,7 @@ const NetworkPage = () => {
                   <TableCell>MNC</TableCell>
                   <TableCell>LAC</TableCell>
                   <TableCell>CID</TableCell>
+                  <TableCell>Link</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -88,6 +89,15 @@ const NetworkPage = () => {
                     <TableCell>{cell.mobileNetworkCode}</TableCell>
                     <TableCell>{cell.locationAreaCode}</TableCell>
                     <TableCell>{cell.cellId}</TableCell>
+                    <TableCell>
+                      <Link
+                        target="_blank"
+                        rel="noreferrer"
+                        href={`https://opencellidapi.gps4pets.de/?mcc=${cell.mobileCountryCode}&mnc=${cell.mobileNetworkCode}&lac=${cell.locationAreaCode}&cell_id=${cell.cellId}`}
+                      >
+                        Locate
+                      </Link>
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
