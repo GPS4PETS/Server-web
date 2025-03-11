@@ -93,7 +93,7 @@ const NetworkPage = () => {
                       <Link
                         target="_blank"
                         rel="noreferrer"
-                        href={`https://opencellid.gps4pets.de/api/?mcc=${cell.mobileCountryCode}&mnc=${cell.mobileNetworkCode}&lac=${cell.locationAreaCode}&cell_id=${cell.cellId}`}
+                        href={`https://opencellid.gps4pets.de/?mcc=${cell.mobileCountryCode}&mnc=${cell.mobileNetworkCode}&lac=${cell.locationAreaCode}&cell_id=${cell.cellId}`}
                       >
                         Locate
                       </Link>
