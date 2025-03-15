@@ -37,6 +37,7 @@ const useStyles = makeStyles((theme) => ({
   },
   listclass: {
     height: '100%',
+    overflow: 'auto',
     width: theme.dimensions.eventsDrawerWidth,
   },
 }));
