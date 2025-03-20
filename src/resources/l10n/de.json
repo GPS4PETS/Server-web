@@ -135,6 +135,8 @@
     "attributeProcessingCopyAttributes": "Aktiv: Werte kopieren",
     "attributeColor": "Farbe",
     "attributeWebLiveRouteLength": "Web: Länge der Liveroute",
+    "attributeMapLineWidth": "Map Linie Breite",
+    "attributeMapLineOpacity": "Map Linie Transparenz (0.0 - 1.0)",
     "attributeWebSelectZoom": "Web: Mit Auswahl vergrößern",
     "attributeWebMaxZoom": "Web: Maximaler Zoom",
     "attributeTelegramChatId": "Kundennummer",
