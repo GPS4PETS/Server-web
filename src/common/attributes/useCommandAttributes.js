@@ -287,4 +287,26 @@ export default (t) => useMemo(() => ({
       type: 'string',
     },
   ],
+  omniSetup: [
+    {
+      key: 'frequency',
+      name: t('commandFrequency'),
+      type: 'number',
+    },
+    {
+      key: 'motionsleep',
+      name: t('commandEnable'),
+      type: 'boolean',
+    },
+    {
+      key: 'homewifi',
+      name: t('commandHomeWifi'),
+      type: 'boolean',
+    },
+    {
+      key: 'homewifimac',
+      name: t('commandHomeWifiMac'),
+      type: 'string',
+    },
+  ],
 }), [t]);
