@@ -295,7 +295,7 @@ export default (t) => useMemo(() => ({
     },
     {
       key: 'motionsleep',
-      name: t('commandEnable'),
+      name: t('commandMotionSleep'),
       type: 'boolean',
     },
     {
