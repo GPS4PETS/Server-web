@@ -829,14 +829,14 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
                       loadingPosition="start"
                       startIcon={<LightIcon />}
                       onClick={() => lighthandle()}
-                      disabled={lightdcolor === '#FFFF0080'}
+                      disabled={lightdcolor === '#FFFF0080' || !donline}
                       sx={{
                         '.MuiButton-startIcon': {
                           marginLeft: '-10px',
                           marginRight: '4px',
                         },
                         '&.Mui-disabled': {
-                          backgroundColor: `${lightdcolor}`,
+                          backgroundColor: `${donline ? lightdcolor : ''}`,
                         },
                       }}
                     >
@@ -855,14 +855,14 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
                       loadingPosition="start"
                       startIcon={<BuzzerIcon />}
                       onClick={() => buzzerhandle()}
-                      disabled={buzzerdcolor === '#0000FF80'}
+                      disabled={buzzerdcolor === '#0000FF80' || !donline}
                       sx={{
                         '.MuiButton-startIcon': {
                           marginLeft: '-10px',
                           marginRight: '4px',
                         },
                         '&.Mui-disabled': {
-                          backgroundColor: `${buzzerdcolor}`,
+                          backgroundColor: `${donline ? buzzerdcolor : ''}`,
                         },
                       }}
                     >
@@ -884,14 +884,14 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
                       loadingPosition="start"
                       startIcon={<LiveModeIcon />}
                       onClick={() => livemodehandle()}
-                      disabled={lmd || lmcolor === '#00FF0080'}
+                      disabled={lmd || lmcolor === '#00FF0080' || !donline}
                       sx={{
                         '.MuiButton-startIcon': {
                           marginLeft: '-10px',
                           marginRight: '4px',
                         },
                         '&.Mui-disabled': {
-                          backgroundColor: `${lmcolor}`,
+                          backgroundColor: `${donline ? lmcolor : ''}`,
                         },
                       }}
                     >
