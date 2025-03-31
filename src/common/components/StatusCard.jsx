@@ -391,8 +391,15 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
   const [lcounter, setLcounter] = React.useState(0);
   React.useEffect(() => {
     let timer;
-    if (lcounter > 0) {
+    if (lcounter > 1) {
       timer = setTimeout(() => setLcounter((c) => c - 1), 1000);
+    } else if (lcounter === 1) {
+      fetch('/api/commands/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: `{"id":11,"attributes":{},"deviceId":${deviceId},"type":"lightOff","textChannel":false,"description":"Licht Aus"}`,
+      });
+      setLcounter(0);
     }
 
     return () => {
@@ -405,8 +412,15 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
   const [bcounter, setBcounter] = React.useState(0);
   React.useEffect(() => {
     let timer;
-    if (bcounter > 0) {
+    if (bcounter > 1) {
       timer = setTimeout(() => setBcounter((c) => c - 1), 1000);
+    } else if (bcounter === 1) {
+      fetch('/api/commands/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: `{"id":12,"attributes":{},"deviceId":${deviceId},"type":"buzzerOff","textChannel":false,"description":"Buzzer Aus"}`,
+      });
+      setBcounter(0);
     }
 
     return () => {
