@@ -93,5 +93,10 @@ export default makeStyles((theme) => ({
     padding: '10px',
     fontSize: '1.1em',
     backgroundColor: '#EEEEEE10',
+  actionCellPadding: {
+    '&.MuiTableCell-body': {
+      paddingTop: 0,
+      paddingBottom: 0,
+    },
   },
 }));
