@@ -383,7 +383,7 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
       fetch('/api/commands/send', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: `{"attributes":{"noQueue":true},"deviceId":${deviceId},"type":"liveModeOff}`,
+        body: `{"attributes":{"noQueue":true},"deviceId":${deviceId},"type":"liveModeOff"}`,
       });
       setLmcounter(0);
     }
@@ -551,12 +551,12 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
         const tmpt = fetchdev.substring((fetchdev.indexOf('"liveModetime":') + 27), (fetchdev.indexOf('"liveModetime":') + 35));
         const now = dayjs();
         let lmts = dayjs(tmpd.concat(' ').concat(tmpt));
-        lmts = lmts.add(1, 'hour');
+        lmts = lmts.add(2, 'hour'); // 1 Winterzeit, 2 Sommerzeit
         let lmtime = now.diff(lmts, 'second');
         lmtime = 300 - lmtime;
         if (lmcounter === 0 && lmtime > 0 && lmtime <= 300) {
           setLml(false);
-          setLmcounter((lmtime));
+          setLmcounter(lmtime);
         }
       }
       if (!position) { livemodedis = true; }
