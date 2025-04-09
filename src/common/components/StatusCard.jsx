@@ -660,7 +660,7 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
     fetch('/api/commands/send', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: `{"id":22,"attributes":{},"deviceId":${deviceId},"type":"liveModeOn","textChannel":false,"description":"LiveMode"}`,
+      body: `{"attributes":{"noQueue":"true"},"deviceId":${deviceId},"type":"liveModeOn"}`,
     });
   });
   const lighthandle = useCatch(async () => {
@@ -671,7 +671,7 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
     fetch('/api/commands/send', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: `{"id":9,"attributes":{},"deviceId":${deviceId},"type":"lightOn","textChannel":false,"description":"Licht An"}`,
+      body: `{"attributes":{},"deviceId":${deviceId},"type":"lightOn"}`,
     });
   });
   const buzzerhandle = useCatch(async () => {
@@ -682,7 +682,7 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
     fetch('/api/commands/send', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: `{"id":7,"attributes":{},"deviceId":${deviceId},"type":"buzzerOn","textChannel":false,"description":"Buzzer An"}`,
+      body: `{"attributes":{},"deviceId":${deviceId},"type":"buzzerOn"}`,
     });
   });
 
