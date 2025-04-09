@@ -654,7 +654,7 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
 
   const livemodehandle = useCatch(async () => {
     // livemode
-    // setLmcounter(300);
+    setLmcounter(300);
     setLml(true);
     setLmcolor('#00FF0080');
     fetch('/api/commands/send', {
