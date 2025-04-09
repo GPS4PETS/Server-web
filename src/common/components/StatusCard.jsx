@@ -377,8 +377,15 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
   const [lmcounter, setLmcounter] = React.useState(0);
   React.useEffect(() => {
     let timer;
-    if (lmcounter > 0) {
+    if (lmcounter > 1) {
       timer = setTimeout(() => setLmcounter((c) => c - 1), 1000);
+    } else if (lmcounter === 1) {
+      fetch('/api/commands/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: `{"attributes":{"noQueue":true},"deviceId":${deviceId},"type":"liveModeOff}`,
+      });
+      setLmcounter(0);
     }
 
     return () => {
