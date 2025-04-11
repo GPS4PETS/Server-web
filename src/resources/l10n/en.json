@@ -290,6 +290,7 @@
     "positionDistance": "Distance",
     "positionRpm": "RPM",
     "positionFuel": "Fuel",
+    "positionFuelUsed": "Fuel Used",
     "positionPower": "Power",
     "positionBattery": "Battery",
     "positionRaw": "Raw",
