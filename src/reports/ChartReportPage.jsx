@@ -1,5 +1,4 @@
-git checkout -b traccar-master master
-git pull https://github.com/traccar/traccar-web.git masterimport dayjs from 'dayjs';
+import dayjs from 'dayjs';
 import React, { useState } from 'react';
 import {
   FormControl, InputLabel, Select, MenuItem, useTheme,
