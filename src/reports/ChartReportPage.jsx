@@ -33,7 +33,6 @@ const ChartReportPage = () => {
 
   const [items, setItems] = useState([]);
   const [types, setTypes] = useState(['speed']);
-  const [type, setType] = useState('speed');
   const [selectedTypes, setSelectedTypes] = useState(['speed']);
   const [timeType, setTimeType] = useState('fixTime');
 
