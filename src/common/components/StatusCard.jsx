@@ -54,7 +54,7 @@ import {
   formatPercentage, getStatusColor,
 } from '../util/formatter';
 
-const useStyles = makeStyles()((theme, { desktopPadding }) => ({
+const useStyles = makeStyles()((theme ) => ({
   components: {
     MuiIconButton: {
       styleOverrides: {
@@ -170,13 +170,13 @@ const useStyles = makeStyles()((theme, { desktopPadding }) => ({
     width: '20px',
     float: 'right',
   },
-  root: ({ desktopPadding }) => ({
+  root: {
     pointerEvents: 'none',
     position: 'fixed',
     zIndex: 5,
     left: '50%',
     [theme.breakpoints.up('md')]: {
-      left: `calc(50% + ${desktopPadding} / 2)`,
+      left: `calc(50%)`,
       bottom: theme.spacing(3),
     },
     [theme.breakpoints.down('md')]: {
@@ -184,7 +184,7 @@ const useStyles = makeStyles()((theme, { desktopPadding }) => ({
       bottom: `calc(${theme.spacing(3)} + ${theme.dimensions.bottomBarHeight}px)`,
     },
     transform: 'translateX(-50%)',
-  }),
+  },
 }));
 
 const RouteIcon = createSvgIcon(
@@ -278,7 +278,7 @@ const LiveModeIcon = createSvgIcon(
 );
 
 const StatusRow = ({ name, content }) => {
-  const { classes } = useStyles({ desktopPadding: 0 });
+  const { classes } = useStyles();
 
   return (
     <TableRow>
@@ -292,12 +292,12 @@ const StatusRow = ({ name, content }) => {
   );
 };
 
-const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPadding = 0 }) => {
+const StatusCard = ({ deviceId, position, onClose, disableActions }) => {
   if (deviceId === null) {
     onClose();
   }
 
-  const { classes } = useStyles({ desktopPadding });
+  const { classes } = useStyles();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const t = useTranslation();
@@ -440,6 +440,7 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
   const [lightl, setLightl] = useState(true);
   const [buzzerl, setBuzzerl] = useState(true);
 
+  /*
   useEffect(() => {
     function getLightl() {
       let tmpll = true;
@@ -448,6 +449,7 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
     }
     getLightl();
   });
+  */
 
   const [fetchdev, setFetchdev] = useState('failure');
   useEffect(() => {
@@ -543,6 +545,7 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
       let livemodedis = false;
       if (fetchdev.indexOf('"liveModetime":"2000-01-01') > -1) {
         livemodedis = false;
+        setLml(false);
         setLmcounter(0);
       } else {
         livemodedis = true;
@@ -556,6 +559,9 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
         if (lmcounter === 0 && lmtime > 0 && lmtime <= 300) {
           setLml(false);
           setLmcounter(lmtime);
+        }
+        if (lmtime > 300) {
+          setLml(false);
         }
       }
       if (!position) { livemodedis = true; }
@@ -583,6 +589,7 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
       if (fetchcmd.indexOf('"type":"lightOn"') > -1) {
         lightdis = false;
       }
+      setLightl(false);
       if (!position) { lightdis = true; }
       setLightd(lightdis);
     }
@@ -595,6 +602,7 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
       let buzzerdis = true;
       if (fetchcmd.indexOf('"type":"buzzerOn"') > -1) {
         buzzerdis = false;
+        setBuzzerl(false);
       }
       if (!position) { buzzerdis = true; }
       setBuzzerd(buzzerdis);
@@ -622,9 +630,12 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
         }
       } else if (fetchpos.indexOf('"lightswitch":0') > -1) {
         setLcounter(0);
+        setLightl(false);
       } else if (lcounter > 0) {
         ldcolor = '#FFFF0080';
+        setLightl(false);
       }
+      setLightl(false);
       setLightdcolor(ldcolor);
     }
     getLightdcolor();
@@ -650,8 +661,10 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
         }
       } else if (fetchpos.indexOf('"soundswitch":0') > -1) {
         setBcounter(0);
+        setBuzzerl(false);
       } else if (bcounter > 0) {
         bdcolor = '#0000FF80';
+        setBuzzerl(false);
       }
       setBuzzerdcolor(bdcolor);
     }
