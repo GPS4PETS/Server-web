@@ -1,4 +1,3 @@
-import React from 'react';
 import { Divider, List } from '@mui/material';
 import { createSvgIcon } from '@mui/material/utils';
 import StarIcon from '@mui/icons-material/Star';

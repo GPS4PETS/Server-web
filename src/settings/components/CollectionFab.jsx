@@ -1,11 +1,10 @@
-import React from 'react';
 import { Fab } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
+import { makeStyles } from 'tss-react/mui';
 import AddIcon from '@mui/icons-material/Add';
 import { useNavigate } from 'react-router-dom';
 import { useAdministrator } from '../../common/util/permissions';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
   fab: {
     position: 'fixed',
     bottom: theme.spacing(2),
@@ -17,8 +16,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CollectionFab = ({ editPath }) => {
-  const classes = useStyles();
+const CollectionFab = ({ editPath, disabled }) => {
+  const { classes } = useStyles();
   const navigate = useNavigate();
 
   const admin = useAdministrator();

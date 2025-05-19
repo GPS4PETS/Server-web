@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import {
   Button,
@@ -28,7 +28,7 @@ import useFeatures from '../../common/util/useFeatures';
 import useSettingsStyles from '../common/useSettingsStyles';
 
 const EditAttributesAccordion = ({ attribute, attributes, setAttributes, definitions, focusAttribute }) => {
-  const classes = useSettingsStyles();
+  const { classes } = useSettingsStyles();
   const t = useTranslation();
 
   const features = useFeatures();

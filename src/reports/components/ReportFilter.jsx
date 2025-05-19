@@ -14,7 +14,7 @@ import { useAdministrator } from '../../common/util/permissions';
 const ReportFilter = ({
   children, handleSubmit, handleSchedule, showOnly, ignoreDevice, multiDevice, includeGroups, loading, noauto,
 }) => {
-  const classes = useReportStyles();
+  const { classes } = useReportStyles();
   const dispatch = useDispatch();
   const t = useTranslation();
 

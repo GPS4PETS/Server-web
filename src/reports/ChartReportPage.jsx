@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   FormControl, InputLabel, Select, MenuItem, useTheme,
 } from '@mui/material';
@@ -20,7 +20,7 @@ import {
 import useReportStyles from './common/useReportStyles';
 
 const ChartReportPage = () => {
-  const classes = useReportStyles();
+  const { classes } = useReportStyles();
   const theme = useTheme();
   const t = useTranslation();
 

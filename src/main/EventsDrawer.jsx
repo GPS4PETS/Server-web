@@ -1,17 +1,16 @@
-import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import {
   Drawer, IconButton, Button, List, ListItemButton, ListItemText, Toolbar, Typography,
 } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { makeStyles } from 'tss-react/mui';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CloseIcon from '@mui/icons-material/Close';
 import { formatNotificationTitle, formatTime } from '../common/util/formatter';
 import { useTranslation } from '../common/components/LocalizationProvider';
 import { eventsActions } from '../store';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
   drawer: {
     width: theme.dimensions.eventsDrawerWidth,
   },
@@ -43,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const EventsDrawer = ({ open, onClose }) => {
-  const classes = useStyles();
+  const { classes } = useStyles();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const t = useTranslation();

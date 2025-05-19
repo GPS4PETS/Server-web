@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import dayjs from 'dayjs';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -31,7 +31,7 @@ const deviceFields = [
 ];
 
 const PreferencesPage = () => {
-  const classes = useSettingsStyles();
+  const { classes } = useSettingsStyles();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const t = useTranslation();

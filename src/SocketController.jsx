@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector, connect } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Snackbar } from '@mui/material';
@@ -56,7 +56,7 @@ const SocketController = () => {
           if (devicesResponse.status === 401 || positionsResponse.status === 401) {
             navigate('/login');
           }
-        } catch (error) {
+        } catch {
           // ignore errors
         }
         setTimeout(() => connectSocket(), 60000);

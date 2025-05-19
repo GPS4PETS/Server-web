@@ -135,8 +135,13 @@
     "attributeProcessingCopyAttributes": "Aktiv: Werte kopieren",
     "attributeColor": "Farbe",
     "attributeWebLiveRouteLength": "Web: Länge der Liveroute",
+<<<<<<< HEAD
     "attributeMapLineWidth": "Karte Linie Breite",
     "attributeMapLineOpacity": "Karte Linie Transparenz (0.0 - 1.0)",
+=======
+    "attributeMapLineWidth": "Map Line Width",
+    "attributeMapLineOpacity": "Map Line Opacity",
+>>>>>>> 6ee69fbc9910bf035b536febd37d637c09e3bc43
     "attributeWebSelectZoom": "Web: Mit Auswahl vergrößern",
     "attributeWebMaxZoom": "Web: Maximaler Zoom",
     "attributeTelegramChatId": "Kundennummer",
@@ -290,6 +295,7 @@
     "positionDistance": "Distanz",
     "positionRpm": "Drehzahl",
     "positionFuel": "Treibstoff",
+    "positionFuelUsed": "Fuel Used",
     "positionPower": "Versorgungsspannung",
     "positionBattery": "Batterie",
     "positionRaw": "Roh",
@@ -334,6 +340,7 @@
     "positionTemp": "Temperatur",
     "positionDeviceTemp": "Gerätetemperatur",
     "positionCoolantTemp": "Kühlmitteltemperatur",
+    "positionEngineTemp": "Engine Temperature",
     "positionOperator": "Netz",
     "positionCommand": "Befehl",
     "positionBlocked": "Blockiert",
@@ -450,7 +457,11 @@
     "commandSend": "Senden",
     "commandSent": "Befehl gesendet",
     "commandQueued": "Befehl eingereiht",
+<<<<<<< HEAD
     "commandNoQueue": "Befehl nicht eingereiht",
+=======
+    "commandNoQueue": "No queue",
+>>>>>>> 6ee69fbc9910bf035b536febd37d637c09e3bc43
     "commandUnit": "Einheit",
     "commandCustom": "Benutzerdefinierter Befehl",
     "commandSetApn": "APN",
