@@ -1,11 +1,7 @@
-<<<<<<< HEAD
 import React, { useState } from 'react';
 import { isMobile } from 'react-device-detect';
 import { createSvgIcon } from '@mui/material/utils';
 
-=======
-import { useState } from 'react';
->>>>>>> 6ee69fbc9910bf035b536febd37d637c09e3bc43
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
 import {

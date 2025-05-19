@@ -1,11 +1,7 @@
-<<<<<<< HEAD
 import React, { useState, useEffect } from 'react';
 import { isMobile } from 'react-device-detect';
 import { createSvgIcon } from '@mui/material/utils';
 import dayjs from 'dayjs';
-=======
-import { useState } from 'react';
->>>>>>> 6ee69fbc9910bf035b536febd37d637c09e3bc43
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Link as RouterLink } from 'react-router-dom';
 import { Rnd } from 'react-rnd';
@@ -54,27 +50,23 @@ import { devicesActions } from '../../store';
 import { useCatch, useCatchCallback } from '../../reactHelper';
 import { useAttributePreference } from '../util/preferences';
 
-<<<<<<< HEAD
 import {
   formatPercentage, getStatusColor,
 } from '../util/formatter';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme, { desktopPadding }) => ({
   components: {
     MuiIconButton: {
       styleOverrides: {
         root: ({
           p: 0,
         }),
-        disabled: ({
+        disabled: ({ 
           p: 0,
         }),
       },
-    },
+    }, 
   },
-=======
-const useStyles = makeStyles()((theme, { desktopPadding }) => ({
->>>>>>> 6ee69fbc9910bf035b536febd37d637c09e3bc43
   card: {
     pointerEvents: 'auto',
     width: theme.dimensions.popupMaxWidth,
@@ -113,11 +105,7 @@ const useStyles = makeStyles()((theme, { desktopPadding }) => ({
       paddingLeft: 0,
       paddingRight: 0,
     },
-<<<<<<< HEAD
-    '&.MuiTableCell-sizeSmall:first-child': {
-=======
     '& .MuiTableCell-sizeSmall:first-of-type': {
->>>>>>> 6ee69fbc9910bf035b536febd37d637c09e3bc43
       paddingRight: theme.spacing(1),
     },
   },
@@ -132,7 +120,6 @@ const useStyles = makeStyles()((theme, { desktopPadding }) => ({
   actions: {
     justifyContent: 'space-between',
   },
-<<<<<<< HEAD
   button: {
     width: '48%',
     margin: '2px',
@@ -184,9 +171,6 @@ const useStyles = makeStyles()((theme, { desktopPadding }) => ({
     float: 'right',
   },
   root: ({ desktopPadding }) => ({
-=======
-  root: {
->>>>>>> 6ee69fbc9910bf035b536febd37d637c09e3bc43
     pointerEvents: 'none',
     position: 'fixed',
     zIndex: 5,
@@ -309,16 +293,11 @@ const StatusRow = ({ name, content }) => {
 };
 
 const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPadding = 0 }) => {
-<<<<<<< HEAD
   if (deviceId === null) {
     onClose();
   }
 
-  const classes = useStyles({ desktopPadding });
-
-=======
   const { classes } = useStyles({ desktopPadding });
->>>>>>> 6ee69fbc9910bf035b536febd37d637c09e3bc43
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const t = useTranslation();
@@ -737,20 +716,17 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
                     <CloseIcon fontSize="small" className={classes.mediaButton} />
                   </IconButton>
                 </CardMedia>
-<<<<<<< HEAD
               )}
               {!isMobile && !deviceImage && (
                 <CardMedia
                   className={classes.media}
                   image="/device.png"
                 >
-=======
               ) : (
                 <div className={`${classes.header} draggable-header`}>
                   <Typography variant="body2" color="textSecondary">
                     {device.name}
                   </Typography>
->>>>>>> 6ee69fbc9910bf035b536febd37d637c09e3bc43
                   <IconButton
                     size="small"
                     onClick={onClose}
