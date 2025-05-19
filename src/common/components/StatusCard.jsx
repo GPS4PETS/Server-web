@@ -184,7 +184,7 @@ const useStyles = makeStyles()((theme, { desktopPadding }) => ({
       bottom: `calc(${theme.spacing(3)} + ${theme.dimensions.bottomBarHeight}px)`,
     },
     transform: 'translateX(-50%)',
-  },
+  }),
 }));
 
 const RouteIcon = createSvgIcon(
@@ -722,7 +722,16 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
                   className={classes.media}
                   image="/device.png"
                 >
-              ) : (
+                  <IconButton
+                    size="small"
+                    onClick={onClose}
+                    onTouchStart={onClose}
+                  >
+                    <CloseIcon fontSize="small" className={classes.mediaButton} />
+                  </IconButton>
+                </CardMedia>
+              )}
+              {isMobile && deviceImage && (
                 <div className={`${classes.header} draggable-header`}>
                   <Typography variant="body2" color="textSecondary">
                     {device.name}
@@ -734,7 +743,7 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
                   >
                     <CloseIcon fontSize="small" className={classes.mediaButton} />
                   </IconButton>
-                </CardMedia>
+                </div>
               )}
               {!position && (
                 <CardContent className={classes.content}>
