@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { isMobile } from 'react-device-detect';
 import dayjs from 'dayjs';
 import { useTheme } from '@mui/material';
@@ -256,7 +256,6 @@ const StepsReportPage = () => {
     <PageLayout menu={<ReportsMenu />} breadcrumbs={['reportTitle', 'reportSteps']}>
       <ReportFilter handleSubmit={handleSubmit} showOnly>
       </ReportFilter>
-      {(routeItems.length > 0 || true) && (
         <div className={classes.chart}>
           <ResponsiveContainer>
             <ComposedChart
@@ -307,7 +306,6 @@ const StepsReportPage = () => {
             </ComposedChart>
           </ResponsiveContainer>
         </div>
-      )}
     </PageLayout>
   );
 };
