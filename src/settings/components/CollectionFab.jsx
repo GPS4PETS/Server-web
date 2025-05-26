@@ -22,7 +22,7 @@ const CollectionFab = ({ editPath, disabled }) => {
 
   const admin = useAdministrator();
 
-  if (admin) {
+  if (admin && !disabled) {
     return (
       <div className={classes.fab}>
         <Fab size="medium" color="primary" onClick={() => navigate(editPath)}>

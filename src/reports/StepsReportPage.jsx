@@ -36,7 +36,7 @@ const StepsReportPage = () => {
   const altitudeUnit = useAttributePreference('altitudeUnit');
   const speedUnit = useAttributePreference('speedUnit');
 
-  const [routeItems, setRouteItems] = useState([]);
+  //const [routeItems, setRouteItems] = useState([]);
 
   const [steps, setSteps] = useState([]);
 
@@ -246,7 +246,7 @@ const StepsReportPage = () => {
       }
 
       setSteps(steptmp);
-      setRouteItems(formattedPositions);
+      //setRouteItems(formattedPositions);
     } else {
       throw Error(await routeResponse.text());
     }
