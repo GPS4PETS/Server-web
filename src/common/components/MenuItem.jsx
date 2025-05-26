@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 const useStyles = makeStyles()(() => ({
   menuItemText: {
     whiteSpace: 'nowrap',
+    textAlign: 'start',
   },
 }));
 

@@ -28,9 +28,9 @@ const useStyles = makeStyles()((theme) => ({
     flexDirection: 'column',
     [theme.breakpoints.up('md')]: {
       position: 'fixed',
-      left: 0,
-      top: 50,
-      height: 'calc(100% - 75px)',
+      insetInlineStart: 0,
+      top: 0,
+      height: `calc(100% - ${theme.spacing(3)})`,
       width: theme.dimensions.drawerWidthDesktop,
       margin: '0px',
       zIndex: 3,

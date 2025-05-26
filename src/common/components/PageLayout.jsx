@@ -24,6 +24,7 @@ const useStyles = makeStyles()((theme, { miniVariant }) => ({
   desktopRoot: {
     height: '100%',
     display: 'flex',
+    flexDirection: theme.direction === 'rtl' ? 'row-reverse' : 'row',
   },
   mobileRoot: {
     height: '100%',
@@ -122,13 +123,13 @@ const PageLayout = ({ menu, breadcrumbs, children }) => {
         <Toolbar>
           {!miniVariant && (
             <>
-              <IconButton color="inherit" edge="start" sx={{ mr: 2 }} onClick={() => navigate('/')}>
+              <IconButton color="inherit" edge="start" sx={{ marginInlineEnd: 2 }} onClick={() => navigate('/')}>
                 <ArrowBackIcon />
               </IconButton>
               <PageTitle breadcrumbs={breadcrumbs} />
             </>
           )}
-          <IconButton color="inherit" edge="start" sx={{ ml: miniVariant ? -2 : 'auto' }} onClick={toggleDrawer}>
+          <IconButton color="inherit" edge="start" sx={{ marginInlineStart: miniVariant ? -2 : 'auto' }} onClick={toggleDrawer}>
             {miniVariant ? <ChevronRightIcon /> : <ChevronLeftIcon />}
           </IconButton>
         </Toolbar>
@@ -165,7 +166,7 @@ const PageLayout = ({ menu, breadcrumbs, children }) => {
       </Drawer>
       <AppBar className={classes.mobileToolbar} position="static" color="inherit">
         <Toolbar>
-          <IconButton color="inherit" edge="start" sx={{ mr: 2 }} onClick={() => setOpenDrawer(true)}>
+          <IconButton color="inherit" edge="start" sx={{ marginInlineEnd: 2 }} onClick={() => setOpenDrawer(true)}>
             <MenuIcon />
           </IconButton>
           <PageTitle breadcrumbs={breadcrumbs} />
