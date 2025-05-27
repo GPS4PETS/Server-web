@@ -85,10 +85,7 @@ const useStyles = makeStyles()((theme ) => ({
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingBlockStart: theme.spacing(1),
-    paddingBlockEnd: 0,
-    paddingInlineStart: theme.spacing(2),
-    paddingInlineEnd: theme.spacing(1),
+    padding: theme.spacing(1, 1, 0, 2),
   },
   content: {
     paddingTop: 0,
@@ -104,12 +101,12 @@ const useStyles = makeStyles()((theme ) => ({
     filter: 'brightness(0) invert(1)',
   },
   table: {
-    '&.MuiTableCell-sizeSmall': {
+    '& .MuiTableCell-sizeSmall': {
       paddingLeft: 0,
       paddingRight: 0,
     },
     '& .MuiTableCell-sizeSmall:first-of-type': {
-      paddingInlineEnd: theme.spacing(1),
+      paddingRight: theme.spacing(1),
     },
   },
   cell: {
@@ -177,14 +174,14 @@ const useStyles = makeStyles()((theme ) => ({
     pointerEvents: 'none',
     position: 'fixed',
     zIndex: 5,
-    insetInlineStart: '50%',
+    left: '50%',
     [theme.breakpoints.up('md')]: {
       left: `calc(50%)`,
       bottom: theme.spacing(3),
     },
     [theme.breakpoints.down('md')]: {
-      insetInlineStart: '50%',
-      insetBlockEnd: `calc(${theme.spacing(3)} + ${theme.dimensions.bottomBarHeight}px)`,
+      left: '50%',
+      bottom: `calc(${theme.spacing(3)} + ${theme.dimensions.bottomBarHeight}px)`,
     },
     transform: 'translateX(-50%)',
   },

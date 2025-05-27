@@ -11,7 +11,6 @@ import {
   useTheme,
 } from '@mui/material';
 import { makeStyles } from 'tss-react/mui';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -19,12 +18,12 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from './LocalizationProvider';
 import BottomMenu from './BottomMenu';
+import BackIcon from './BackIcon';
 
 const useStyles = makeStyles()((theme, { miniVariant }) => ({
   desktopRoot: {
     height: '100%',
     display: 'flex',
-    flexDirection: theme.direction === 'rtl' ? 'row-reverse' : 'row',
   },
   mobileRoot: {
     height: '100%',
@@ -123,14 +122,14 @@ const PageLayout = ({ menu, breadcrumbs, children }) => {
         <Toolbar>
           {!miniVariant && (
             <>
-              <IconButton color="inherit" edge="start" sx={{ marginInlineEnd: 2 }} onClick={() => navigate('/')}>
-                <ArrowBackIcon />
+              <IconButton color="inherit" edge="start" sx={{ mr: 2 }} onClick={() => navigate('/')}>
+                <BackIcon />
               </IconButton>
               <PageTitle breadcrumbs={breadcrumbs} />
             </>
           )}
-          <IconButton color="inherit" edge="start" sx={{ marginInlineStart: miniVariant ? -2 : 'auto' }} onClick={toggleDrawer}>
-            {miniVariant ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+          <IconButton color="inherit" edge="start" sx={{ ml: miniVariant ? -2 : 'auto' }} onClick={toggleDrawer}>
+            {(miniVariant !== (theme.direction === 'rtl')) ? <ChevronRightIcon /> : <ChevronLeftIcon />}
           </IconButton>
         </Toolbar>
         <Divider />
@@ -166,7 +165,7 @@ const PageLayout = ({ menu, breadcrumbs, children }) => {
       </Drawer>
       <AppBar className={classes.mobileToolbar} position="static" color="inherit">
         <Toolbar>
-          <IconButton color="inherit" edge="start" sx={{ marginInlineEnd: 2 }} onClick={() => setOpenDrawer(true)}>
+          <IconButton color="inherit" edge="start" sx={{ mr: 2 }} onClick={() => setOpenDrawer(true)}>
             <MenuIcon />
           </IconButton>
           <PageTitle breadcrumbs={breadcrumbs} />
