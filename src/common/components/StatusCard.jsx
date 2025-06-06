@@ -744,20 +744,6 @@ const StatusCard = ({ deviceId, position, onClose, disableActions }) => {
                   </IconButton>
                 </CardMedia>
               )}
-              {isMobile && deviceImage && (
-                <div className={`${classes.header} draggable-header`}>
-                  <Typography variant="body2" color="textSecondary">
-                    {device.name}
-                  </Typography>
-                  <IconButton
-                    size="small"
-                    onClick={onClose}
-                    onTouchStart={onClose}
-                  >
-                    <CloseIcon fontSize="small" className={classes.mediaButton} />
-                  </IconButton>
-                </div>
-              )}
               {!position && (
                 <CardContent className={classes.content}>
                   <div style={{ borderBottom: 'thin solid grey', height: '1.5em' }}>
