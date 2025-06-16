@@ -58,6 +58,7 @@ const useStyles = makeStyles()((theme) => ({
   },
   sound: {
     color: '#0000FF80',
+  },
   selected: {
     backgroundColor: theme.palette.action.selected,
   },
