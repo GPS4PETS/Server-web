@@ -7,6 +7,7 @@ import {
   FormControlLabel,
   Checkbox,
   TextField,
+  Button,
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { MuiFileInput } from 'mui-file-input';
@@ -22,6 +23,7 @@ import useCommonDeviceAttributes from '../common/attributes/useCommonDeviceAttri
 import { useCatch } from '../reactHelper';
 import useQuery from '../common/util/useQuery';
 import useSettingsStyles from './common/useSettingsStyles';
+import QrCodeDialog from '../common/components/QrCodeDialog';
 
 const DevicePage = () => {
   const { classes } = useSettingsStyles();
@@ -36,6 +38,7 @@ const DevicePage = () => {
   const uniqueId = query.get('uniqueId');
 
   const [item, setItem] = useState(uniqueId ? { uniqueId } : null);
+  const [showQr, setShowQr] = useState(false);
   const [imageFile, setImageFile] = useState(null);
 
   const handleFileInput = useCatch(async (newFile) => {
@@ -102,79 +105,58 @@ const DevicePage = () => {
               </Typography>
             </AccordionSummary>
             <AccordionDetails className={classes.details}>
-              <>
-                <TextField
-                  value={item.activityTimeWanted || ''}
-                  onChange={(event) => setItem({ ...item, activityTimeWanted: event.target.value })}
-                  label={t('reportActivityTimeWanted')}
-                />
-                <TextField
-                  value={item.sleepTimeWanted || ''}
-                  onChange={(event) => setItem({ ...item, sleepTimeWanted: event.target.value })}
-                  label={t('reportSleepTimeWanted')}
-                />
-                <TextField
-                  value={item.stepsWanted || ''}
-                  onChange={(event) => setItem({ ...item, stepsWanted: event.target.value })}
-                  label={t('reportStepsWanted')}
-                />
-              </>
-              {admin && (
-              <>
-                <SelectField
-                  value={item.groupId}
-                  onChange={(event) => setItem({ ...item, groupId: Number(event.target.value) })}
-                  endpoint="/api/groups"
-                  label={t('groupParent')}
-                />
-                <TextField
-                  value={item.phone || ''}
-                  onChange={(event) => setItem({ ...item, phone: event.target.value })}
-                  label={t('sharedPhone')}
-                />
-                <TextField
-                  value={item.model || ''}
-                  onChange={(event) => setItem({ ...item, model: event.target.value })}
-                  label={t('deviceModel')}
-                />
-                <TextField
-                  value={item.contact || ''}
-                  onChange={(event) => setItem({ ...item, contact: event.target.value })}
-                  label={t('deviceContact')}
-                />
-                <SelectField
-                  value={item.category || 'default'}
-                  onChange={(event) => setItem({ ...item, category: event.target.value })}
-                  data={deviceCategories.map((category) => ({
-                    id: category,
-                    name: t(`category${category.replace(/^\w/, (c) => c.toUpperCase())}`),
-                  }))}
-                  label={t('deviceCategory')}
-                />
-                <SelectField
-                  value={item.calendarId}
-                  onChange={(event) => setItem({ ...item, calendarId: Number(event.target.value) })}
-                  endpoint="/api/calendars"
-                  label={t('sharedCalendar')}
-                />
-                <TextField
-                  label={t('userExpirationTime')}
-                  type="date"
-                  value={item.expirationTime ? item.expirationTime.split('T')[0] : '2099-01-01'}
-                  onChange={(e) => {
-                    if (e.target.value) {
-                      setItem({ ...item, expirationTime: new Date(e.target.value).toISOString() });
-                    }
-                  }}
-                  disabled={!admin}
-                />
-                <FormControlLabel
-                  control={<Checkbox checked={item.disabled} onChange={(event) => setItem({ ...item, disabled: event.target.checked })} />}
-                  label={t('sharedDisabled')}
-                  disabled={!admin}
-                />
-              </>
-              )}
+              <SelectField
+                value={item.groupId}
+                onChange={(event) => setItem({ ...item, groupId: Number(event.target.value) })}
+                endpoint="/api/groups"
+                label={t('groupParent')}
+              />
+              <TextField
+                value={item.phone || ''}
+                onChange={(event) => setItem({ ...item, phone: event.target.value })}
+                label={t('sharedPhone')}
+              />
+              <TextField
+                value={item.model || ''}
+                onChange={(event) => setItem({ ...item, model: event.target.value })}
+                label={t('deviceModel')}
+              />
+              <TextField
+                value={item.contact || ''}
+                onChange={(event) => setItem({ ...item, contact: event.target.value })}
+                label={t('deviceContact')}
+              />
+              <SelectField
+                value={item.category || 'default'}
+                onChange={(event) => setItem({ ...item, category: event.target.value })}
+                data={deviceCategories.map((category) => ({
+                  id: category,
+                  name: t(`category${category.replace(/^\w/, (c) => c.toUpperCase())}`),
+                })).sort((a, b) => a.name.localeCompare(b.name))}
+                label={t('deviceCategory')}
+              />
+              <SelectField
+                value={item.calendarId}
+                onChange={(event) => setItem({ ...item, calendarId: Number(event.target.value) })}
+                endpoint="/api/calendars"
+                label={t('sharedCalendar')}
+              />
+              <TextField
+                label={t('userExpirationTime')}
+                type="date"
+                value={item.expirationTime ? item.expirationTime.split('T')[0] : '2099-01-01'}
+                onChange={(e) => {
+                  if (e.target.value) {
+                    setItem({ ...item, expirationTime: new Date(e.target.value).toISOString() });
+                  }
+                }}
+                disabled={!admin}
+              />
+              <FormControlLabel
+                control={<Checkbox checked={item.disabled} onChange={(event) => setItem({ ...item, disabled: event.target.checked })} />}
+                label={t('sharedDisabled')}
+                disabled={!admin}
+              />
             </AccordionDetails>
           </Accordion>
           {item.id && (
@@ -201,6 +183,7 @@ const DevicePage = () => {
           />
         </>
       )}
+      <QrCodeDialog open={showQr} onClose={() => setShowQr(false)} />
     </EditItemView>
   );
 };

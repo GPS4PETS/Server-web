@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import {
   IconButton,
   Table, TableBody, TableCell, TableHead, TableRow,
@@ -39,6 +40,8 @@ const StopReportPage = () => {
   const { classes } = useReportStyles();
   const t = useTranslation();
 
+  const devices = useSelector((state) => state.devices.items);
+
   const distanceUnit = useAttributePreference('distanceUnit');
   const volumeUnit = useAttributePreference('volumeUnit');
 
@@ -47,8 +50,10 @@ const StopReportPage = () => {
   const [loading, setLoading] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
 
-  const handleSubmit = useCatch(async ({ deviceId, from, to, type }) => {
-    const query = new URLSearchParams({ deviceId, from, to });
+  const handleSubmit = useCatch(async ({ deviceIds, groupIds, from, to, type }) => {
+    const query = new URLSearchParams({ from, to });
+    deviceIds.forEach((deviceId) => query.append('deviceId', deviceId));
+    groupIds.forEach((groupId) => query.append('groupId', groupId));
     if (type === 'export') {
       window.location.assign(`/api/reports/stops/xlsx?${query.toString()}`);
     } else if (type === 'mail') {
@@ -86,6 +91,8 @@ const StopReportPage = () => {
   const formatValue = (item, key) => {
     const value = item[key];
     switch (key) {
+      case 'deviceId':
+        return devices[value].name;
       case 'startTime':
       case 'endTime':
         return formatTime(value, 'minutes');
@@ -127,7 +134,7 @@ const StopReportPage = () => {
         )}
         <div className={classes.containerMain}>
           <div className={classes.header}>
-            <ReportFilter handleSubmit={handleSubmit} handleSchedule={handleSchedule} loading={loading}>
+            <ReportFilter handleSubmit={handleSubmit} handleSchedule={handleSchedule} multiDevice includeGroups loading={loading}>
               <ColumnSelect columns={columns} setColumns={setColumns} columnsArray={columnsArray} />
             </ReportFilter>
           </div>
@@ -135,6 +142,7 @@ const StopReportPage = () => {
             <TableHead>
               <TableRow>
                 <TableCell className={classes.columnAction} />
+                <TableCell>{t('sharedDevice')}</TableCell>
                 {columns.map((key) => (<TableCell key={key}>{t(columnsMap.get(key))}</TableCell>))}
               </TableRow>
             </TableHead>
@@ -152,13 +160,14 @@ const StopReportPage = () => {
                       </IconButton>
                     )}
                   </TableCell>
+                  <TableCell>{devices[item.deviceId].name}</TableCell>
                   {columns.map((key) => (
                     <TableCell key={key}>
                       {formatValue(item, key)}
                     </TableCell>
                   ))}
                 </TableRow>
-              )) : (<TableShimmer columns={columns.length + 1} startAction />)}
+              )) : (<TableShimmer columns={columns.length + 2} startAction />)}
             </TableBody>
           </Table>
         </div>
