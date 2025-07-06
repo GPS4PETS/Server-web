@@ -226,6 +226,7 @@
     "deviceLastUpdate": "Last Update",
     "deviceLastUpdateShort": "Update",
     "deviceCommand": "Command",
+    "deviceCommandSender": "Command Channel",
     "deviceFollow": "Follow",
     "deviceTotalDistance": "Total Distance",
     "deviceStatus": "Status",

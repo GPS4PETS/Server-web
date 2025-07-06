@@ -44,7 +44,7 @@ import BatteryCharging20Icon from '@mui/icons-material/BatteryCharging20';
 import { useTranslation } from './LocalizationProvider';
 import RemoveDialog from './RemoveDialog';
 import PositionValue from './PositionValue';
-import { useDeviceReadonly, useAdministrator } from '../util/permissions';
+import { useDeviceReadonly, useAdministrator, useRestriction } from '../util/permissions';
 import usePositionAttributes from '../attributes/usePositionAttributes';
 import { devicesActions } from '../../store';
 import { useCatch, useCatchCallback } from '../../reactHelper';
@@ -303,6 +303,7 @@ const StatusCard = ({ deviceId, position, onClose, disableActions }) => {
   const t = useTranslation();
 
   const admin = useAdministrator();
+  const readonly = useRestriction('readonly');
   const deviceReadonly = useDeviceReadonly();
 
   const shareDisabled = useSelector((state) => state.session.server.attributes.disableShare);
@@ -1019,6 +1020,11 @@ const StatusCard = ({ deviceId, position, onClose, disableActions }) => {
               {navigationAppTitle}
             </MenuItem>
           )}
+          {!readonly && <MenuItem onClick={handleGeofence}>{t('sharedCreateGeofence')}</MenuItem>}
+          <MenuItem component="a" target="_blank" href={`https://www.google.com/maps/search/?api=1&query=${position.latitude}%2C${position.longitude}`}>{t('linkGoogleMaps')}</MenuItem>
+          <MenuItem component="a" target="_blank" href={`http://maps.apple.com/?ll=${position.latitude},${position.longitude}`}>{t('linkAppleMaps')}</MenuItem>
+          <MenuItem component="a" target="_blank" href={`https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${position.latitude}%2C${position.longitude}&heading=${position.course}`}>{t('linkStreetView')}</MenuItem>
+          {navigationAppTitle && <MenuItem component="a" target="_blank" href={navigationAppLink.replace('{latitude}', position.latitude).replace('{longitude}', position.longitude)}>{navigationAppTitle}</MenuItem>}
           {!shareDisabled && !user.temporary && (
             <MenuItem onClick={() => navigate(`/settings/device/${deviceId}/share`)}>
               <ShareIcon fontSize="small" />
