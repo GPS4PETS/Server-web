@@ -66,6 +66,7 @@ import { generateLoginToken } from './common/components/NativeInterface';
 import { useLocalization } from './common/components/LocalizationProvider';
 import fetchOrThrow from './common/util/fetchOrThrow';
 import AuditPage from './reports/AuditPage';
+import RouteReportPage from './reports/RouteReportPage';
 
 const Navigation = () => {
   const navigate = useNavigate();
