@@ -10,6 +10,7 @@ import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import EventRepeatIcon from '@mui/icons-material/EventRepeat';
 import NotesIcon from '@mui/icons-material/Notes';
+import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from '../../common/components/LocalizationProvider';
 import { useAdministrator, useRestriction } from '../../common/util/permissions';
@@ -258,6 +259,12 @@ const ReportsMenu = () => {
           title={t('reportReplay')}
           link="/replay"
           icon={<RouteIcon />}
+        />
+        <MenuItem
+          title={t('reportPositions')}
+          link="/reports/route"
+          icon={<TimelineIcon />}
+          selected={location.pathname === '/reports/route'}
         />
       </List>
       {admin && (

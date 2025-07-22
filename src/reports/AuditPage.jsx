@@ -15,24 +15,20 @@ import TableShimmer from '../common/components/TableShimmer';
 import fetchOrThrow from '../common/util/fetchOrThrow';
 
 const columnsArray = [
-  ['captureTime', 'statisticsCaptureTime'],
-  ['activeUsers', 'statisticsActiveUsers'],
-  ['activeDevices', 'statisticsActiveDevices'],
-  ['requests', 'statisticsRequests'],
-  ['messagesReceived', 'statisticsMessagesReceived'],
-  ['messagesStored', 'statisticsMessagesStored'],
-  ['mailSent', 'notificatorMail'],
-  ['smsSent', 'notificatorSms'],
-  ['geocoderRequests', 'statisticsGeocoder'],
-  ['geolocationRequests', 'statisticsGeolocation'],
+  ['actionTime', 'positionServerTime'],
+  ['address', 'positionAddress'],
+  ['userId', 'settingsUser'],
+  ['actionType', 'sharedActionType'],
+  ['objectType', 'sharedQbjectType'],
+  ['objectId', 'deviceIdentifier'],
 ];
 const columnsMap = new Map(columnsArray);
 
-const StatisticsPage = () => {
+const AuditPage = () => {
   const { classes } = useReportStyles();
   const t = useTranslation();
 
-  const [columns, setColumns] = usePersistedState('statisticsColumns', ['captureTime', 'activeUsers', 'activeDevices', 'messagesStored']);
+  const [columns, setColumns] = usePersistedState('auditColumns', ['actionTime', 'userId', 'actionType', 'objectType']);
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -40,7 +36,7 @@ const StatisticsPage = () => {
     setLoading(true);
     try {
       const query = new URLSearchParams({ from, to });
-      const response = await fetchOrThrow(`/api/statistics?${query.toString()}`);
+      const response = await fetchOrThrow(`/api/audit?${query.toString()}`);
       setItems(await response.json());
     } finally {
       setLoading(false);
@@ -48,7 +44,7 @@ const StatisticsPage = () => {
   });
 
   return (
-    <PageLayout menu={<ReportsMenu />} breadcrumbs={['reportTitle', 'statisticsTitle']}>
+    <PageLayout menu={<ReportsMenu />} breadcrumbs={['reportTitle', 'reportAudit']}>
       <div className={classes.header}>
         <ReportFilter onShow={onShow} deviceType="none" loading={loading}>
           <ColumnSelect columns={columns} setColumns={setColumns} columnsArray={columnsArray} />
@@ -65,7 +61,7 @@ const StatisticsPage = () => {
             <TableRow key={item.id}>
               {columns.map((key) => (
                 <TableCell key={key}>
-                  {key === 'captureTime' ? formatTime(item[key], 'date') : item[key]}
+                  {key === 'actionTime' ? formatTime(item[key], 'minutes') : item[key]}
                 </TableCell>
               ))}
             </TableRow>
@@ -76,4 +72,4 @@ const StatisticsPage = () => {
   );
 };
 
-export default StatisticsPage;
+export default AuditPage;

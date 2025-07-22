@@ -21,14 +21,12 @@ import BottomMenu from './BottomMenu';
 import BackIcon from './BackIcon';
 
 const useStyles = makeStyles()((theme, { miniVariant }) => ({
-  desktopRoot: {
+  root: {
     height: '100%',
     display: 'flex',
-  },
-  mobileRoot: {
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
+    [theme.breakpoints.down('md')]: {
+      flexDirection: 'column',
+    },
   },
   desktopDrawer: {
     width: miniVariant ? `calc(${theme.spacing(8)} + 1px)` : theme.dimensions.drawerWidthDesktop,
@@ -41,9 +39,15 @@ const useStyles = makeStyles()((theme, { miniVariant }) => ({
   },
   mobileDrawer: {
     width: theme.dimensions.drawerWidthTablet,
+    '@media print': {
+      display: 'none',
+    },
   },
   mobileToolbar: {
     zIndex: 1,
+    '@media print': {
+      display: 'none',
+    },
   },
   content: {
     flexGrow: 1,
