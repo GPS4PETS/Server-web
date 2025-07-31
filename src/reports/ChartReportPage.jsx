@@ -15,7 +15,7 @@ import usePositionAttributes from '../common/attributes/usePositionAttributes';
 import { useCatch } from '../reactHelper';
 import { useAttributePreference } from '../common/util/preferences';
 import {
-  altitudeFromMeters, distanceFromMeters, speedFromKnots, volumeFromLiters,
+  altitudeFromMeters, distanceFromMeters, speedFromKnots, speedToKnots, volumeFromLiters,
 } from '../common/util/converter';
 import useReportStyles from './common/useReportStyles';
 import fetchOrThrow from '../common/util/fetchOrThrow';
@@ -64,7 +64,11 @@ const ChartReportPage = () => {
           const definition = positionAttributes[key] || {};
           switch (definition.dataType) {
             case 'speed':
-              formatted[key] = speedFromKnots(value, speedUnit).toFixed(2);
+              if (key == 'obdSpeed') {
+                formatted[key] = speedFromKnots(speedToKnots(value, 'kmh'), speedUnit).toFixed(2);
+              } else {
+                formatted[key] = speedFromKnots(value, speedUnit).toFixed(2);
+              }
               break;
             case 'altitude':
               formatted[key] = altitudeFromMeters(value, altitudeUnit).toFixed(2);
