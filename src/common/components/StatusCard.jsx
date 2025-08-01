@@ -304,7 +304,6 @@ const StatusCard = ({ deviceId, position, onClose, disableActions }) => {
   const t = useTranslation();
 
   const admin = useAdministrator();
-  const readonly = useRestriction('readonly');
   const deviceReadonly = useDeviceReadonly();
 
   const shareDisabled = useSelector((state) => state.session.server.attributes.disableShare);

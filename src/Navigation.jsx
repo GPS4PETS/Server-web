@@ -5,7 +5,6 @@ import {
 import { useDispatch } from 'react-redux';
 import MainPage from './main/MainPage';
 import CombinedReportPage from './reports/CombinedReportPage';
-import PositionsReportPage from './reports/PositionsReportPage';
 import ServerPage from './settings/ServerPage';
 import UsersPage from './settings/UsersPage';
 import DevicePage from './settings/DevicePage';
