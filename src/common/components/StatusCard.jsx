@@ -44,7 +44,7 @@ import BatteryCharging20Icon from '@mui/icons-material/BatteryCharging20';
 import { useTranslation } from './LocalizationProvider';
 import RemoveDialog from './RemoveDialog';
 import PositionValue from './PositionValue';
-import { useDeviceReadonly, useAdministrator, useRestriction } from '../util/permissions';
+import { useDeviceReadonly, useAdministrator } from '../util/permissions';
 import usePositionAttributes from '../attributes/usePositionAttributes';
 import { devicesActions } from '../../store';
 import { useCatch, useCatchCallback } from '../../reactHelper';
