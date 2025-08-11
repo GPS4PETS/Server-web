@@ -23,6 +23,7 @@ import useSettingsStyles from './common/useSettingsStyles';
 import DeviceUsersValue from './components/DeviceUsersValue';
 import usePersistedState from '../common/util/usePersistedState';
 import fetchOrThrow from '../common/util/fetchOrThrow';
+import AddressValue from '../common/components/AddressValue';
 
 const DevicesPage = () => {
   const { classes } = useSettingsStyles();
@@ -35,6 +36,8 @@ const DevicesPage = () => {
   const admin = useAdministrator();
   const manager = useManager();
   const deviceReadonly = useDeviceReadonly();
+
+  const positions = useSelector((state) => state.session.positions);
 
   const [timestamp, setTimestamp] = useState(Date.now());
   const [items, setItems] = useState([]);
@@ -62,6 +65,7 @@ const DevicesPage = () => {
       [t('deviceModel')]: item.model,
       [t('deviceContact')]: item.contact,
       [t('userExpirationTime')]: formatTime(item.expirationTime, 'date'),
+      [t('positionAddress')]: positions[item.id].address,
     }));
 
     const workbook = new ExcelJS.Workbook();
@@ -123,6 +127,7 @@ const DevicesPage = () => {
             {admin && <TableCell>{t('deviceModel')}</TableCell>}
             {!isMobile && <TableCell>{t('deviceContact')}</TableCell>}
             <TableCell>{t('userExpirationTime')}</TableCell>
+            <TableCell>{t('positionAddress')}</TableCell>
             {manager && <TableCell>{t('settingsUsers')}</TableCell>}
             <TableCell className={classes.columnAction} />
           </TableRow>
@@ -137,6 +142,15 @@ const DevicesPage = () => {
               {admin && <TableCell>{item.model}</TableCell>}
               {!isMobile && <TableCell>{item.contact}</TableCell>}
               <TableCell>{formatTime(item.expirationTime, 'date')}</TableCell>
+              <TableCell>
+                {positions[item.id] && (
+                  <AddressValue
+                    latitude={positions[item.id].latitude}
+                    longitude={positions[item.id].longitude}
+                    originalAddress={positions[item.id].address}
+                  />
+                )}
+              </TableCell>
               {manager && <TableCell><DeviceUsersValue deviceId={item.id} /></TableCell>}
               <TableCell className={classes.columnAction} padding="none">
                 <CollectionActions
@@ -149,7 +163,7 @@ const DevicesPage = () => {
                 />
               </TableCell>
             </TableRow>
-          )) : (<TableShimmer columns={manager ? 8 : 7} endAction />)}
+          )) : (<TableShimmer columns={manager ? 9 : 8} endAction />)}
         </TableBody>
         {admin && (
         <TableFooter>
@@ -157,7 +171,7 @@ const DevicesPage = () => {
             <TableCell>
               <Button onClick={handleExport} variant="text">{t('reportExport')}</Button>
             </TableCell>
-            <TableCell colSpan={manager ? 8 : 7} align="right">
+            <TableCell colSpan={manager ? 9 : 8} align="right">
               <FormControlLabel
                 control={(
                   <Switch
