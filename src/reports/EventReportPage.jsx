@@ -41,7 +41,7 @@ const EventReportPage = () => {
   const { classes } = useReportStyles();
   const t = useTranslation();
 
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
 
   const devices = useSelector((state) => state.devices.items);
   const geofences = useSelector((state) => state.geofences.items);
