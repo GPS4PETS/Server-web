@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
   FormControl, InputLabel, Select, MenuItem, Table, TableHead, TableRow, TableCell, TableBody, Link, IconButton,
@@ -206,7 +206,7 @@ const EventReportPage = () => {
                   <SelectField
                     multiple
                     value={alarmTypes}
-                    onChange={(e) => updateReportParams(searchParams, setSearchParams, 'alarmType', e.target.value)}
+                    //onChange={(e) => updateReportParams(searchParams, setSearchParams, 'alarmType', e.target.value)}
                     data={alarms}
                     keyGetter={(it) => it.key}
                     label={t('sharedAlarms')}

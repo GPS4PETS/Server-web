@@ -116,7 +116,7 @@ const SummaryReportPage = () => {
               <Select
                 label={t('sharedType')}
                 value={daily}
-                onChange={(e) => updateReportParams(searchParams, setSearchParams, 'daily', [String(e.target.value)])}
+                //onChange={(e) => updateReportParams(searchParams, setSearchParams, 'daily', [String(e.target.value)])}
               >
                 <MenuItem value={false}>{t('reportSummary')}</MenuItem>
                 <MenuItem value>{t('reportDaily')}</MenuItem>
