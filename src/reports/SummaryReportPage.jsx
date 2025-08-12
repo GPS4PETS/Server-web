@@ -7,7 +7,7 @@ import {
 import {
   formatDistance, formatSpeed, formatVolume, formatTime, formatNumericHours,
 } from '../common/util/formatter';
-import ReportFilter, { updateReportParams } from './components/ReportFilter';
+import ReportFilter from './components/ReportFilter'; //, { updateReportParams }
 import { useAttributePreference } from '../common/util/preferences';
 import { useTranslation } from '../common/components/LocalizationProvider';
 import PageLayout from '../common/components/PageLayout';

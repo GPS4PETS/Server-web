@@ -7,7 +7,7 @@ import GpsFixedIcon from '@mui/icons-material/GpsFixed';
 import LocationSearchingIcon from '@mui/icons-material/LocationSearching';
 import { useSelector } from 'react-redux';
 import { formatSpeed, formatTime } from '../common/util/formatter';
-import ReportFilter, { updateReportParams } from './components/ReportFilter';
+import ReportFilter from './components/ReportFilter'; //, { updateReportParams } from './components/ReportFilter';
 import { prefixString, unprefixString } from '../common/util/stringUtils';
 import { useTranslation, useTranslationKeys } from '../common/components/LocalizationProvider';
 import PageLayout from '../common/components/PageLayout';
@@ -63,11 +63,11 @@ const EventReportPage = () => {
   const [selectedItem, setSelectedItem] = useState(null);
   const [position, setPosition] = useState(null);
 
-  useEffect(() => {
-    if (!eventTypes.length) {
-      updateReportParams(searchParams, setSearchParams, 'eventType', ['allEvents']);
-    }
-  }, [searchParams, setSearchParams, eventTypes])
+  //useEffect(() => {
+  //  if (!eventTypes.length) {
+  //    updateReportParams(searchParams, setSearchParams, 'eventType', ['allEvents']);
+  //  }
+  //}, [searchParams, setSearchParams, eventTypes])
 
   useEffectAsync(async () => {
     if (selectedItem) {
@@ -191,7 +191,7 @@ const EventReportPage = () => {
                       if (values.includes('allEvents') && values.length > 1) {
                         values = [clicked];
                       }
-                      updateReportParams(searchParams, setSearchParams, 'eventType', values)
+                      //updateReportParams(searchParams, setSearchParams, 'eventType', values)
                     }}
                     multiple
                   >
