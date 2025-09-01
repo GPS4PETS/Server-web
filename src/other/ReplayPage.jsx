@@ -18,7 +18,7 @@ import MapRoutePath from '../map/MapRoutePath';
 import MapRoutePoints from '../map/MapRoutePoints';
 import MapPositions from '../map/MapPositions';
 import { formatTime } from '../common/util/formatter';
-import ReportFilter, { updateReportParams } from '../reports/components/ReportFilter';
+import ReportFilter from '../reports/components/ReportFilter';
 import { useTranslation } from '../common/components/LocalizationProvider';
 import { useCatch } from '../reactHelper';
 import MapCamera from '../map/MapCamera';
@@ -181,7 +181,7 @@ const ReplayPage = () => {
                 <IconButton onClick={handleDownload}>
                   <DownloadIcon />
                 </IconButton>
-                <IconButton edge="end" onClick={() => updateReportParams(searchParams, setSearchParams, 'ignore', [])}>
+                <IconButton edge="end" onClick={() => ''}>
                   <TuneIcon />
                 </IconButton>
               </>
