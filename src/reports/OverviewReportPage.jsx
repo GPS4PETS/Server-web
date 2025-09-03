@@ -1,4 +1,3 @@
-/* eslint-disable react/no-array-index-key */
 import { useMemo, useState } from 'react';
 import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
