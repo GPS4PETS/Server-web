@@ -27,6 +27,7 @@ const BottomMenu = () => {
   const user = useSelector((state) => state.session.user);
   const socket = useSelector((state) => state.session.socket);
   const devicesOpen = useSelector((state) => state.session.devicesOpen);
+  const selectedDeviceId = useSelector((state) => state.devices.selectedId);
 
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -112,10 +113,10 @@ const BottomMenu = () => {
         navigate('/');
         break;
       case 'reports':
-        if (admin) {
-          navigate('/reports/combined');
+        if (selectedDeviceId != null) {
+          navigate(`/reports/combined?deviceId=${selectedDeviceId}`);
         } else {
-          navigate('/reports/overview');
+          navigate('/reports/combined');
         }
         break;
       case 'settings':

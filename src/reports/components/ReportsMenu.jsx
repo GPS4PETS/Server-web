@@ -176,6 +176,26 @@ const ReportsMenu = () => {
     </svg>,
     'steps',
   );
+  const buildLink = (path) => {
+    const sourceParams = new URLSearchParams(location.search);
+    const deviceIds = sourceParams.getAll('deviceId');
+    const groupIds = sourceParams.getAll('groupId');
+    if (!deviceIds.length && !groupIds.length) {
+      return path;
+    }
+    const params = new URLSearchParams();
+    if (path === '/reports/chart' || path === '/reports/route') {
+      const [firstDeviceId] = deviceIds;
+      if (firstDeviceId != null) {
+        params.append('deviceId', firstDeviceId);
+      }
+    } else {
+      deviceIds.forEach((deviceId) => params.append('deviceId', deviceId));
+      groupIds.forEach((groupId) => params.append('groupId', groupId));
+    }
+    const search = params.toString();
+    return search ? `${path}?${search}` : path;
+  };
 
   return (
     <>
@@ -226,6 +246,42 @@ const ReportsMenu = () => {
           icon={<GraphIcon />}
           selected={location.pathname === '/reports/charts'}
         />
+        <MenuItem
+          title={t('reportCombined')}
+          link={buildLink('/reports/combined')}
+          icon={<StarIcon />}
+          selected={location.pathname === '/reports/combined'}
+        />
+        <MenuItem
+          title={t('reportEvents')}
+          link={buildLink('/reports/events')}
+          icon={<NotificationsActiveIcon />}
+          selected={location.pathname === '/reports/events'}
+        />
+        <MenuItem
+          title={t('reportTrips')}
+          link={buildLink('/reports/trips')}
+          icon={<PlayCircleFilledIcon />}
+          selected={location.pathname === '/reports/trips'}
+        />
+        <MenuItem
+          title={t('reportStops')}
+          link={buildLink('/reports/stops')}
+          icon={<PauseCircleFilledIcon />}
+          selected={location.pathname === '/reports/stops'}
+        />
+        <MenuItem
+          title={t('reportSummary')}
+          link={buildLink('/reports/summary')}
+          icon={<FormatListBulletedIcon />}
+          selected={location.pathname === '/reports/summary'}
+        />
+        <MenuItem
+          title={t('reportChart')}
+          link={buildLink('/reports/chart')}
+          icon={<TrendingUpIcon />}
+          selected={location.pathname === '/reports/chart'}
+        />
         {admin && (
         <>
           <MenuItem
@@ -261,7 +317,7 @@ const ReportsMenu = () => {
         />
         <MenuItem
           title={t('reportPositions')}
-          link="/reports/route"
+          link={buildLink('/reports/route')}
           icon={<TimelineIcon />}
           selected={location.pathname === '/reports/route'}
         />
