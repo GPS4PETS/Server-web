@@ -22,7 +22,7 @@ const BottomMenu = () => {
   const t = useTranslation();
 
   const readonly = useRestriction('readonly');
-  const admin = useAdministrator();
+  //const admin = useAdministrator();
   const disableReports = useRestriction('disableReports');
   const user = useSelector((state) => state.session.user);
   const socket = useSelector((state) => state.session.socket);

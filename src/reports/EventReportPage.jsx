@@ -15,7 +15,7 @@ import PageLayout from '../common/components/PageLayout';
 import ReportsMenu from './components/ReportsMenu';
 import usePersistedState from '../common/util/usePersistedState';
 import ColumnSelect from './components/ColumnSelect';
-import { useCatch, useEffectAsync } from '../reactHelper';
+import { useCatch, useEffect, useEffectAsync } from '../reactHelper';
 import useReportStyles from './common/useReportStyles';
 import TableShimmer from '../common/components/TableShimmer';
 import { useAttributePreference } from '../common/util/preferences';
