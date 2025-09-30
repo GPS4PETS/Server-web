@@ -12,7 +12,7 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 
 import { sessionActions } from '../../store';
 import { useTranslation } from './LocalizationProvider';
-import { useAdministrator, useRestriction } from '../util/permissions';
+import { useRestriction } from '../util/permissions';
 import { nativePostMessage } from './NativeInterface';
 
 const BottomMenu = () => {
