@@ -24,8 +24,8 @@ import {
   Tooltip,
 } from '@mui/material';
 import { makeStyles } from 'tss-react/mui';
-import CloseIcon from '@mui/icons-material/Close';
-import PublishIcon from '@mui/icons-material/Publish';
+import CloseIcon from '@mui/icons-material/Close'; 
+import SendIcon from '@mui/icons-material/Send';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import PendingIcon from '@mui/icons-material/Pending';
@@ -954,7 +954,7 @@ const StatusCard = ({ deviceId, position, onClose, disableActions }) => {
                     onClick={() => navigate(`/settings/device/${deviceId}/command`)}
                     disabled={disableActions || !donline}
                   >
-                    <PublishIcon />
+                    <SendIcon />
                   </IconButton>
                 </Tooltip>
                 )}

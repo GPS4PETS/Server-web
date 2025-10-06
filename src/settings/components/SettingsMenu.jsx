@@ -6,14 +6,15 @@ import {
 import SettingsIcon from '@mui/icons-material/Settings';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import FolderIcon from '@mui/icons-material/Folder';
-import StorageIcon from '@mui/icons-material/Storage';
 import BuildIcon from '@mui/icons-material/Build';
 import PeopleIcon from '@mui/icons-material/People';
 import TodayIcon from '@mui/icons-material/Today';
-import PublishIcon from '@mui/icons-material/Publish';
+import TuneIcon from '@mui/icons-material/Tune';
+import SendIcon from '@mui/icons-material/Send';
 import HelpIcon from '@mui/icons-material/Help';
 import PaymentIcon from '@mui/icons-material/Payment';
 import CampaignIcon from '@mui/icons-material/Campaign';
+import CalculateIcon from '@mui/icons-material/Calculate';
 import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useTranslation } from '../../common/components/LocalizationProvider';
@@ -111,7 +112,7 @@ const SettingsMenu = () => {
         <MenuItem
           title={t('sharedPreferences')}
           link="/settings/preferences"
-          icon={<SettingsIcon />}
+          icon={<TuneIcon />}
           selected={location.pathname === '/settings/preferences'}
         />
         {!readonly && (
@@ -170,7 +171,7 @@ const SettingsMenu = () => {
               <MenuItem
                 title={t('sharedComputedAttributes')}
                 link="/settings/attributes"
-                icon={<StorageIcon />}
+                icon={<CalculateIcon />}
                 selected={location.pathname.startsWith('/settings/attribute')}
               />
             )}
@@ -186,7 +187,7 @@ const SettingsMenu = () => {
               <MenuItem
                 title={t('sharedSavedCommands')}
                 link="/settings/commands"
-                icon={<PublishIcon />}
+                icon={<SendIcon />}
                 selected={location.pathname.startsWith('/settings/command')}
               />
             )}
@@ -221,7 +222,7 @@ const SettingsMenu = () => {
               <MenuItem
                 title={t('settingsServer')}
                 link="/settings/server"
-                icon={<StorageIcon />}
+                icon={<SettingsIcon />}
                 selected={location.pathname === '/settings/server'}
               />
             )}
